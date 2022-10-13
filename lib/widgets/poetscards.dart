@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:soulrelief/pages/poetPages.dart';
 
 class PoetsCards extends StatelessWidget {
    PoetsCards({Key? key, required this.poetName , required this.poetImageLink}) : super(key: key);
@@ -13,7 +14,12 @@ class PoetsCards extends StatelessWidget {
     final height = size.height;
     final width = size.width;
     return InkWell(
-      onTap: (){},
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) =>  PoetPages(poetName: poetName,)),
+        );
+      },
       child: Container(
         padding: EdgeInsets.only(left: 8.0,right: 8.0),
         child: Column(

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "651447355393",
+    "project_id": "taranaportel-hyd",
+    "storage_bucket": "taranaportel-hyd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651447355393:android:ff051e531ca1bfed401800",
+        "android_client_info": {
+          "package_name": "com.soulrelief.siohyd.soulrelief"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "651447355393-v8h0r9tctdkfao2g4l4njhth7fad3nkl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAKmRt7s0QR7GH9ix1-owbw4cXybWJSUg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "651447355393-v8h0r9tctdkfao2g4l4njhth7fad3nkl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "651447355393-cppf6cc4q711nqbd6n44l3ar9lssdhm2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.siohyd.taranaportal"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:soulrelief/pages/dominePages.dart';
 
 class DomainsCards extends StatelessWidget {
    DomainsCards({
@@ -18,7 +19,12 @@ class DomainsCards extends StatelessWidget {
     final height = size.height;
     final width = size.width;
     return InkWell(
-      onTap: (){},
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) =>  DominePages(domineName: dominName,)),
+        );
+      },
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),

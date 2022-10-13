@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../builders/gradienttext.dart';
+import '../pages/songpage.dart';
 
 class LatestCards extends StatelessWidget {
-  const LatestCards({Key? key}) : super(key: key);
+  const LatestCards({Key? key, required this.songName, required this.artistName, required this.lyrics}) : super(key: key);
+
+  final String songName;
+  final String artistName;
+  final String lyrics;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +19,9 @@ class LatestCards extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-          onTap: (){},
+          onTap: (){
+
+          },
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
@@ -36,7 +43,7 @@ class LatestCards extends StatelessWidget {
                       fontWeight: FontWeight.w500),
                 ),
                 GradientText(
-                  "Dhadakti hai jawan seeno me",
+                  songName??"Dhadakti hai jawan seeno me",
                   style: TextStyle(
                       color: Color(0xFF5F7185),
                       fontSize: 16,
@@ -81,7 +88,7 @@ class LatestCards extends StatelessWidget {
 
                             children: [
                               Text(
-                                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+                                lyrics??"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
                                 maxLines: 10,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -90,6 +97,7 @@ class LatestCards extends StatelessWidget {
                                     fontFamily: GoogleFonts.poppins().fontFamily,
                                     fontWeight: FontWeight.w500),
                               ),
+                              Divider(),
                               Text(
                                 "Artist",
                                 maxLines: 10,
@@ -101,7 +109,7 @@ class LatestCards extends StatelessWidget {
                                     fontWeight: FontWeight.w500),
                               ),
                               Text(
-                                "Haider Saifullah",
+                                artistName??"Haider Saifullah",
                                 maxLines: 10,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -125,6 +133,10 @@ class LatestCards extends StatelessWidget {
                   ElevatedButton.icon(
                     onPressed: (){
                       print("You pressed Icon Elevated Button");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SongPage()),
+                      );
                     },
                     icon: Icon(Icons.play_arrow),  //icon data for elevated button
                     label: Text("Play now"),

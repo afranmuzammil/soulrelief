@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../widgets/letestcards.dart';
 import '../widgets/recentcards.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,8 +13,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final db = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
+
     final size = MediaQuery.of(context).size;
     final height = size.height;
     final width = size.width;
@@ -67,7 +70,6 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   child: Container(
-
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(22)),
                       color: Colors.white,
@@ -95,39 +97,67 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Padding(
-                  padding:
-                  const EdgeInsets.only(left: 0.0, top: 50.0, right: 170.0, bottom: 0.0),
-                  child: Text("Recently Played",
-                      textAlign:TextAlign.start,
+                  padding: const EdgeInsets.only(left: 0.0, top: 50.0, right: 170.0, bottom: 0.0),
+                  child: Text("Listen Again",
+                      textAlign: TextAlign.start,
                       style: TextStyle(
                           color: Color(0xFF5F7185),
                           fontSize: 16,
                           fontFamily: GoogleFonts.poppins().fontFamily,
                           fontWeight: FontWeight.w600)),
                 ),
-                SizedBox(height: 8.0,),
-                Container(
-
-                  height: height*0.16,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 5,
-                      itemBuilder: (BuildContext context,int index){
-                    return RecentCards(songName: "Takzeeb mitane waale hum", coverImageUrl: 'assets/hqdefault.png',);
-                  }),
+                SizedBox(
+                  height: 8.0,
                 ),
-                SizedBox(height: 20.0,),
                 Container(
-                  height: height,
+                  height: height * 0.16,
                   child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      physics: ScrollPhysics(),
-                      itemCount: 3,
-                      itemBuilder: (BuildContext context,int index){
-                        return LatestCards();
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 5,
+                      itemBuilder: (BuildContext context, int index) {
+                        return RecentCards(
+                          songName: "Takzeeb mitane waale hum",
+                          coverImageUrl: 'assets/hqdefault.png',
+                        );
                       }),
                 ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Container(
+                  height: height,
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: db.collection('AllTaranas').snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return ListView(
+                          physics :NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: snapshot.data!.docs
+                              .map((doc) => LatestCards(
+                                    songName: doc["songName"].toString(),
+                                    artistName: doc["singerName"].toString(),
+                                    lyrics: doc["lyrics"].toString(),
+                                  ))
+                              .toList(),
+                        );
 
+                        // ListView.builder(
+                        //     scrollDirection: Axis.vertical,
+                        //     shrinkWrap: true,
+                        //     physics: ScrollPhysics(),
+                        //     itemCount: 3,
+                        //     itemBuilder: (BuildContext context,int index){
+                        //
+                        //     });
+                      }
+                    },
+                  ),
+                ),
               ],
             ),
           ),

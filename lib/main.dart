@@ -1,9 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:soulrelief/pages/home.dart';
 import 'package:soulrelief/widgets/navigationbar.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
+        (value) => runApp(
+      const MyApp(),
+    ),
+  );
+ // runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
