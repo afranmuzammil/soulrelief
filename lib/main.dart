@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
+import 'package:soulrelief/models/StorageModel.dart';
 import 'package:soulrelief/pages/home.dart';
 import 'package:soulrelief/widgets/navigationbar.dart';
 
@@ -14,6 +16,18 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Hive.registerAdapter(LikedSongAdapter());
+  Hive.registerAdapter(LikedListAdapter());
+  Hive.registerAdapter(PlayListsAdapter());
+  Hive.registerAdapter(PlayListSongIdsListAdapter());
+  Hive.registerAdapter(PlayListSingleSongAdapter());
+
+  await Hive.openBox<LikedSong>("LikedSong");
+  await Hive.openBox<LikedList>("LikedList");
+  await Hive.openBox<PlayLists>("PlayLists");
+  await Hive.openBox<PlayListSongIdsList>("PlayListSongIdsList");
+  await Hive.openBox<PlayListSingleSong>("PlayListSingleSong");
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
         (value) => runApp(
       const MyApp(),
