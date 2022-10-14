@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:soulrelief/models/StorageModel.dart';
 import 'package:soulrelief/pages/home.dart';
 import 'package:soulrelief/widgets/navigationbar.dart';
-
+import 'package:hive_flutter/adapters.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -12,7 +12,7 @@ import 'firebase_options.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
 
-
+  await Hive.initFlutter();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:soulrelief/models/StorageModel.dart';
+import 'package:soulrelief/models/initalizeHive.dart';
 import 'dart:developer';
 import '../builders/gradienticon.dart';
 import '../widgets/domainsbox.dart';
@@ -13,6 +15,8 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
+  final likedListHive = LikedListHive.initLikedListDataHive();
+  final likedSongsHive = LikedSongsHive.initLikedSongsDataHive();
   var top = 0.0;
 
   @override
@@ -218,7 +222,9 @@ class _ExplorePageState extends State<ExplorePage> {
                             fontFamily: GoogleFonts.poppins().fontFamily,
                             fontWeight: FontWeight.w300),
                       ),
-                      trailing: IconButton(onPressed: () {}, icon: Icon(Icons.favorite))),
+                      trailing: IconButton(onPressed: () {
+
+                      }, icon: Icon(Icons.favorite))),
                 ),
                 Card(
                   elevation: 5,
@@ -238,7 +244,9 @@ class _ExplorePageState extends State<ExplorePage> {
                             fontFamily: GoogleFonts.poppins().fontFamily,
                             fontWeight: FontWeight.w300),
                       ),
-                      trailing: IconButton(onPressed: () {}, icon: Icon(Icons.favorite))),
+                      trailing: IconButton(onPressed: () {
+                        log("single ${likedSongsHive.get("songId")!.songID} songlist ${likedListHive.get("testList")!.songID}");
+                      }, icon: Icon(Icons.favorite))),
                 ),
                 Card(
                   elevation: 5,
@@ -258,7 +266,20 @@ class _ExplorePageState extends State<ExplorePage> {
                             fontFamily: GoogleFonts.poppins().fontFamily,
                             fontWeight: FontWeight.w300),
                       ),
-                      trailing: IconButton(onPressed: () {}, icon: Icon(Icons.favorite))),
+                      trailing: IconButton(onPressed: () {
+                          final songData = LikedSong("songName", "songID", "artistName", "audioLength");
+                          likedSongsHive.put("songId", songData).then((value) {
+                            List<String> addinginList = likedListHive.get("testList")!.songID;
+                            setState(() {
+                              addinginList.add("songId");
+                            });
+
+                            final SongId = LikedList(addinginList);
+                            likedListHive.put("testList", SongId);
+                          });
+
+                      },
+                          icon: Icon(Icons.favorite))),
                 ),
 
                 SizedBox(
