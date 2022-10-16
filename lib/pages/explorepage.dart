@@ -140,13 +140,16 @@ class _ExplorePageState extends State<ExplorePage> {
                 Padding(
                   padding:
                   const EdgeInsets.only(left: 0.0, top: 0.0, right: 250.0, bottom: 0.0),
-                  child: Text("Domains",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: Color(0xFF5F7185),
-                          fontSize: 16,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                          fontWeight: FontWeight.w600)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("Domains",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: Color(0xFF5F7185),
+                            fontSize: 16,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontWeight: FontWeight.w600)),
+                  ),
                 ),
                 Container(
                   height: height * 0.36,
@@ -169,13 +172,16 @@ class _ExplorePageState extends State<ExplorePage> {
                 Padding(
                   padding:
                   const EdgeInsets.only(left: 0.0, top: 0.0, right: 190.0, bottom: 0.0),
-                  child: Text("Explore by Poets",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: Color(0xFF5F7185),
-                          fontSize: 16,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                          fontWeight: FontWeight.w600)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("Explore by Poets",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: Color(0xFF5F7185),
+                            fontSize: 16,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontWeight: FontWeight.w600)),
+                  ),
                 ),
                 SizedBox(
                   height: 10.0,
@@ -196,13 +202,16 @@ class _ExplorePageState extends State<ExplorePage> {
                 Padding(
                   padding:
                   const EdgeInsets.only(left: 0.0, top: 8.0, right: 220.0, bottom: 0.0),
-                  child: Text("Latest tarane",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: Color(0xFF5F7185),
-                          fontSize: 16,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                          fontWeight: FontWeight.w600)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("Latest tarane",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: Color(0xFF5F7185),
+                            fontSize: 16,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontWeight: FontWeight.w600)),
+                  ),
                 ),
                 Card(
                   elevation: 5,
@@ -223,7 +232,7 @@ class _ExplorePageState extends State<ExplorePage> {
                             fontWeight: FontWeight.w300),
                       ),
                       trailing: IconButton(onPressed: () {
-
+                        likedListHive.delete("testList");
                       }, icon: Icon(Icons.favorite))),
                 ),
                 Card(
@@ -267,9 +276,10 @@ class _ExplorePageState extends State<ExplorePage> {
                             fontWeight: FontWeight.w300),
                       ),
                       trailing: IconButton(onPressed: () {
-                          final songData = LikedSong("songName", "songID", "artistName", "audioLength");
+                          final songData = LikedSong("songName", "songID", "artistName", "audioLength","");
                           likedSongsHive.put("songId", songData).then((value) {
-                            List<String> addinginList = likedListHive.get("testList")!.songID;
+
+                            List<String> addinginList = likedListHive.get("testList")?.songID??[];
                             setState(() {
                               addinginList.add("songId");
                             });

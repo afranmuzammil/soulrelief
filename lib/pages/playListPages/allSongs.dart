@@ -46,7 +46,7 @@ class _AllSongsPageState extends State<AllSongsPage> {
         body: Column(
           children: [
             StreamBuilder<QuerySnapshot>(
-              stream: db.collection('AllTaranas').snapshots(),
+              stream: db.collection('AllSongsList').snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(
@@ -61,7 +61,7 @@ class _AllSongsPageState extends State<AllSongsPage> {
                       onTap: (){
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const SongPage()),
+                          MaterialPageRoute(builder: (context) =>  SongPage(songID: '${doc["song_id"].toString()}',)),
                         );
                       },
                       leading: Container(
@@ -85,8 +85,8 @@ class _AllSongsPageState extends State<AllSongsPage> {
                         //   imageUrl: products.body["items"][index]["coverImage"].toString(),
                         // ),
                       ),
-                      title: Text(doc["songName"].toString()),
-                      subtitle: Text("${doc["singerName"].toString()} • ${doc["audioLength"].toString()}"),
+                      title: Text(doc["song_name"].toString()),
+                      subtitle: Text("${doc["singer_name"].toString()} • ${doc["audio_length"].toString()}"),
                       trailing: IconButton(onPressed: (){},icon: Icon(Icons.more_vert),),
                     )
                     ).toList(),

@@ -17,11 +17,15 @@ class LikedSong extends HiveObject{
   @HiveField(3)
   String audioLength;
 
+  @HiveField(4)
+  String songImage;
+
   LikedSong(
       this.songName,
       this.songID,
       this.artistName,
-      this.audioLength
+      this.audioLength,
+      this.songImage
       );
 
 }
@@ -78,11 +82,15 @@ class PlayListSingleSong extends HiveObject{
   @HiveField(3)
   String audioLength;
 
+  @HiveField(4)
+  String songImage;
+
   PlayListSingleSong(
       this.songName,
       this.songID,
       this.artistName,
-      this.audioLength
+      this.audioLength,
+      this.songImage
       );
 
 
@@ -90,3 +98,41 @@ class PlayListSingleSong extends HiveObject{
 
 
 
+///single Liked Song
+@HiveType(typeId: 5)
+class RecentSong extends HiveObject{
+  @HiveField(0)
+  String songName;
+
+  @HiveField(1)
+  String songID;
+
+  @HiveField(2)
+  String artistName;
+
+  @HiveField(3)
+  String audioLength;
+
+  @HiveField(4)
+  String songImage;
+
+  RecentSong(
+      this.songName,
+      this.songID,
+      this.artistName,
+      this.audioLength,
+      this.songImage
+      );
+
+}
+///List of liked songs
+@HiveType(typeId: 6)
+class RecentSongList extends HiveObject{
+
+
+  @HiveField(0)
+  List<String> songID;
+
+  RecentSongList(this.songID,);
+
+}

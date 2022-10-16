@@ -6,6 +6,7 @@ import 'package:soulrelief/pages/playListPages/allDominesPage.dart';
 import 'package:soulrelief/pages/playListPages/allSongs.dart';
 import 'package:soulrelief/pages/playListPages/artists.dart';
 import 'package:soulrelief/pages/playListPages/downloads.dart';
+import 'package:soulrelief/pages/playListPages/likedSongsPage.dart';
 
 import '../widgets/recentcards.dart';
 
@@ -85,8 +86,49 @@ class PlayList extends StatelessWidget {
                   onTap: (){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>  DownloadsPage()),
+                      MaterialPageRoute(builder: (context) =>  LikedSongsPage()),
                     );
+                  },
+                  leading: Icon(Icons.favorite),
+                  title: Text("Liked Songs",
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 20,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                        fontWeight: FontWeight.w400),
+                  ),
+                  trailing: Icon(Icons.arrow_forward_ios_sharp),
+                ),
+              ),
+              Divider(),
+              Container(
+                //color: Colors.cyan,
+                height: height*0.06,
+                child: ListTile(
+                  onTap: (){
+                    const snackBar = SnackBar(
+                      // padding:EdgeInsets.only(bottom: 10),
+
+                      content: Text('Coming soon ',style: TextStyle(color: Colors.black),),
+                      behavior: SnackBarBehavior.floating,
+                      //      elevation: 10,
+                      backgroundColor: Colors.white,
+                      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                      // action: SnackBarAction(
+                      // //  label: 'Undo',
+                      //   onPressed: () {
+                      //     // Some code to undo the change.
+                      //   },
+                      // ),
+                    );
+
+                    // Find the ScaffoldMessenger in the widget tree
+                    // and use it to show a SnackBar.
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) =>  DownloadsPage()),
+                    // );
                   },
                   leading: Icon(Icons.download_sharp),
                   title: Text("Downloads",
@@ -215,6 +257,25 @@ class PlayList extends StatelessWidget {
                 height: height*0.06,
                 child: ListTile(
                   onTap: (){
+                    const snackBar = SnackBar(
+                     // padding:EdgeInsets.only(bottom: 10),
+
+                      content: Text('Coming soon ',style: TextStyle(color: Colors.black),),
+                      behavior: SnackBarBehavior.floating,
+                //      elevation: 10,
+                      backgroundColor: Colors.white,
+                     // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                      // action: SnackBarAction(
+                      // //  label: 'Undo',
+                      //   onPressed: () {
+                      //     // Some code to undo the change.
+                      //   },
+                      // ),
+                    );
+
+                    // Find the ScaffoldMessenger in the widget tree
+                    // and use it to show a SnackBar.
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
                   },
                   leading: Icon(Icons.queue_music),

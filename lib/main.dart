@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:soulrelief/models/StorageModel.dart';
 import 'package:soulrelief/pages/home.dart';
 import 'package:soulrelief/widgets/navigationbar.dart';
@@ -16,17 +17,26 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
   Hive.registerAdapter(LikedSongAdapter());
   Hive.registerAdapter(LikedListAdapter());
   Hive.registerAdapter(PlayListsAdapter());
   Hive.registerAdapter(PlayListSongIdsListAdapter());
   Hive.registerAdapter(PlayListSingleSongAdapter());
+  Hive.registerAdapter(RecentSongAdapter());
+  Hive.registerAdapter(RecentSongListAdapter());
 
   await Hive.openBox<LikedSong>("LikedSong");
   await Hive.openBox<LikedList>("LikedList");
   await Hive.openBox<PlayLists>("PlayLists");
   await Hive.openBox<PlayListSongIdsList>("PlayListSongIdsList");
   await Hive.openBox<PlayListSingleSong>("PlayListSingleSong");
+  await Hive.openBox<RecentSong>("RecentSong");
+  await Hive.openBox<RecentSongList>("RecentSongList");
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
         (value) => runApp(
@@ -57,7 +67,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const NavBar(),
+      home:  NavBar(),
     );
   }
 }

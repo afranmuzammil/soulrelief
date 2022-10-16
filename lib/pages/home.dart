@@ -1,10 +1,14 @@
+import 'package:firestore_search/firestore_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:soulrelief/pages/searchFeed.dart';
 import 'dart:developer';
 import '../widgets/letestcards.dart';
 import '../widgets/recentcards.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'flotingAudio.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,6 +20,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final db = FirebaseFirestore.instance;
   var top = 0.0;
+  bool isPlayerOpened = false;
+
+  onSearch(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) =>  SearchFeed()),
+    );
+  // return SearchFeed();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +111,9 @@ class _HomePageState extends State<HomePage> {
                                     fontFamily: GoogleFonts.quicksand().fontFamily,
                                     fontWeight: FontWeight.w600)),
                           ),
-                          IconButton(onPressed: () {}, icon: Icon(Icons.search))
+                          IconButton(onPressed: () {
+                            onSearch();
+                          }, icon: Icon(Icons.search))
                           // Text("26 day's", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                           // Text("this month",
                           //     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
@@ -137,7 +153,11 @@ class _HomePageState extends State<HomePage> {
             actions: [
               Visibility(
                 visible: top == kToolbarHeight,
-                  child: IconButton(onPressed: (){}, icon: Icon(Icons.search,color: Colors.black87,))),
+                  child: IconButton(onPressed: (){
+                    FirestoreSearchBar(
+                      tag: 'example',
+                    );
+                  }, icon: Icon(Icons.search,color: Colors.black87,))),
               Visibility(
                 visible: top == kToolbarHeight,
                 child: IconButton(onPressed: (){
@@ -152,13 +172,17 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding:
                   const EdgeInsets.only(left: 0.0, top: 0.0, right: 170.0, bottom: 0.0),
-                  child: Text("Listen Again",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: Color(0xFF5F7185),
-                          fontSize: 16,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                          fontWeight: FontWeight.w600)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("Listen Again",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: Color(0xFF5F7185),
+                            fontSize: 16,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontWeight: FontWeight.w600)
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: 8.0,
@@ -179,9 +203,9 @@ class _HomePageState extends State<HomePage> {
                   height: 20.0,
                 ),
                 Container(
-                  height: height,
+                 // height: height,
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: db.collection('AllTaranas').snapshots(),
+                    stream: db.collection('AllSongsList').snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return const Center(
@@ -193,9 +217,11 @@ class _HomePageState extends State<HomePage> {
                           shrinkWrap: true,
                           children: snapshot.data!.docs
                               .map((doc) => LatestCards(
-                            songName: doc["songName"].toString(),
-                            artistName: doc["singerName"].toString(),
+                            songName: doc["song_name"].toString(),
+                            artistName: doc["singer_name"].toString(),
                             lyrics: doc["lyrics"].toString(),
+                            SongID: doc["song_id"].toString(),
+
                           ))
                               .toList(),
                         );
@@ -252,7 +278,39 @@ class _HomePageState extends State<HomePage> {
 //             ),
           ]))
         ],
-      )),
+      ),
+         // floatingActionButton: floatingActionItem,
+      ),
+
     );
   }
+
+  // onPaused() {
+  //   setState(() {
+  //     isPlayerOpened = false;
+  //   });
+  // }
+  //
+  // get floatingActionItem {
+  //   Widget floatingPlayer = FloatingAudioPlayer(onPaused: onPaused);
+  //
+  //   Widget floatingActionButton = FloatingActionButton(
+  //     onPressed: () {
+  //       setState(() {
+  //         isPlayerOpened = true;
+  //       });
+  //     },
+  //     child: Icon(Icons.play_arrow_outlined),
+  //   );
+  //
+  //   return AnimatedSwitcher(
+  //     reverseDuration: Duration(milliseconds: 0),
+  //     duration: const Duration(milliseconds: 200),
+  //     transitionBuilder: (Widget child, Animation<double> animation) {
+  //       return ScaleTransition(child: child, scale: animation);
+  //     },
+  //     child: isPlayerOpened ? floatingPlayer : floatingActionButton,
+  //   );
+  // }
+
 }

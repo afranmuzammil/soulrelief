@@ -33,3 +33,15 @@ class PlayListSingleSongHive{
     return Hive.box<PlayListSingleSong>("PlayListSingleSong");
   }
 }
+
+class RecentSongHive{
+  static Box<RecentSong> initRecentSongDataHive(){
+    return Hive.box<RecentSong>("RecentSong");
+  }
+}
+
+class RecentSongListHive{
+  static Box<RecentSongList> initRecentSongListDataHive(){
+    return Hive.box<RecentSongList>("RecentSongList");
+  }
+}

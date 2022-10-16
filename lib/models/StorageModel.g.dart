@@ -21,13 +21,14 @@ class LikedSongAdapter extends TypeAdapter<LikedSong> {
       fields[1] as String,
       fields[2] as String,
       fields[3] as String,
+      fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, LikedSong obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.songName)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class LikedSongAdapter extends TypeAdapter<LikedSong> {
       ..writeByte(2)
       ..write(obj.artistName)
       ..writeByte(3)
-      ..write(obj.audioLength);
+      ..write(obj.audioLength)
+      ..writeByte(4)
+      ..write(obj.songImage);
   }
 
   @override
@@ -166,13 +169,14 @@ class PlayListSingleSongAdapter extends TypeAdapter<PlayListSingleSong> {
       fields[1] as String,
       fields[2] as String,
       fields[3] as String,
+      fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, PlayListSingleSong obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.songName)
       ..writeByte(1)
@@ -180,7 +184,9 @@ class PlayListSingleSongAdapter extends TypeAdapter<PlayListSingleSong> {
       ..writeByte(2)
       ..write(obj.artistName)
       ..writeByte(3)
-      ..write(obj.audioLength);
+      ..write(obj.audioLength)
+      ..writeByte(4)
+      ..write(obj.songImage);
   }
 
   @override
@@ -190,6 +196,86 @@ class PlayListSingleSongAdapter extends TypeAdapter<PlayListSingleSong> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is PlayListSingleSongAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class RecentSongAdapter extends TypeAdapter<RecentSong> {
+  @override
+  final int typeId = 5;
+
+  @override
+  RecentSong read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return RecentSong(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as String,
+      fields[3] as String,
+      fields[4] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, RecentSong obj) {
+    writer
+      ..writeByte(5)
+      ..writeByte(0)
+      ..write(obj.songName)
+      ..writeByte(1)
+      ..write(obj.songID)
+      ..writeByte(2)
+      ..write(obj.artistName)
+      ..writeByte(3)
+      ..write(obj.audioLength)
+      ..writeByte(4)
+      ..write(obj.songImage);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is RecentSongAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class RecentSongListAdapter extends TypeAdapter<RecentSongList> {
+  @override
+  final int typeId = 6;
+
+  @override
+  RecentSongList read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return RecentSongList(
+      (fields[0] as List).cast<String>(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, RecentSongList obj) {
+    writer
+      ..writeByte(1)
+      ..writeByte(0)
+      ..write(obj.songID);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is RecentSongListAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
