@@ -12,6 +12,27 @@ class DownloadsPage extends StatefulWidget {
 
 class _DownloadsPageState extends State<DownloadsPage> {
 
+
+  // static Future<File> downloadAudioFile(String audioUrl) async {
+  //   var hiddenFolder = '.nomedia';
+  //
+  //   var directoryExternal = await getExternalStorageDirectory();
+  //   final dir = Directory('${directoryExternal!.path}/$hiddenFolder');
+  //   if ((await dir.exists())) {
+  //   } else {
+  //     dir.create();
+  //   }
+  //   final http.Response responseData = await http.get(Uri.parse(audioUrl));
+  //   var uint8list = responseData.bodyBytes;
+  //   var buffer = uint8list.buffer;
+  //   ByteData byteData = ByteData.view(buffer);
+  //
+  //   String fileName = audioUrl.split('/').last;
+  //   File file = await File('${dir.path}/.${fileName}').writeAsBytes(
+  //       buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+  //   return file;
+  // }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

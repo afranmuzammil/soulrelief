@@ -8,10 +8,14 @@ import 'package:soulrelief/pages/playListPages/artists.dart';
 import 'package:soulrelief/pages/playListPages/downloads.dart';
 import 'package:soulrelief/pages/playListPages/likedSongsPage.dart';
 
+import '../builders/gradienttext.dart';
+import '../models/initalizeHive.dart';
 import '../widgets/recentcards.dart';
 
 class PlayList extends StatelessWidget {
-  const PlayList({Key? key}) : super(key: key);
+   PlayList({Key? key}) : super(key: key);
+  final recentSongsHive = RecentSongHive.initRecentSongDataHive();
+  final recentSongListHive = RecentSongListHive.initRecentSongListDataHive();
 
   @override
   Widget build(BuildContext context) {
@@ -65,15 +69,17 @@ class PlayList extends StatelessWidget {
               ),
               Container(
                 height: height * 0.16,
-                child: ListView.builder(
+                child:  ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: 5,
+                    itemCount: recentSongListHive.get("recentSongs")?.songID.length,
                     itemBuilder: (BuildContext context, int index) {
                       return RecentCards(
-                        songName: "Takzeeb mitane waale hum",
+                        songName: "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songName}",
                         coverImageUrl: 'assets/hqdefault.png',
+                        songId: "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songID}",
+                        artistName: "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.artistName}",
                       );
-                    }),
+                    })
               ),
               SizedBox(
                 height: 8.0,
@@ -106,25 +112,20 @@ class PlayList extends StatelessWidget {
                 height: height*0.06,
                 child: ListTile(
                   onTap: (){
-                    const snackBar = SnackBar(
-                      // padding:EdgeInsets.only(bottom: 10),
+                    showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title:  GradientText('Coming Soon',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
+                        content: const Text('Downloading of songs is Coming soon'),
+                        actions: <Widget>[
 
-                      content: Text('Coming soon ',style: TextStyle(color: Colors.black),),
-                      behavior: SnackBarBehavior.floating,
-                      //      elevation: 10,
-                      backgroundColor: Colors.white,
-                      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                      // action: SnackBarAction(
-                      // //  label: 'Undo',
-                      //   onPressed: () {
-                      //     // Some code to undo the change.
-                      //   },
-                      // ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'OK'),
+                            child: const GradientText('OK',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
+                          ),
+                        ],
+                      ),
                     );
-
-                    // Find the ScaffoldMessenger in the widget tree
-                    // and use it to show a SnackBar.
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     // Navigator.push(
                     //   context,
                     //   MaterialPageRoute(builder: (context) =>  DownloadsPage()),
@@ -257,25 +258,20 @@ class PlayList extends StatelessWidget {
                 height: height*0.06,
                 child: ListTile(
                   onTap: (){
-                    const snackBar = SnackBar(
-                     // padding:EdgeInsets.only(bottom: 10),
+                    showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title:  GradientText('Coming Soon',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
+                        content: const Text('Custom Playlist will be coming soon'),
+                        actions: <Widget>[
 
-                      content: Text('Coming soon ',style: TextStyle(color: Colors.black),),
-                      behavior: SnackBarBehavior.floating,
-                //      elevation: 10,
-                      backgroundColor: Colors.white,
-                     // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                      // action: SnackBarAction(
-                      // //  label: 'Undo',
-                      //   onPressed: () {
-                      //     // Some code to undo the change.
-                      //   },
-                      // ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'OK'),
+                            child: const GradientText('OK',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
+                          ),
+                        ],
+                      ),
                     );
-
-                    // Find the ScaffoldMessenger in the widget tree
-                    // and use it to show a SnackBar.
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
                   },
                   leading: Icon(Icons.queue_music),

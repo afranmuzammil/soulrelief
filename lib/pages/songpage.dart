@@ -20,8 +20,10 @@ import '../models/initalizeHive.dart';
 import '../widgets/letestcards.dart';
 
 class SongPage extends StatefulWidget {
-  const SongPage({Key? key, required this.songID}) : super(key: key);
-  final String songID;
+  const SongPage({Key? key,  this.songID,  this.onTap}) : super(key: key);
+  final String? songID;
+  final Function? onTap;
+
 
   @override
   State<SongPage> createState() => _SongPageState();
@@ -105,6 +107,7 @@ class _SongPageState extends State<SongPage> {
         }),
 
       });
+      //_player.seek(Duration.zero);
 
 
 
@@ -165,14 +168,14 @@ class _SongPageState extends State<SongPage> {
 
   }
 
-  @override
-  void dispose() {
-    // WidgetsBinding.instance?.removeObserver(this);
-    // Release decoders and buffers back to the operating system making them
-    // available for other apps to use.
-    _player.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // WidgetsBinding.instance?.removeObserver(this);
+  //   // Release decoders and buffers back to the operating system making them
+  //   // available for other apps to use.
+  //   _player.dispose();
+  //   super.dispose();
+  // }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -231,7 +234,10 @@ class _SongPageState extends State<SongPage> {
           // ),
           leading: IconButton(
             icon: Icon(Icons.keyboard_arrow_down_rounded, color: Colors.black,), onPressed: () {
-            Navigator.of(context).pop();
+
+              widget.onTap!();
+
+          //  Navigator.of(context).pop();
           },),
           centerTitle: true,
         ),
@@ -536,17 +542,19 @@ class _SongPageState extends State<SongPage> {
                               ),
                               Container(
                                 padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  "${data["lyrics"].toString()}",
-                                  maxLines: 10,
-                                  overflow: TextOverflow.visible,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontFamily: GoogleFonts
-                                          .poppins()
-                                          .fontFamily,
-                                      fontWeight: FontWeight.w500),
+                                child: SingleChildScrollView(
+                                  child: Text(
+                                    "${data["lyrics"].toString()}",
+                                    //maxLines: 10,
+                                    overflow: TextOverflow.visible,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontFamily: GoogleFonts
+                                            .poppins()
+                                            .fontFamily,
+                                        fontWeight: FontWeight.w500),
+                                  ),
                                 ),
                               ),
                               Container()

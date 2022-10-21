@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../builders/gradienttext.dart';
+import '../contollers/currentSongContoller.dart';
 import '../pages/flotingAudio.dart';
 import '../pages/songpage.dart';
 
@@ -13,6 +15,7 @@ class LatestCards extends StatelessWidget {
   final String artistName;
   final String lyrics;
   final String SongID;
+  CurrnetSongController currnetSongController = Get.put(CurrnetSongController());
 
   OverlayEntry? entry;
 
@@ -120,7 +123,7 @@ class LatestCards extends StatelessWidget {
                               Text(
                                 lyrics ??
                                     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-                                maxLines: 10,
+                                maxLines: 4,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     color: Color(0xFF5F7185),
@@ -162,10 +165,11 @@ class LatestCards extends StatelessWidget {
                     ElevatedButton.icon(
                       onPressed: () {
                         print("You pressed Icon Elevated Button");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) =>  SongPage(songID: SongID,)),
-                        );
+                        currnetSongController.updateCurrentSong(SongID);
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(builder: (context) =>  SongPage(songID: SongID,)),
+                        // );
                       },
                       icon: Icon(Icons.play_arrow), //icon data for elevated button
                       label: Text("Play now"),
@@ -177,25 +181,21 @@ class LatestCards extends StatelessWidget {
                     NeumorphicButton(
                       onPressed: () {
                         print("onClick");
-                        const snackBar = SnackBar(
-                          // padding:EdgeInsets.only(bottom: 10),
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title:  GradientText('Coming Soon',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
+                            content: const Text('Custom Playlist will be coming soon'),
+                            actions: <Widget>[
 
-                          content: Text('Coming soon ',style: TextStyle(color: Colors.black),),
-                          behavior: SnackBarBehavior.floating,
-                          //      elevation: 10,
-                          backgroundColor: Colors.white,
-                          // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                          // action: SnackBarAction(
-                          // //  label: 'Undo',
-                          //   onPressed: () {
-                          //     // Some code to undo the change.
-                          //   },
-                          // ),
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const GradientText('OK',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
+                              ),
+                            ],
+                          ),
                         );
 
-                        // Find the ScaffoldMessenger in the widget tree
-                        // and use it to show a SnackBar.
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       },
                       style: NeumorphicStyle(
                         shape: NeumorphicShape.flat,

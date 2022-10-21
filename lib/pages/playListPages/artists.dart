@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../builders/gradienttext.dart';
+import '../artistsSongspage.dart';
+import '../poetPages.dart';
 
 class ArtistsPage extends StatefulWidget {
   const ArtistsPage({Key? key}) : super(key: key);
@@ -13,6 +17,28 @@ class ArtistsPage extends StatefulWidget {
 
 class _ArtistsPageState extends State<ArtistsPage> {
   final db = FirebaseFirestore.instance;
+
+  List<String> ArtiestsLists = [];
+  @override
+  void initState() {
+    getDomineNames();
+  }
+  getDomineNames()async{
+
+    CollectionReference col_ref = FirebaseFirestore.instance
+        .collection('artists');
+    QuerySnapshot docSnap = await col_ref.get();
+    docSnap.docs.forEach((elements) {
+      if(ArtiestsLists.contains(elements)==false){
+        setState(() {
+          ArtiestsLists.add(elements.id);
+        });
+
+      }
+
+      log(ArtiestsLists.toString());
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -42,21 +68,23 @@ class _ArtistsPageState extends State<ArtistsPage> {
           },),
           centerTitle: true,
         ),
-        body: Column(
-          children: [
-            StreamBuilder<QuerySnapshot>(
-              stream: db.collection('AllTaranas').snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  return ListView(
-                    physics :NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    children: snapshot.data!.docs
-                        .map((doc) => ListTile(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              ListView.builder(
+                // scrollDirection: Axis.horizontal,
+                  itemCount: ArtiestsLists.length,
+                  shrinkWrap: true,
+                  physics: ScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  ArtistsPages(artistName: ArtiestsLists[index],)),
+                        );
+                      },
                       leading: Container(
                         height: height*0.06,
                         width: width*0.12,
@@ -78,26 +106,14 @@ class _ArtistsPageState extends State<ArtistsPage> {
                         //   imageUrl: products.body["items"][index]["coverImage"].toString(),
                         // ),
                       ),
-                      title: Text("Artists Name"),
-                      subtitle: Text("19 songs"),
-                      trailing: IconButton(onPressed: (){},icon: Icon(Icons.more_vert),),
-                    )
-                    ).toList(),
-                  );
+                      title: Text("${ArtiestsLists[index]}".toUpperCase()),
+                      trailing: IconButton(onPressed: (){},icon: Icon(Icons.arrow_forward_ios_sharp),) ,
 
-                  // ListView.builder(
-                  //     scrollDirection: Axis.vertical,
-                  //     shrinkWrap: true,
-                  //     physics: ScrollPhysics(),
-                  //     itemCount: 3,
-                  //     itemBuilder: (BuildContext context,int index){
-                  //
-                  //     });
-                }
-              },
-            ),
+                    );
+                  }),
 
-          ],
+            ],
+          ),
         ));
   }
 }

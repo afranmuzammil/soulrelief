@@ -46,6 +46,8 @@ dependencies:
   firestore_search: ^0.1.9
   text_scroll: ^0.1.0
   just_audio_background: ^0.0.1-beta.7
+  just_audio_cache: ^0.1.1
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -3,16 +3,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:developer';
 
 import 'package:soulrelief/pages/songpage.dart';
+import 'package:text_scroll/text_scroll.dart';
 
 class RecentCards extends StatelessWidget {
   RecentCards({
     required this.songName,
     required this.coverImageUrl,
-    Key? key,
+    Key? key, required this.songId, required this.artistName,
   }) : super(key: key);
 
   final String songName;
   final String coverImageUrl;
+  final String songId;
+  final String artistName;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +29,7 @@ class RecentCards extends StatelessWidget {
           log("hello i am from recent cards");
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) =>  SongPage(songID: '1rMHGBUIIxHxFX43Wef7Xhx97RlU_NHQ9',)),
+            MaterialPageRoute(builder: (context) =>  SongPage(songID: songId,)),
           );
         },
         child: Container(
@@ -112,9 +115,9 @@ class RecentCards extends StatelessWidget {
                   //   //   Radius.circular(20),
                   //   // ),
                   // ),
-                  child: Text(songName.toString(),
+                  child: TextScroll(songName.toString(),
                       textAlign: TextAlign.start,
-                      maxLines: 3,
+                      velocity:  Velocity(pixelsPerSecond: Offset(12, 0)),
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,

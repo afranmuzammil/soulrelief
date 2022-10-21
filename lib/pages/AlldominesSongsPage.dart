@@ -5,16 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:soulrelief/pages/songpage.dart';
 
-class DominePages extends StatefulWidget {
-  const DominePages({Key? key, required this.domineName}) : super(key: key);
-  final String domineName;
+class AllDominesSongsPage extends StatefulWidget {
+   AllDominesSongsPage({Key? key, required this.domnineName}) : super(key: key);
+  final String domnineName;
 
   @override
-  State<DominePages> createState() => _DominePagesState();
+  State<AllDominesSongsPage> createState() => _AllDominesSongsPageState();
 }
 
-class _DominePagesState extends State<DominePages> {
+class _AllDominesSongsPageState extends State<AllDominesSongsPage> {
   final db = FirebaseFirestore.instance;
+
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +23,8 @@ class _DominePagesState extends State<DominePages> {
     final height = size.height;
     final width = size.width;
     return Scaffold(
-    appBar:  AppBar(
-        title: Text("${widget.domineName}".toUpperCase(),
+      appBar:  AppBar(
+        title: Text("${widget.domnineName}",
           style: TextStyle(
               color: Colors.black87,
               fontSize: 20,
@@ -37,12 +38,10 @@ class _DominePagesState extends State<DominePages> {
         elevation: 0,
         centerTitle: true,
       ),
-     // backgroundColor: Colors.red,
+      // backgroundColor: Colors.red,
       body: SafeArea(child: Column(
         children: [
-
           StreamBuilder<QuerySnapshot>(
-
             stream: db.collection('AllTaranas').snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
@@ -101,7 +100,7 @@ class _DominePagesState extends State<DominePages> {
             },
           ),
 
-         // Container(),
+          // Container(),
         ],
       )),
     );

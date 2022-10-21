@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../builders/gradienttext.dart';
+import '../poetPages.dart';
 
 class AllPoetsPage extends StatefulWidget {
   const AllPoetsPage({Key? key}) : super(key: key);
@@ -13,6 +16,29 @@ class AllPoetsPage extends StatefulWidget {
 
 class _AllPoetsPageState extends State<AllPoetsPage> {
   final db = FirebaseFirestore.instance;
+
+  List<String> PoetLists = [];
+  @override
+  void initState() {
+    getDomineNames();
+  }
+  getDomineNames()async{
+
+    CollectionReference col_ref = FirebaseFirestore.instance
+        .collection('poets');
+    QuerySnapshot docSnap = await col_ref.get();
+    docSnap.docs.forEach((elements) {
+      if(PoetLists.contains(elements)==false){
+        setState(() {
+          PoetLists.add(elements.id);
+        });
+
+      }
+
+      log(PoetLists.toString());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -42,21 +68,23 @@ class _AllPoetsPageState extends State<AllPoetsPage> {
           },),
           centerTitle: true,
         ),
-        body: Column(
-          children: [
-            StreamBuilder<QuerySnapshot>(
-              stream: db.collection('AllTaranas').snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  return ListView(
-                    physics :NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    children: snapshot.data!.docs
-                        .map((doc) => ListTile(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              ListView.builder(
+                // scrollDirection: Axis.horizontal,
+                  itemCount: PoetLists.length,
+                  shrinkWrap: true,
+                  physics: ScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  PoetPages(poetName: PoetLists[index], )),
+                        );
+                      },
                       leading: Container(
                         height: height*0.06,
                         width: width*0.12,
@@ -78,26 +106,17 @@ class _AllPoetsPageState extends State<AllPoetsPage> {
                         //   imageUrl: products.body["items"][index]["coverImage"].toString(),
                         // ),
                       ),
-                      title: Text("Artists Name"),
-                      subtitle: Text("19 songs"),
-                      trailing: IconButton(onPressed: (){},icon: Icon(Icons.more_vert),),
-                    )
-                    ).toList(),
-                  );
+                      title: Text("${PoetLists[index]}".toUpperCase()),
+                      trailing: IconButton(onPressed: (){},icon: Icon(Icons.arrow_forward_ios_sharp),) ,
 
-                  // ListView.builder(
-                  //     scrollDirection: Axis.vertical,
-                  //     shrinkWrap: true,
-                  //     physics: ScrollPhysics(),
-                  //     itemCount: 3,
-                  //     itemBuilder: (BuildContext context,int index){
-                  //
-                  //     });
-                }
-              },
-            ),
+                    );
+                  }),
 
-          ],
+
+
+
+            ],
+          ),
         ));
   }
 }

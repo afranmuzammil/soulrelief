@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../builders/gradienttext.dart';
+import '../dominePages.dart';
 
 class AllDominePages extends StatefulWidget {
   const AllDominePages({Key? key}) : super(key: key);
@@ -13,6 +16,30 @@ class AllDominePages extends StatefulWidget {
 
 class _AllDominePagesState extends State<AllDominePages> {
   final db = FirebaseFirestore.instance;
+
+
+  List<String> dominesLists = [];
+  @override
+  void initState() {
+    getDomineNames();
+  }
+  getDomineNames()async{
+
+    CollectionReference col_ref = FirebaseFirestore.instance
+        .collection('Domains');
+    QuerySnapshot docSnap = await col_ref.get();
+    docSnap.docs.forEach((elements) {
+      if(dominesLists.contains(elements)==false){
+        setState(() {
+          dominesLists.add(elements.id);
+        });
+
+      }
+
+    log(dominesLists.toString());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -23,7 +50,9 @@ class _AllDominePagesState extends State<AllDominePages> {
           backgroundColor: Colors.white,
           elevation: 0,
           actions: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.search,color: Colors.black87,)),
+            IconButton(onPressed: (){
+              getDomineNames();
+            }, icon: Icon(Icons.search,color: Colors.black87,)),
             IconButton(onPressed: (){}, icon: Icon(Icons.settings,color: Colors.black87,))
           ],
           title: GradientText(
@@ -42,21 +71,24 @@ class _AllDominePagesState extends State<AllDominePages> {
           },),
           centerTitle: true,
         ),
-        body: Column(
-          children: [
-            StreamBuilder<QuerySnapshot>(
-              stream: db.collection('AllTaranas').snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  return ListView(
-                    physics :NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    children: snapshot.data!.docs
-                        .map((doc) => ListTile(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+
+              ListView.builder(
+                 // scrollDirection: Axis.horizontal,
+                  itemCount: dominesLists.length,
+                  shrinkWrap: true,
+                  physics: ScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  DominePages(domineName: dominesLists[index],)),
+                        );
+                      },
                       leading: Container(
                         height: height*0.06,
                         width: width*0.12,
@@ -78,26 +110,16 @@ class _AllDominePagesState extends State<AllDominePages> {
                         //   imageUrl: products.body["items"][index]["coverImage"].toString(),
                         // ),
                       ),
-                      title: Text("Artists Name"),
-                      subtitle: Text("19 songs"),
-                      trailing: IconButton(onPressed: (){},icon: Icon(Icons.more_vert),),
-                    )
-                    ).toList(),
-                  );
+                      title: Text("${dominesLists[index]}".toUpperCase()),
+                      trailing: IconButton(onPressed: (){},icon: Icon(Icons.arrow_forward_ios_sharp),) ,
 
-                  // ListView.builder(
-                  //     scrollDirection: Axis.vertical,
-                  //     shrinkWrap: true,
-                  //     physics: ScrollPhysics(),
-                  //     itemCount: 3,
-                  //     itemBuilder: (BuildContext context,int index){
-                  //
-                  //     });
-                }
-              },
-            ),
+                    );
+                  }),
 
-          ],
+
+
+            ],
+          ),
         ));
   }
 }
