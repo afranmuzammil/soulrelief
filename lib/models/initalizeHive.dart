@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:soulrelief/models/songStorageModel.dart';
 
 import 'StorageModel.dart';
 
@@ -43,5 +44,11 @@ class RecentSongHive{
 class RecentSongListHive{
   static Box<RecentSongList> initRecentSongListDataHive(){
     return Hive.box<RecentSongList>("RecentSongList");
+  }
+}
+
+class SingleSongHive{
+  static Box<SingleSong> initSingleSongDataHive(){
+    return Hive.box<SingleSong>("SingleSong");
   }
 }

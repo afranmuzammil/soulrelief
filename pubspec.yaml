@@ -60,8 +60,24 @@ dev_dependencies:
   hive_generator: ^1.1.2
   flutter_launcher_icons: ^0.10.0
   flutter_native_splash: ^2.2.9
-  flutter_image_slideshow: ^0.1.4
+ # flutter_image_slideshow: ^0.1.4
+  #flutter_launcher_name: ^0.0.1
 
+#flutter_launcher_name:
+#  name: "Kooza"
+
+
+
+flutter_native_splash:
+  android: false
+  color: "#000000"
+  ios: true
+  image: "assets/k.png"
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path: "assets/k.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

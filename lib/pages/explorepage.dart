@@ -193,8 +193,8 @@ class _ExplorePageState extends State<ExplorePage> {
                       itemCount: 3,
                       itemBuilder: (BuildContext context, int index) {
                         return PoetsCards(
-                          poetImageLink: 'assets/Allama Iqbal.png',
-                          poetName: 'Allama Iqbal',
+                          poetImageLink: 'assets/kdefult.png',
+                          poetName: 'Poets',
                         );
                       }),
                 ),

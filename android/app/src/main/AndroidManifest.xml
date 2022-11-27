@@ -6,7 +6,7 @@
 
 
    <application
-        android:label="soulrelief"
+        android:label="Kooza"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
        <activity

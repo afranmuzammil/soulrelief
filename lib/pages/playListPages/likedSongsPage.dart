@@ -68,7 +68,7 @@ class _LikedSongsPageState extends State<LikedSongsPage> {
 
                         borderRadius: BorderRadius.all(Radius.circular(0)),
                         // color: pictureBG,
-                        image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/hqdefault.png')
+                        image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/kdefult.png')
                           //NetworkImage(
                           //  "${Product.products[index].imageUrl}")
                           // CachedNetworkImageProvider(

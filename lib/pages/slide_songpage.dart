@@ -32,6 +32,12 @@ class _SlideSongPageState extends State<SlideSongPage> {
     ];
   }
 
+  @override
+  initState(){
+    currnetSongController;
+  }
+
+
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
@@ -157,7 +163,7 @@ class _SlideSongPageState extends State<SlideSongPage> {
         isDismissible: true,
         body: _buildScreens()[IndexValue],
         panelHeader: MiniPlayer(onTap: sliderControl.sliderController.show,songId: currnetSongController.currentSongID ,),
-        panel: SongPage(onTap: sliderControl.sliderController.hide,songID: "1rMHGBUIIxHxFX43Wef7Xhx97RlU_NHQ9",),
+        panel: SongPage(onTap: sliderControl.sliderController.hide,songID: currnetSongController.currentSongID,),
         footer: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),

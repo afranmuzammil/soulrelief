@@ -2,22 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:soulrelief/models/songStorageModel.dart';
 import '../builders/gradienttext.dart';
 import '../contollers/currentSongContoller.dart';
+import '../models/initalizeHive.dart';
 import '../pages/flotingAudio.dart';
 import '../pages/songpage.dart';
 
 class LatestCards extends StatelessWidget {
-  LatestCards({Key? key, required this.songName, required this.artistName, required this.lyrics, required this.SongID})
+  LatestCards({Key? key, required this.songName, required this.artistName, required this.lyrics, required this.SongID,  required this.poetName, required this.albumName, required this.audioImage, required this.audioFileSize, required this.audioLength, required this.composedBy, required this.domineName})
       : super(key: key);
 
+
+  final String poetName;
+ final String albumName;
   final String songName;
   final String artistName;
+  final String audioImage;
+  final String audioFileSize;
+  final String audioLength;
+  final String composedBy;
+  final String domineName;
   final String lyrics;
   final String SongID;
   CurrnetSongController currnetSongController = Get.put(CurrnetSongController());
 
   OverlayEntry? entry;
+  final CurrentSongHive = SingleSongHive.initSingleSongDataHive();
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +112,7 @@ class LatestCards extends StatelessWidget {
                           borderRadius: BorderRadius.all(Radius.circular(14)),
                           // color: pictureBG,
                           image: DecorationImage(
-                              fit: BoxFit.fill, image: AssetImage("assets/hidersiaf.png")
+                              fit: BoxFit.fill, image: AssetImage("assets/kdefult.png")
                               //NetworkImage(
                               //  "${Product.products[index].imageUrl}")
                               // CachedNetworkImageProvider(
@@ -123,7 +134,7 @@ class LatestCards extends StatelessWidget {
                               Text(
                                 lyrics ??
                                     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-                                maxLines: 4,
+                                maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     color: Color(0xFF5F7185),
@@ -165,7 +176,10 @@ class LatestCards extends StatelessWidget {
                     ElevatedButton.icon(
                       onPressed: () {
                         print("You pressed Icon Elevated Button");
-                        currnetSongController.updateCurrentSong(SongID);
+                       // currnetSongController.updateCurrentSong(SongID);
+                     //   currnetSongController.getSong(SongID);
+                          final singleSong = SingleSong(SongID, poetName, albumName, artistName, audioLength, songName, composedBy, audioImage, audioFileSize, lyrics, domineName);
+                        CurrentSongHive.put("currentSong", singleSong);
                         // Navigator.push(
                         //   context,
                         //   MaterialPageRoute(builder: (context) =>  SongPage(songID: SongID,)),

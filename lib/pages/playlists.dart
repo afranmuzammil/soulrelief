@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:soulrelief/pages/playListPages/AllPoetsPage.dart';
 import 'package:soulrelief/pages/playListPages/albumsPage.dart';
@@ -9,6 +10,7 @@ import 'package:soulrelief/pages/playListPages/downloads.dart';
 import 'package:soulrelief/pages/playListPages/likedSongsPage.dart';
 
 import '../builders/gradienttext.dart';
+import '../contollers/currentSongContoller.dart';
 import '../models/initalizeHive.dart';
 import '../widgets/recentcards.dart';
 
@@ -16,6 +18,8 @@ class PlayList extends StatelessWidget {
    PlayList({Key? key}) : super(key: key);
   final recentSongsHive = RecentSongHive.initRecentSongDataHive();
   final recentSongListHive = RecentSongListHive.initRecentSongListDataHive();
+   final likedListHive = LikedListHive.initLikedListDataHive();
+   CurrnetSongController currnetSongController = Get.put(CurrnetSongController());
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +31,9 @@ class PlayList extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.search,color: Colors.black87,)),
+          IconButton(onPressed: (){
+            currnetSongController.AddSongsToHive();
+          }, icon: Icon(Icons.search,color: Colors.black87,)),
           IconButton(onPressed: (){}, icon: Icon(Icons.settings,color: Colors.black87,))
         ],
         title: Text("Playlists",
@@ -42,7 +48,7 @@ class PlayList extends StatelessWidget {
            padding: const EdgeInsets.only(left: 10.0),
            child: Image(
               image: AssetImage(
-                "assets/tarnana.png",
+                "assets/kdefult.png",
               ),
               height: height * 0.12,
               width: width * 0.04,
@@ -67,19 +73,26 @@ class PlayList extends StatelessWidget {
               SizedBox(
                 height: 8.0,
               ),
-              Container(
-                height: height * 0.16,
-                child:  ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: recentSongListHive.get("recentSongs")?.songID.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return RecentCards(
-                        songName: "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songName}",
-                        coverImageUrl: 'assets/hqdefault.png',
-                        songId: "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songID}",
-                        artistName: "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.artistName}",
-                      );
-                    })
+              Visibility( visible: recentSongListHive.get("recentSongs")?.songID != null,
+                child:recentSongListHive.get("recentSongs")?.songID.isNotEmpty ?? false
+                    ? Container(
+                  height: height * 0.16,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: recentSongListHive.get("recentSongs")?.songID.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return RecentCards(
+                          songName:
+                          "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songName}",
+                          coverImageUrl: 'assets/kdefult.png',
+                          songId:
+                          "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songID}",
+                          artistName:
+                          "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.artistName}",
+                        );
+                      }),
+                )
+                    : Container(),
               ),
               SizedBox(
                 height: 8.0,
@@ -90,10 +103,13 @@ class PlayList extends StatelessWidget {
                 height: height*0.06,
                 child: ListTile(
                   onTap: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) =>  LikedSongsPage()),
-                    );
+                    if(likedListHive.get("likedSongs")!.songID.isNotEmpty){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>  LikedSongsPage()),
+                      );
+                    }
+
                   },
                   leading: Icon(Icons.favorite),
                   title: Text("Liked Songs",

@@ -4,6 +4,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:hive/hive.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:soulrelief/models/StorageModel.dart';
+import 'package:soulrelief/models/songStorageModel.dart';
 import 'package:soulrelief/pages/home.dart';
 import 'package:soulrelief/pages/slide_songpage.dart';
 import 'package:soulrelief/widgets/navigationbar.dart';
@@ -31,6 +32,7 @@ void main() async{
   Hive.registerAdapter(PlayListSingleSongAdapter());
   Hive.registerAdapter(RecentSongAdapter());
   Hive.registerAdapter(RecentSongListAdapter());
+  Hive.registerAdapter(SingleSongAdapter());
 
   await Hive.openBox<LikedSong>("LikedSong");
   await Hive.openBox<LikedList>("LikedList");
@@ -39,6 +41,7 @@ void main() async{
   await Hive.openBox<PlayListSingleSong>("PlayListSingleSong");
   await Hive.openBox<RecentSong>("RecentSong");
   await Hive.openBox<RecentSongList>("RecentSongList");
+  await Hive.openBox<SingleSong>("SingleSong");
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
         (value) => runApp(

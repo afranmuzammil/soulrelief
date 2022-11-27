@@ -48,7 +48,7 @@ class _AllDominesSongsPageState extends State<AllDominesSongsPage> {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
-              } else {
+              } else if (snapshot.hasData){
                 return ListView(
                   physics :NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -67,7 +67,7 @@ class _AllDominesSongsPageState extends State<AllDominesSongsPage> {
 
                         borderRadius: BorderRadius.all(Radius.circular(0)),
                         // color: pictureBG,
-                        image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/hqdefault.png')
+                        image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/kdefult.png')
                           //NetworkImage(
                           //  "${Product.products[index].imageUrl}")
                           // CachedNetworkImageProvider(
@@ -96,6 +96,89 @@ class _AllDominesSongsPageState extends State<AllDominesSongsPage> {
                 //     itemBuilder: (BuildContext context,int index){
                 //
                 //     });
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    "Some Thing went wrong please try restating the Application ",
+                    overflow: TextOverflow.visible,
+                    style: TextStyle(),
+                  ),
+                );
+              } else {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                    return Center(
+                      child: Text(
+                        "Some Thing went wrong please try restating the Application ${snapshot.hasError}",
+                        overflow: TextOverflow.visible,
+                        style: TextStyle(),
+                      ),
+                    );
+
+                    break;
+
+                  case ConnectionState.waiting:
+                    return Column(
+                      children: [
+                        Center(child: CircularProgressIndicator()),
+                        Center(
+                          child: Text("Please wait While loading"),
+                        ),
+                      ],
+                    );
+                    // children =  [
+                    //   Center(child: Text("Please wait While loading"),),
+                    //
+                    // ];
+                    break;
+                  case ConnectionState.active:
+                    return Center(child: CircularProgressIndicator());
+
+                    // children =  [
+                    //         Center(child: CupertinoActivityIndicator()),
+                    //       ];
+                    break;
+                  case ConnectionState.done:
+                    return ListView(
+                      physics :NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      children: snapshot.data!.docs
+                          .map((doc) => ListTile(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) =>  SongPage(songID: '1rMHGBUIIxHxFX43Wef7Xhx97RlU_NHQ9',)),
+                          );
+                        },
+                        leading: Container(
+                          height: height*0.06,
+                          width: width*0.12,
+                          decoration:  BoxDecoration(
+
+                            borderRadius: BorderRadius.all(Radius.circular(0)),
+                            // color: pictureBG,
+                            image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/kdefult.png')
+                              //NetworkImage(
+                              //  "${Product.products[index].imageUrl}")
+                              // CachedNetworkImageProvider(
+                              //   items.body["featuredClothingItems"][index]["coverImage"]
+                              //       .toString(),
+                              // ),
+                            ),
+                          ),
+                          // child: CachedNetworkImage(
+                          //   placeholder: (context, imgUrl) => const Text("Image is loading"),
+                          //   imageUrl: products.body["items"][index]["coverImage"].toString(),
+                          // ),
+                        ),
+                        title: Text(doc["songName"].toString()),
+                        subtitle: Text("${doc["singerName"].toString()} . ${doc["audioLength"].toString()}"),
+                        trailing: IconButton(onPressed: (){},icon: Icon(Icons.more_vert),),
+                      )
+                      ).toList(),
+                    );
+                    break;
+                }
               }
             },
           ),

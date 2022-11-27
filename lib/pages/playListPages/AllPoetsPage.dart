@@ -20,24 +20,24 @@ class _AllPoetsPageState extends State<AllPoetsPage> {
   List<String> PoetLists = [];
   @override
   void initState() {
-    getDomineNames();
+  //  getDomineNames();
   }
-  getDomineNames()async{
-
-    CollectionReference col_ref = FirebaseFirestore.instance
-        .collection('poets');
-    QuerySnapshot docSnap = await col_ref.get();
-    docSnap.docs.forEach((elements) {
-      if(PoetLists.contains(elements)==false){
-        setState(() {
-          PoetLists.add(elements.id);
-        });
-
-      }
-
-      log(PoetLists.toString());
-    });
-  }
+  // getDomineNames()async{
+  //
+  //   CollectionReference col_ref = FirebaseFirestore.instance
+  //       .collection('poets');
+  //   QuerySnapshot docSnap = await col_ref.get();
+  //   docSnap.docs.forEach((elements) {
+  //     if(PoetLists.contains(elements)==false){
+  //       setState(() {
+  //         PoetLists.add(elements.id);
+  //       });
+  //
+  //     }
+  //
+  //     log(PoetLists.toString());
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +92,7 @@ class _AllPoetsPageState extends State<AllPoetsPage> {
 
                           borderRadius: BorderRadius.all(Radius.circular(0)),
                           // color: pictureBG,
-                          image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/hqdefault.png')
+                          image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/kdefult.png')
                             //NetworkImage(
                             //  "${Product.products[index].imageUrl}")
                             // CachedNetworkImageProvider(

@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart' as getx;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
@@ -14,14 +16,15 @@ import '../contollers/common.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:we_slide/we_slide.dart';
 import 'package:rxdart/rxdart.dart';
-
+import 'package:just_audio_cache/just_audio_cache.dart';
+import '../contollers/currentSongContoller.dart';
 import '../models/StorageModel.dart';
 import '../models/initalizeHive.dart';
 import '../widgets/letestcards.dart';
 
 class SongPage extends StatefulWidget {
-  const SongPage({Key? key,  this.songID,  this.onTap}) : super(key: key);
-  final String? songID;
+  const SongPage({Key? key,  required this.songID,  this.onTap}) : super(key: key);
+  final String songID;
   final Function? onTap;
 
 
@@ -36,6 +39,7 @@ class _SongPageState extends State<SongPage> {
   final likedSongsHive = LikedSongsHive.initLikedSongsDataHive();
   final recentSongsHive = RecentSongHive.initRecentSongDataHive();
   final recentSongListHive = RecentSongListHive.initRecentSongListDataHive();
+  CurrnetSongController currnetSongController = getx.Get.put(CurrnetSongController());
   List<String> addinginList = [];
   var t = true;
   /// String songId="12ig9Z23DlI2frx0pb8DozUcqGrYsg7vQ";
@@ -52,7 +56,7 @@ class _SongPageState extends State<SongPage> {
   @override
   void initState() {
     addinginList = likedListHive.get("likedSongs")?.songID??[];
-    songId = widget.songID;
+    songId = widget?.songID;
     print("songid : $songId");
     super.initState();
     // WidgetsBinding.instance?.addObserver(this);
@@ -60,14 +64,19 @@ class _SongPageState extends State<SongPage> {
       // statusBarColor: Colors.black,
     ));
 
+    Timer.periodic(Duration(seconds: 3), (timer) {
+      // getData();
+    });
 
-    _init();
+
+    init();
   }
 
   List<DocumentSnapshot>? documentList;
 
 
-  Future<void> _init() async {
+  Future<void> init() async {
+    log("song Init Started") ;
     // Inform the operating system of our app's audio attributes etc.
     // We pick a reasonable default for an app that plays speech.
     final session = await AudioSession.instance;
@@ -79,34 +88,42 @@ class _SongPageState extends State<SongPage> {
         });
     // Try to load audio from a source and catch any errors.
     try {
-      await _player.setAudioSource(AudioSource.uri(
-        Uri.parse(
-            "https://drive.google.com/uc?export=view&id=$songId"),
-        tag: MediaItem(
-          // Specify a unique ID for each media item:
-          id: '1',
-          // Metadata to display in the notification:
-          album: "Album name",
-          title: "Song name",
-          artUri: Uri.parse("https://drive.google.com/uc?export=view&id=$songId"),
-        ),
-      )); //1-HPfLLirpw2REb-quLmxq6MyEtQ3jZep
+      if(await _player.existedInLocal(url: "https://drive.google.com/uc?export=view&id=$songId") == true){
+        await _player.dynamicSet( url: "https://drive.google.com/uc?export=view&id=$songId");
+        ////TODO: have a look at his download of audio
+      }else{
+        _player.cacheFile( url: "https://drive.google.com/uc?export=view&id=$songId");
+        await _player.setAudioSource(
+            AudioSource.uri(
+          Uri.parse(
+              "https://drive.google.com/uc?export=view&id=$songId"),
+          tag: MediaItem(
+            // Specify a unique ID for each media item:
+            id: '1',
+            // Metadata to display in the notification:
+            album: "Album name",
+            title: "Song name",
+            artUri: Uri.parse("https://drive.google.com/uc?export=view&id=$songId"),
+          ),
+        )); //1-HPfLLirpw2REb-quLmxq6MyEtQ3jZep
+      }
 
-      await FirebaseFirestore.instance
-          .collection("song_ids_list").doc("song_ids").get().then((value) =>
-      {
-        log("whrere ${value["all_ids"][0]}"),
 
-        setState(() {
-          for (int i = 0; i <= value["all_ids"].length; i++) {
-            if (songIDList.contains(value["all_ids"][i]) == false) {
-              songIDList.add(value["all_ids"][i]);
-              log("hello ${songIDList}");
-            }
-          }
-        }),
-
-      });
+      // await FirebaseFirestore.instance
+      //     .collection("song_ids_list").doc("song_ids").get().then((value) =>
+      // {
+      //   log("whrere ${value["all_ids"][0]}"),
+      //
+      //   setState(() {
+      //     for (int i = 0; i <= value["all_ids"].length; i++) {
+      //       if (songIDList.contains(value["all_ids"][i]) == false) {
+      //         songIDList.add(value["all_ids"][i]);
+      //         log("hello ${songIDList}");
+      //       }
+      //     }
+      //   }),
+      //
+      // });
       //_player.seek(Duration.zero);
 
 
@@ -176,7 +193,7 @@ class _SongPageState extends State<SongPage> {
   //   _player.dispose();
   //   super.dispose();
   // }
-
+  bool isfirst = true;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
@@ -241,19 +258,355 @@ class _SongPageState extends State<SongPage> {
           },),
           centerTitle: true,
         ),
-        body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-          future: db.collection("AllSongsList").doc(songId).get(),
-          builder: (_, snapshot) {
-            if (snapshot.hasError) return Text('Error = ${snapshot.error}');
+        body: currnetSongController.obx(
+          (data){
+            //var data = snapshot.data!.data();
+            var value = data!['song_name'];
+            log("song name $value");
+            if(t){
+              addSongToRecent(data!['song_id'],data!['song_name'],data!['singer_name'],data!['audio_length'],data!['audio_image']);
+            }
+            return Container(
+              height: height,
+              width: width,
+              child: SafeArea(
+                child: SingleChildScrollView(
+                  child: Column(
 
+                    children: [
+                      // Container(
+                      //   height: height * 0.2,
+                      //   width: width,
+                      //   // color: Colors.red,
+                      //   child: Column(
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     crossAxisAlignment: CrossAxisAlignment.center,
+                      //     children: [
+                      //       Image(
+                      //         image: AssetImage(
+                      //           "assets/tarnana.png",
+                      //         ),
+                      //         height: height * 0.12,
+                      //         width: width * 0.3,
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                        elevation: 10,
+                        shadowColor: Color(0xFFC3539A),
+                        child: SizedBox(
+                            height: height * 0.66,
+                            width: width * 0.85,
+
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                GradientText(
+                                  "${data!['song_name']}",
+                                  style: TextStyle(
+                                      color: Color(0xFF5F7185),
+                                      fontSize: 18,
+                                      fontFamily: GoogleFonts
+                                          .poppins()
+                                          .fontFamily,
+                                      fontWeight: FontWeight.bold),
+                                  gradient: LinearGradient(colors: [
+                                    Color(0xffdf99da), Color(0xff668fd7)
+                                  ]),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0.0, 22, 0.0, 50),
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16.0),
+                                    ),
+                                    shadowColor: Color(0xFFC3539A),
+                                    elevation: 20,
+                                    child: Container(
+                                      height: height * 0.25,
+                                      width: width * 0.45,
+                                      decoration: BoxDecoration(
+
+                                        borderRadius: BorderRadius.all(Radius.circular(14)),
+                                        // color: pictureBG,
+                                        image: DecorationImage(fit: BoxFit.fill,
+                                            image: AssetImage("assets/Allama Iqbal.png")
+                                          //NetworkImage(
+                                          //  "${Product.products[index].imageUrl}")
+                                          // CachedNetworkImageProvider(
+                                          //   items.body["featuredClothingItems"][index]["coverImage"]
+                                          //       .toString(),
+                                          // ),
+                                        ),
+                                      ),
+                                      // child: CachedNetworkImage(
+                                      //   placeholder: (context, imgUrl) => const Text("Image is loading"),
+                                      //   imageUrl: products.body["items"][index]["coverImage"].toString(),
+                                      // ),
+                                    ),
+                                  ),
+                                ),
+                                StreamBuilder<PositionData>(
+                                  stream: _positionDataStream,
+                                  builder: (context, snapshot) {
+                                    final positionData = snapshot.data;
+                                    return SeekBar(
+
+                                      duration: positionData?.duration ?? Duration.zero,
+                                      position: positionData?.position ?? Duration.zero,
+                                      bufferedPosition:
+                                      positionData?.bufferedPosition ?? Duration.zero,
+                                      onChangeEnd: _player.seek,
+                                    );
+                                  },
+                                ),
+                                Row(
+
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+
+                                    ControlButtons(_player, songIdList: songIDList,
+                                      currentSongID: songId!,
+                                      Nextsong: () {
+                                        nextSong();
+                                      },
+                                      prvsong: () {
+                                        prvSong();
+                                      },),
+
+
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    IconButton( onPressed: () {
+
+                                      if(addinginList.contains(data!['song_id'])== false){
+                                        final songData = LikedSong("${data!['song_name']}", "${data!['song_id']}", "${data!['singer_name']}", "${data!['audio_length']}","{data!['audio_image']}");
+                                        likedSongsHive.put("${data!['song_id']}", songData).then((value) {
+
+                                          setState(() {
+                                            addinginList.add("${data!['song_id']}");
+                                          });
+
+                                          final SongId = LikedList(addinginList);
+                                          likedListHive.put("likedSongs", SongId);
+                                        });
+                                      }
+                                      if(addinginList.contains(data!['song_id'])== true){
+
+                                        likedSongsHive.delete(data!['song_id']).then((value) {
+
+                                          setState(() {
+                                            addinginList.remove("${data!['song_id']}");
+                                          });
+
+                                          final SongId = LikedList(addinginList);
+                                          likedListHive.put("likedSongs", SongId);
+                                        });
+                                      }
+
+
+                                    }, icon: addinginList.contains(data!['song_id'])?RadiantGradientMask(child: Icon(Icons.favorite,color:Colors.white,),)
+                                        :Icon(Icons.favorite_border,color:Color(0XFF5F7185),)
+                                      ,),
+                                    Text("${data!['album_name']}".toUpperCase(),style :TextStyle(
+                                        color: Color(0xFF5F7185),
+                                        fontSize: 16,
+                                        fontFamily: GoogleFonts.poppins().fontFamily,
+                                        fontWeight: FontWeight.w600)),
+                                    IconButton( onPressed: () {
+                                      const snackBar = SnackBar(
+                                        // padding:EdgeInsets.only(bottom: 10),
+
+                                        content: Text('Coming soon ',style: TextStyle(color: Colors.black),),
+                                        behavior: SnackBarBehavior.floating,
+                                        //      elevation: 10,
+                                        backgroundColor: Colors.white,
+                                        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                                        // action: SnackBarAction(
+                                        // //  label: 'Undo',
+                                        //   onPressed: () {
+                                        //     // Some code to undo the change.
+                                        //   },
+                                        // ),
+                                      );
+
+                                      // Find the ScaffoldMessenger in the widget tree
+                                      // and use it to show a SnackBar.
+                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                    }, icon: Icon(Icons.playlist_add,color:Color(0XFF5F7185),) ,),
+                                  ],
+                                )
+                                //  ControlButtons(_player),
+                                // Display seek bar. Using StreamBuilder, this widget rebuilds
+                                // each time the position, buffered position or duration changes.
+
+                              ],
+                            )
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: height,
+                        width: width * 0.85,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Color(0xff3B4C77), Color(0xffD1549E)],
+                            begin: Alignment.bottomRight,
+                            end: Alignment.topLeft,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(14)),
+                          // color: pictureBG,
+
+                        ),
+                        child: ContainedTabBarView(
+                          tabBarProperties: TabBarProperties(
+                            indicatorColor: Colors.white,
+                          ),
+                          initialIndex: 1,
+                          tabs: [
+                            Text('Next'),
+                            Text('Lyrics'),
+                            Text("Info")
+                          ],
+                          views: [
+                            Container(
+                              child: StreamBuilder<QuerySnapshot>(
+                                //   stream: db.collection('AllSongsList').snapshots(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else {
+                                    return
+                                      ListView(
+                                        physics: NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        children: snapshot.data!.docs
+                                            .map((doc) =>
+                                            ListTile(
+                                              onTap: () {
+                                                setState(() {
+                                                  songId = doc["song_id"].toString();
+                                                  init();
+                                                });
+                                                print(doc["song_id"].toString());
+                                              },
+                                              leading: Container(
+                                                height: height * 0.06,
+                                                width: width * 0.12,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(0)),
+                                                  // color: pictureBG,
+                                                  image: DecorationImage(fit: BoxFit.fill,
+                                                      image: AssetImage('assets/hqdefault.png')
+                                                    //NetworkImage(
+                                                    //  "${Product.products[index].imageUrl}")
+                                                    // CachedNetworkImageProvider(
+                                                    //   items.body["featuredClothingItems"][index]["coverImage"]
+                                                    //       .toString(),
+                                                    // ),
+                                                  ),
+                                                ),
+                                                // child: CachedNetworkImage(
+                                                //   placeholder: (context, imgUrl) => const Text("Image is loading"),
+                                                //   imageUrl: products.body["items"][index]["coverImage"].toString(),
+                                                // ),
+                                              ),
+                                              title: Text(doc["song_name"].toString(),
+                                                style: TextStyle(color: Colors.white),),
+                                              subtitle: Text("${doc["singer_name"]
+                                                  .toString()} • ${doc["audio_length"]
+                                                  .toString()}",
+                                                  style: TextStyle(color: Colors.white)),
+                                              trailing: IconButton(onPressed: () {},
+                                                icon: Icon(Icons.more_vert),
+                                                color: Colors.white,),
+                                            ),
+
+
+                                        ).toList(),
+                                      );
+
+                                    // ListView.builder(
+                                    //     scrollDirection: Axis.vertical,
+                                    //     shrinkWrap: true,
+                                    //     physics: ScrollPhysics(),
+                                    //     itemCount: 3,
+                                    //     itemBuilder: (BuildContext context,int index){
+                                    //
+                                    //     });
+                                  }
+                                },
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(8.0),
+                              child: SingleChildScrollView(
+                                child: Text(
+                                  "${data["lyrics"].toString()}",
+                                  //maxLines: 10,
+                                  overflow: TextOverflow.visible,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontFamily: GoogleFonts
+                                          .poppins()
+                                          .fontFamily,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ),
+                            Container()
+                          ],
+                          onChange: (index) => print(index),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        )
+
+
+    );
+  }
+
+  FutureBuilder<DocumentSnapshot<Map<String, dynamic>>> SongPlayFunction(double height, double width, BuildContext context) {
+    //var snapshot = await documentRef.get({ source: 'cache' }
+
+      return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+         // future: db.collection("AllSongsList").doc("songId").get(),
+          builder: (_, snapshot) {
+
+            WidgetsBinding.instance.addPostFrameCallback((_){
+              if(isfirst){
+                setState(() {
+                  isfirst = false;
+                });
+                log(isfirst.toString());
+              }
+            });
+            if (snapshot.hasError) return Text('Error = ${snapshot.error}');
             if (snapshot.hasData) {
               var data = snapshot.data!.data();
               var value = data!['song_name'];
               log("song name $value");
-
               if(t){
               addSongToRecent(data!['song_id'],data!['song_name'],data!['singer_name'],data!['audio_length'],data!['audio_image']);
-
               }
               return Container(
                 height: height,
@@ -470,7 +823,7 @@ class _SongPageState extends State<SongPage> {
                             views: [
                               Container(
                                 child: StreamBuilder<QuerySnapshot>(
-                                  stream: db.collection('AllSongsList').snapshots(),
+                               //   stream: db.collection('AllSongsList').snapshots(),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return const Center(
@@ -487,7 +840,7 @@ class _SongPageState extends State<SongPage> {
                                                 onTap: () {
                                                   setState(() {
                                                     songId = doc["song_id"].toString();
-                                                    _init();
+                                                    init();
                                                   });
                                                   print(doc["song_id"].toString());
                                                 },
@@ -567,14 +920,372 @@ class _SongPageState extends State<SongPage> {
                   ),
                 ),
               );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  "Some Thing went wrong please try restating the Application ",
+                  overflow: TextOverflow.visible,
+                  style: TextStyle(),
+                ),
+              );
+            } else {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  return Center(
+                    child: Text(
+                      "Some Thing went wrong please try restating the Application ${snapshot.hasError}",
+                      overflow: TextOverflow.visible,
+                      style: TextStyle(),
+                    ),
+                  );
+                  break;
+                case ConnectionState.waiting:
+                  return Column(
+                    children: [
+                      Center(child: CircularProgressIndicator()),
+                      Center(
+                        child: Text("Please wait While loading"),
+                      ),
+                    ],
+                  );
+                  // children =  [
+                  //   Center(child: Text("Please wait While loading"),),
+                  //
+                  // ];
+                  break;
+                case ConnectionState.active:
+                  return Center(child: CircularProgressIndicator());
+                  // children =  [
+                  //         Center(child: CupertinoActivityIndicator()),
+                  //       ];
+                  break;
+                case ConnectionState.done:
+                  var data = snapshot.data!.data();
+                  var value = data!['song_name'];
+                  log("song name $value");
+
+                  if(t){
+                    addSongToRecent(data!['song_id'],data!['song_name'],data!['singer_name'],data!['audio_length'],data!['audio_image']);
+                  }
+                  return Container(
+                    height: height,
+                    width: width,
+                    child: SafeArea(
+                      child: SingleChildScrollView(
+                        child: Column(
+
+                          children: [
+                            // Container(
+                            //   height: height * 0.2,
+                            //   width: width,
+                            //   // color: Colors.red,
+                            //   child: Column(
+                            //     mainAxisAlignment: MainAxisAlignment.center,
+                            //     crossAxisAlignment: CrossAxisAlignment.center,
+                            //     children: [
+                            //       Image(
+                            //         image: AssetImage(
+                            //           "assets/tarnana.png",
+                            //         ),
+                            //         height: height * 0.12,
+                            //         width: width * 0.3,
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              elevation: 10,
+                              shadowColor: Color(0xFFC3539A),
+                              child: SizedBox(
+                                  height: height * 0.66,
+                                  width: width * 0.85,
+
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      GradientText(
+                                        "${data!['song_name']}",
+                                        style: TextStyle(
+                                            color: Color(0xFF5F7185),
+                                            fontSize: 18,
+                                            fontFamily: GoogleFonts
+                                                .poppins()
+                                                .fontFamily,
+                                            fontWeight: FontWeight.bold),
+                                        gradient: LinearGradient(colors: [
+                                          Color(0xffdf99da), Color(0xff668fd7)
+                                        ]),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(0.0, 22, 0.0, 50),
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(16.0),
+                                          ),
+                                          shadowColor: Color(0xFFC3539A),
+                                          elevation: 20,
+                                          child: Container(
+                                            height: height * 0.25,
+                                            width: width * 0.45,
+                                            decoration: BoxDecoration(
+
+                                              borderRadius: BorderRadius.all(Radius.circular(14)),
+                                              // color: pictureBG,
+                                              image: DecorationImage(fit: BoxFit.fill,
+                                                  image: AssetImage("assets/kdefult.png")
+                                                //NetworkImage(
+                                                //  "${Product.products[index].imageUrl}")
+                                                // CachedNetworkImageProvider(
+                                                //   items.body["featuredClothingItems"][index]["coverImage"]
+                                                //       .toString(),
+                                                // ),
+                                              ),
+                                            ),
+                                            // child: CachedNetworkImage(
+                                            //   placeholder: (context, imgUrl) => const Text("Image is loading"),
+                                            //   imageUrl: products.body["items"][index]["coverImage"].toString(),
+                                            // ),
+                                          ),
+                                        ),
+                                      ),
+                                      StreamBuilder<PositionData>(
+                                        stream: _positionDataStream,
+                                        builder: (context, snapshot) {
+                                          final positionData = snapshot.data;
+                                          return SeekBar(
+
+                                            duration: positionData?.duration ?? Duration.zero,
+                                            position: positionData?.position ?? Duration.zero,
+                                            bufferedPosition:
+                                            positionData?.bufferedPosition ?? Duration.zero,
+                                            onChangeEnd: _player.seek,
+                                          );
+                                        },
+                                      ),
+                                      Row(
+
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+
+                                          ControlButtons(_player, songIdList: songIDList,
+                                            currentSongID: songId!,
+                                            Nextsong: () {
+                                              nextSong();
+                                            },
+                                            prvsong: () {
+                                              prvSong();
+                                            },),
+
+
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          IconButton( onPressed: () {
+
+                                            if(addinginList.contains(data!['song_id'])== false){
+                                              final songData = LikedSong("${data!['song_name']}", "${data!['song_id']}", "${data!['singer_name']}", "${data!['audio_length']}","{data!['audio_image']}");
+                                              likedSongsHive.put("${data!['song_id']}", songData).then((value) {
+
+                                                setState(() {
+                                                  addinginList.add("${data!['song_id']}");
+                                                });
+
+                                                final SongId = LikedList(addinginList);
+                                                likedListHive.put("likedSongs", SongId);
+                                              });
+                                            }
+                                            if(addinginList.contains(data!['song_id'])== true){
+
+                                              likedSongsHive.delete(data!['song_id']).then((value) {
+
+                                                setState(() {
+                                                  addinginList.remove("${data!['song_id']}");
+                                                });
+
+                                                final SongId = LikedList(addinginList);
+                                                likedListHive.put("likedSongs", SongId);
+                                              });
+                                            }
+
+
+                                          }, icon: addinginList.contains(data!['song_id'])?RadiantGradientMask(child: Icon(Icons.favorite,color:Colors.white,),)
+                                              :Icon(Icons.favorite_border,color:Color(0XFF5F7185),)
+                                            ,),
+                                          Text("${data!['album_name']}".toUpperCase(),style :TextStyle(
+                                              color: Color(0xFF5F7185),
+                                              fontSize: 16,
+                                              fontFamily: GoogleFonts.poppins().fontFamily,
+                                              fontWeight: FontWeight.w600)),
+                                          IconButton( onPressed: () {
+                                            const snackBar = SnackBar(
+                                              // padding:EdgeInsets.only(bottom: 10),
+
+                                              content: Text('Coming soon ',style: TextStyle(color: Colors.black),),
+                                              behavior: SnackBarBehavior.floating,
+                                              //      elevation: 10,
+                                              backgroundColor: Colors.white,
+                                              // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                                              // action: SnackBarAction(
+                                              // //  label: 'Undo',
+                                              //   onPressed: () {
+                                              //     // Some code to undo the change.
+                                              //   },
+                                              // ),
+                                            );
+
+                                            // Find the ScaffoldMessenger in the widget tree
+                                            // and use it to show a SnackBar.
+                                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                          }, icon: Icon(Icons.playlist_add,color:Color(0XFF5F7185),) ,),
+                                        ],
+                                      )
+                                      //  ControlButtons(_player),
+                                      // Display seek bar. Using StreamBuilder, this widget rebuilds
+                                      // each time the position, buffered position or duration changes.
+
+                                    ],
+                                  )
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              height: height,
+                              width: width * 0.85,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [Color(0xff3B4C77), Color(0xffD1549E)],
+                                  begin: Alignment.bottomRight,
+                                  end: Alignment.topLeft,
+                                ),
+                                borderRadius: BorderRadius.all(Radius.circular(14)),
+                                // color: pictureBG,
+
+                              ),
+                              child: ContainedTabBarView(
+                                tabBarProperties: TabBarProperties(
+                                  indicatorColor: Colors.white,
+                                ),
+                                initialIndex: 1,
+                                tabs: [
+                                  Text('Next'),
+                                  Text('Lyrics'),
+                                  Text("Info")
+                                ],
+                                views: [
+                                  Container(
+                                    child: StreamBuilder<QuerySnapshot>(
+                                     // stream: db.collection('AllSongsList').snapshots(),
+                                      builder: (context, snapshot) {
+                                        if (!snapshot.hasData) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        } else {
+                                          return
+                                            ListView(
+                                              physics: NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              children: snapshot.data!.docs
+                                                  .map((doc) =>
+                                                  ListTile(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        songId = doc["song_id"].toString();
+                                                        init();
+                                                      });
+                                                      print(doc["song_id"].toString());
+                                                    },
+                                                    leading: Container(
+                                                      height: height * 0.06,
+                                                      width: width * 0.12,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.all(
+                                                            Radius.circular(0)),
+                                                        // color: pictureBG,
+                                                        image: DecorationImage(fit: BoxFit.fill,
+                                                            image: AssetImage('assets/kdefult.png')
+                                                          //NetworkImage(
+                                                          //  "${Product.products[index].imageUrl}")
+                                                          // CachedNetworkImageProvider(
+                                                          //   items.body["featuredClothingItems"][index]["coverImage"]
+                                                          //       .toString(),
+                                                          // ),
+                                                        ),
+                                                      ),
+                                                      // child: CachedNetworkImage(
+                                                      //   placeholder: (context, imgUrl) => const Text("Image is loading"),
+                                                      //   imageUrl: products.body["items"][index]["coverImage"].toString(),
+                                                      // ),
+                                                    ),
+                                                    title: Text(doc["song_name"].toString(),
+                                                      style: TextStyle(color: Colors.white),),
+                                                    subtitle: Text("${doc["singer_name"]
+                                                        .toString()} • ${doc["audio_length"]
+                                                        .toString()}",
+                                                        style: TextStyle(color: Colors.white)),
+                                                    trailing: IconButton(onPressed: () {},
+                                                      icon: Icon(Icons.more_vert),
+                                                      color: Colors.white,),
+                                                  ),
+
+
+                                              ).toList(),
+                                            );
+
+                                          // ListView.builder(
+                                          //     scrollDirection: Axis.vertical,
+                                          //     shrinkWrap: true,
+                                          //     physics: ScrollPhysics(),
+                                          //     itemCount: 3,
+                                          //     itemBuilder: (BuildContext context,int index){
+                                          //
+                                          //     });
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: SingleChildScrollView(
+                                      child: Text(
+                                        "${data["lyrics"].toString()}",
+                                        //maxLines: 10,
+                                        overflow: TextOverflow.visible,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 10,
+                                            fontFamily: GoogleFonts
+                                                .poppins()
+                                                .fontFamily,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                  Container()
+                                ],
+                                onChange: (index) => print(index),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                  break;
+              }
             }
 
             return Center(child: CircularProgressIndicator());
           },
-        )
-
-
-    );
+        );
   }
 }
 
