@@ -15,7 +15,7 @@ class LatestCards extends StatelessWidget {
 
 
   final String poetName;
- final String albumName;
+  final String albumName;
   final String songName;
   final String artistName;
   final String audioImage;
@@ -176,10 +176,11 @@ class LatestCards extends StatelessWidget {
                     ElevatedButton.icon(
                       onPressed: () {
                         print("You pressed Icon Elevated Button");
-                       // currnetSongController.updateCurrentSong(SongID);
+
                      //   currnetSongController.getSong(SongID);
                           final singleSong = SingleSong(SongID, poetName, albumName, artistName, audioLength, songName, composedBy, audioImage, audioFileSize, lyrics, domineName);
                         CurrentSongHive.put("currentSong", singleSong);
+                        currnetSongController.updateCurrentSong(SongID, poetName, albumName, artistName, audioLength, songName, composedBy, audioImage, audioFileSize, lyrics, domineName);
                         // Navigator.push(
                         //   context,
                         //   MaterialPageRoute(builder: (context) =>  SongPage(songID: SongID,)),

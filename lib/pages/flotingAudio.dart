@@ -19,7 +19,7 @@ class MiniPlayer extends StatefulWidget {
 }
 
 class _MiniPlayerState extends State<MiniPlayer> {
-  final db = FirebaseFirestore.instance;
+  //final db = FirebaseFirestore.instance;
   CurrnetSongController currnetSongController = Get.put(CurrnetSongController());
   final CurrentSongHive = SingleSongHive.initSingleSongDataHive();
 
@@ -42,295 +42,108 @@ class _MiniPlayerState extends State<MiniPlayer> {
   @override
   Widget build(BuildContext context) {
     final colorTheme = Theme.of(context).colorScheme;
-    return Container(
-      color: Colors.white,
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 200),
-        height: 71.0,
-        child:Column(
-          children: [
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () => widget.onTap!(),
-                  // onTap: () {
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(builder: (context) => Player()),
-                  //   );
-                  // },
-                  child: Container(
-                    width: 70,
-                    height: 70,
-                    child: Image.asset("assets/kdefult.png",
-                        fit: BoxFit.cover),
-                  ),
-                ),
-                SizedBox(width: 20),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('${CurrentSongHive.get("currentSong")?.songName}',
-                          //'${data!['song_name']}',
-                          style: TextStyle(color: Colors.black),
-                          // maxLines: 1,
-                          overflow: TextOverflow.ellipsis),
-                      SizedBox(width: 8, height: 8),
-                      Text('${CurrentSongHive.get("currentSong")?.singerName}',
-                          //'${data!['singer_name']}',
-                          style: TextStyle(
-                              color: Colors.black.withOpacity(0.5),
-                              fontSize: 12),
-                          //maxLines: 1,
-                          overflow: TextOverflow.ellipsis),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 20),
-                Icon(Icons.favorite_border, color:Colors.black),
-                SizedBox(width: 20),
-                GestureDetector(
-                  onTap: () {
-                    log("ontap");
-                    SongPage(songID: currnetSongController.currentSongID,).createState().initState();
-
-                    widget.onTap!();
-                  },
-                  child: RadiantGradientMask(
-                    child: Icon(Icons.play_arrow,
-                        color: Colors.white, size: 30),
-                  ),
-                ),
-                SizedBox(width: 20),
-              ],
-            ),
-            Divider(color: colorTheme.background, height: 1),
-          ],
-        )
-
-        /*isfirst?
-        FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-          //future: db.collection("AllSongsList").doc(currnetSongController.currentSongID).get(),
-
-          builder: (_, snapshot) {
-            WidgetsBinding.instance.addPostFrameCallback((_){
-
-              if(isfirst){
-                setState(() {
-                  isfirst = false;
-                });
-                log(isfirst.toString());
-              }
-
-            });
-
-            log("hello ${snapshot.connectionState}");
-            //  log( currnetSongController.currentSongID);
-
-
-            if (snapshot.hasData) {
-              var data = snapshot.data!.data();
-              var value = data!['song_name'];
-              log("song name $value");
-
-
-              return Column(
+    return currnetSongController.obx(
+      (currentSongInfo)=> Container(
+        color: Colors.white,
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 200),
+          height: 71.0,
+          child:Column(
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () => widget.onTap!(),
-                        // onTap: () {
-                        //   Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(builder: (context) => Player()),
-                        //   );
-                        // },
-                        child: Container(
-                          width: 70,
-                          height: 70,
-                          child: Image.asset("assets/kdefult.png",
-                              fit: BoxFit.cover),
-                        ),
-                      ),
-                      SizedBox(width: 20),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('${CurrentSongHive.get("currentSong")?.songName}',
-                                //'${data!['song_name']}',
-                                style: TextStyle(color: Colors.black),
-                                // maxLines: 1,
-                                overflow: TextOverflow.ellipsis),
-                            SizedBox(width: 8, height: 8),
-                            Text('${CurrentSongHive.get("currentSong")?.singerName}',
-                                //'${data!['singer_name']}',
-                                style: TextStyle(
-                                    color: Colors.black.withOpacity(0.5),
-                                    fontSize: 12),
-                                //maxLines: 1,
-                                overflow: TextOverflow.ellipsis),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 20),
-                      Icon(Icons.favorite_border, color:Colors.black),
-                      SizedBox(width: 20),
-                      GestureDetector(
-                        onTap: () {
-                          log("ontap");
-                          SongPage(songID: currnetSongController.currentSongID,).createState().initState();
-
-                          widget.onTap!();
-                        },
-                        child: RadiantGradientMask(
-                          child: Icon(Icons.play_arrow,
-                              color: Colors.white, size: 30),
-                        ),
-                      ),
-                      SizedBox(width: 20),
-                    ],
-                  ),
-                  Divider(color: colorTheme.background, height: 1),
-                ],
-              );
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  "Some Thing went wrong please try restating the Application ",
-                  overflow: TextOverflow.visible,
-                  style: TextStyle(),
-                ),
-              );
-            } else {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                  return Center(
-                    child: Text(
-                      "Some Thing went wrong please try restating the Application ${snapshot.hasError}",
-                      overflow: TextOverflow.visible,
-                      style: TextStyle(),
+                  GestureDetector(
+                    onTap: () => widget.onTap!(),
+                    // onTap: () {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(builder: (context) => Player()),
+                    //   );
+                    // },
+                    child: Container(
+                      width: 70,
+                      height: 70,
+                      child: Image.asset("assets/kdefult.png",
+                          fit: BoxFit.cover),
                     ),
-                  );
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("${currnetSongController.currentsongName}",
+                           // '${CurrentSongHive.get("currentSong")?.songName}',
+                            //'${data!['song_name']}',
+                            style: TextStyle(color: Colors.black),
+                            // maxLines: 1,
+                            overflow: TextOverflow.ellipsis),
+                        SizedBox(width: 8, height: 8),
+                        Text('${CurrentSongHive.get("currentSong")?.singerName}',
+                            //'${data!['singer_name']}',
+                            style: TextStyle(
+                                color: Colors.black.withOpacity(0.5),
+                                fontSize: 12),
+                            //maxLines: 1,
+                            overflow: TextOverflow.ellipsis),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Icon(Icons.favorite_border, color:Colors.black),
+                  SizedBox(width: 20),
+                  GestureDetector(
+                    onTap: () {
+                      log("ontap");
+                      SongPage(songID: currnetSongController.currentSongID,).createState().initState();
 
-                  break;
+                      widget.onTap!();
+                    },
+                    child: RadiantGradientMask(
+                      child: Icon(Icons.play_arrow,
+                          color: Colors.white, size: 30),
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                ],
+              ),
+              Divider(color: colorTheme.background, height: 1),
+            ],
+          )
 
-                case ConnectionState.waiting:
-                  return Column(
-                    children: [
-                      Center(child: CircularProgressIndicator()),
-                      Center(
-                        child: Text("Please wait While loading"),
-                      ),
-                    ],
-                  );
-                  // children =  [
-                  //   Center(child: Text("Please wait While loading"),),
-                  //
-                  // ];
-                  break;
-                case ConnectionState.active:
-                  return Center(child: CircularProgressIndicator());
+          /*isfirst?
+          FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+            //future: db.collection("AllSongsList").doc(currnetSongController.currentSongID).get(),
 
-                  // children =  [
-                  //         Center(child: CupertinoActivityIndicator()),
-                  //       ];
-                  break;
-                case ConnectionState.done:
-                  var data = snapshot.data!.data();
-                  var value = data!['song_name'];
-                  log("song name $value");
-
-
-                  return Column(
-                    children: [
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () => widget.onTap!(),
-                            // onTap: () {
-                            //   Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(builder: (context) => Player()),
-                            //   );
-                            // },
-                            child: Container(
-                              width: 70,
-                              height: 70,
-                              child: Image.asset("assets/kdefult.png",
-                                  fit: BoxFit.cover),
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('${data!['song_name']}',
-                                    style: TextStyle(color: Colors.black),
-                                    // maxLines: 1,
-                                    overflow: TextOverflow.ellipsis),
-                                SizedBox(width: 8, height: 8),
-                                Text('${data!['singer_name']}',
-                                    style: TextStyle(
-                                        color: Colors.black.withOpacity(0.5),
-                                        fontSize: 12),
-                                    //maxLines: 1,
-                                    overflow: TextOverflow.ellipsis),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          Icon(Icons.favorite_border, color:Colors.black),
-                          SizedBox(width: 20),
-                          GestureDetector(
-                            onTap: () {
-                              log("ontap");
-                              SongPage(songID: currnetSongController.currentSongID,).createState().initState();
-
-                              widget.onTap!();
-                            },
-                            child: RadiantGradientMask(
-                              child: Icon(Icons.play_arrow,
-                                  color: Colors.white, size: 30),
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                        ],
-                      ),
-                      Divider(color: colorTheme.background, height: 1),
-                    ],
-                  );
-                  break;
-              }
-
-            }
-
-            return Center(child: CircularProgressIndicator(color: Colors.red,));
-          },
-        )
-            : currnetSongController.obx(
-          (data)=> FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-          //  future: db.collection("AllSongsList").doc(currnetSongController.currentSongID).get(),
             builder: (_, snapshot) {
+              WidgetsBinding.instance.addPostFrameCallback((_){
+
+                if(isfirst){
+                  setState(() {
+                    isfirst = false;
+                  });
+                  log(isfirst.toString());
+                }
+
+              });
+
               log("hello ${snapshot.connectionState}");
-            //  log( currnetSongController.currentSongID);
-              if (snapshot.hasError) return Text('Error = ${snapshot.error}');
+              //  log( currnetSongController.currentSongID);
+
+
               if (snapshot.hasData) {
                 var data = snapshot.data!.data();
                 var value = data!['song_name'];
                 log("song name $value");
+
+
                 return Column(
                   children: [
                     Row(
                       children: [
                         GestureDetector(
-                            onTap: () => widget.onTap!(),
+                          onTap: () => widget.onTap!(),
                           // onTap: () {
                           //   Navigator.push(
                           //     context,
@@ -350,15 +163,17 @@ class _MiniPlayerState extends State<MiniPlayer> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('${data!['song_name']}',
+                              Text('${CurrentSongHive.get("currentSong")?.songName}',
+                                  //'${data!['song_name']}',
                                   style: TextStyle(color: Colors.black),
-                                 // maxLines: 1,
+                                  // maxLines: 1,
                                   overflow: TextOverflow.ellipsis),
                               SizedBox(width: 8, height: 8),
-                              Text('${data!['singer_name']}',
+                              Text('${CurrentSongHive.get("currentSong")?.singerName}',
+                                  //'${data!['singer_name']}',
                                   style: TextStyle(
                                       color: Colors.black.withOpacity(0.5),
-                                       fontSize: 12),
+                                      fontSize: 12),
                                   //maxLines: 1,
                                   overflow: TextOverflow.ellipsis),
                             ],
@@ -370,9 +185,9 @@ class _MiniPlayerState extends State<MiniPlayer> {
                         GestureDetector(
                           onTap: () {
                             log("ontap");
+                            SongPage(songID: currnetSongController.currentSongID,).createState().initState();
+
                             widget.onTap!();
-                     //       setSong();
-                            SongPage(songID:currnetSongController.currentSongID ,).createState().initState();
                           },
                           child: RadiantGradientMask(
                             child: Icon(Icons.play_arrow,
@@ -398,7 +213,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
                   case ConnectionState.none:
                     return Center(
                       child: Text(
-                        "Some Thing went wrong please try restating the Application ",
+                        "Some Thing went wrong please try restating the Application ${snapshot.hasError}",
                         overflow: TextOverflow.visible,
                         style: TextStyle(),
                       ),
@@ -498,68 +313,256 @@ class _MiniPlayerState extends State<MiniPlayer> {
 
               }
 
-              return Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator(color: Colors.red,));
             },
-
-          ),
-        )*/
-
-
-        /*Column(
-          children: [
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () => widget.onTap(),
-                  // onTap: () {
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(builder: (context) => Player()),
-                  //   );
-                  // },
-                  child: Container(
-                    width: 70,
-                    height: 70,
-                    child: Image.asset("assets/hidersiaf.png",
-                        fit: BoxFit.cover),
-                  ),
-                ),
-                SizedBox(width: 20),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
+          )
+              : currnetSongController.obx(
+            (data)=> FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+            //  future: db.collection("AllSongsList").doc(currnetSongController.currentSongID).get(),
+              builder: (_, snapshot) {
+                log("hello ${snapshot.connectionState}");
+              //  log( currnetSongController.currentSongID);
+                if (snapshot.hasError) return Text('Error = ${snapshot.error}');
+                if (snapshot.hasData) {
+                  var data = snapshot.data!.data();
+                  var value = data!['song_name'];
+                  log("song name $value");
+                  return Column(
                     children: [
-                      Text('Wurkit (Original Mix)',
-                          style: TextStyle(color: Colors.black),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis),
-                      SizedBox(width: 8, height: 8),
-                      Text('Kyle Watson',
-                          style: TextStyle(
-                              color: Colors.black.withOpacity(0.5),
-                              fontSize: 12),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis),
+                      Row(
+                        children: [
+                          GestureDetector(
+                              onTap: () => widget.onTap!(),
+                            // onTap: () {
+                            //   Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(builder: (context) => Player()),
+                            //   );
+                            // },
+                            child: Container(
+                              width: 70,
+                              height: 70,
+                              child: Image.asset("assets/kdefult.png",
+                                  fit: BoxFit.cover),
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('${data!['song_name']}',
+                                    style: TextStyle(color: Colors.black),
+                                   // maxLines: 1,
+                                    overflow: TextOverflow.ellipsis),
+                                SizedBox(width: 8, height: 8),
+                                Text('${data!['singer_name']}',
+                                    style: TextStyle(
+                                        color: Colors.black.withOpacity(0.5),
+                                         fontSize: 12),
+                                    //maxLines: 1,
+                                    overflow: TextOverflow.ellipsis),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Icon(Icons.favorite_border, color:Colors.black),
+                          SizedBox(width: 20),
+                          GestureDetector(
+                            onTap: () {
+                              log("ontap");
+                              widget.onTap!();
+                       //       setSong();
+                              SongPage(songID:currnetSongController.currentSongID ,).createState().initState();
+                            },
+                            child: RadiantGradientMask(
+                              child: Icon(Icons.play_arrow,
+                                  color: Colors.white, size: 30),
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                        ],
+                      ),
+                      Divider(color: colorTheme.background, height: 1),
                     ],
-                  ),
-                ),
-                SizedBox(width: 20),
-                Icon(Icons.favorite_border, color: colorTheme.onPrimary),
-                SizedBox(width: 20),
-                GestureDetector(
-                  onTap: () {},
-                  child: RadiantGradientMask(
-                    child: Icon(Icons.play_arrow,
-                        color: Colors.white, size: 30),
-                  ),
-                ),
-                SizedBox(width: 20),
-              ],
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      "Some Thing went wrong please try restating the Application ",
+                      overflow: TextOverflow.visible,
+                      style: TextStyle(),
+                    ),
+                  );
+                } else {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                      return Center(
+                        child: Text(
+                          "Some Thing went wrong please try restating the Application ",
+                          overflow: TextOverflow.visible,
+                          style: TextStyle(),
+                        ),
+                      );
+
+                      break;
+
+                    case ConnectionState.waiting:
+                      return Column(
+                        children: [
+                          Center(child: CircularProgressIndicator()),
+                          Center(
+                            child: Text("Please wait While loading"),
+                          ),
+                        ],
+                      );
+                      // children =  [
+                      //   Center(child: Text("Please wait While loading"),),
+                      //
+                      // ];
+                      break;
+                    case ConnectionState.active:
+                      return Center(child: CircularProgressIndicator());
+
+                      // children =  [
+                      //         Center(child: CupertinoActivityIndicator()),
+                      //       ];
+                      break;
+                    case ConnectionState.done:
+                      var data = snapshot.data!.data();
+                      var value = data!['song_name'];
+                      log("song name $value");
+
+
+                      return Column(
+                        children: [
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () => widget.onTap!(),
+                                // onTap: () {
+                                //   Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(builder: (context) => Player()),
+                                //   );
+                                // },
+                                child: Container(
+                                  width: 70,
+                                  height: 70,
+                                  child: Image.asset("assets/kdefult.png",
+                                      fit: BoxFit.cover),
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('${data!['song_name']}',
+                                        style: TextStyle(color: Colors.black),
+                                        // maxLines: 1,
+                                        overflow: TextOverflow.ellipsis),
+                                    SizedBox(width: 8, height: 8),
+                                    Text('${data!['singer_name']}',
+                                        style: TextStyle(
+                                            color: Colors.black.withOpacity(0.5),
+                                            fontSize: 12),
+                                        //maxLines: 1,
+                                        overflow: TextOverflow.ellipsis),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              Icon(Icons.favorite_border, color:Colors.black),
+                              SizedBox(width: 20),
+                              GestureDetector(
+                                onTap: () {
+                                  log("ontap");
+                                  SongPage(songID: currnetSongController.currentSongID,).createState().initState();
+
+                                  widget.onTap!();
+                                },
+                                child: RadiantGradientMask(
+                                  child: Icon(Icons.play_arrow,
+                                      color: Colors.white, size: 30),
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                            ],
+                          ),
+                          Divider(color: colorTheme.background, height: 1),
+                        ],
+                      );
+                      break;
+                  }
+
+                }
+
+                return Center(child: CircularProgressIndicator());
+              },
+
             ),
-            Divider(color: colorTheme.background, height: 1),
-          ],
-        ),*/
+          )*/
+
+
+          /*Column(
+            children: [
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => widget.onTap(),
+                    // onTap: () {
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(builder: (context) => Player()),
+                    //   );
+                    // },
+                    child: Container(
+                      width: 70,
+                      height: 70,
+                      child: Image.asset("assets/hidersiaf.png",
+                          fit: BoxFit.cover),
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Wurkit (Original Mix)',
+                            style: TextStyle(color: Colors.black),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis),
+                        SizedBox(width: 8, height: 8),
+                        Text('Kyle Watson',
+                            style: TextStyle(
+                                color: Colors.black.withOpacity(0.5),
+                                fontSize: 12),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Icon(Icons.favorite_border, color: colorTheme.onPrimary),
+                  SizedBox(width: 20),
+                  GestureDetector(
+                    onTap: () {},
+                    child: RadiantGradientMask(
+                      child: Icon(Icons.play_arrow,
+                          color: Colors.white, size: 30),
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                ],
+              ),
+              Divider(color: colorTheme.background, height: 1),
+            ],
+          ),*/
+        ),
       ),
     );
   }

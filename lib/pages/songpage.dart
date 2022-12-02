@@ -56,20 +56,27 @@ class _SongPageState extends State<SongPage> {
   @override
   void initState() {
     addinginList = likedListHive.get("likedSongs")?.songID??[];
-    songId = widget?.songID;
+    songId = currnetSongController.currentSongID;
     print("songid : $songId");
     super.initState();
     // WidgetsBinding.instance?.addObserver(this);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       // statusBarColor: Colors.black,
     ));
+    init();
 
     Timer.periodic(Duration(seconds: 3), (timer) {
+      if(currnetSongController.currentSongID != songId){
+        init();
+        setState(() {
+          songId = currnetSongController.currentSongID;
+        });
+      }
       // getData();
     });
 
 
-    init();
+
   }
 
   List<DocumentSnapshot>? documentList;
@@ -88,22 +95,23 @@ class _SongPageState extends State<SongPage> {
         });
     // Try to load audio from a source and catch any errors.
     try {
-      if(await _player.existedInLocal(url: "https://drive.google.com/uc?export=view&id=$songId") == true){
+      //await _player.existedInLocal(url: "https://drive.google.com/uc?export=view&id=$songId") == true
+      if(false){
         await _player.dynamicSet( url: "https://drive.google.com/uc?export=view&id=$songId");
         ////TODO: have a look at his download of audio
       }else{
-        _player.cacheFile( url: "https://drive.google.com/uc?export=view&id=$songId");
+        _player.cacheFile( url: "https://drive.google.com/uc?export=view&id=${currnetSongController.currentSongID}");
         await _player.setAudioSource(
             AudioSource.uri(
           Uri.parse(
-              "https://drive.google.com/uc?export=view&id=$songId"),
+              "https://drive.google.com/uc?export=view&id=${currnetSongController.currentSongID}"),
           tag: MediaItem(
             // Specify a unique ID for each media item:
             id: '1',
             // Metadata to display in the notification:
             album: "Album name",
             title: "Song name",
-            artUri: Uri.parse("https://drive.google.com/uc?export=view&id=$songId"),
+            artUri: Uri.parse("https://drive.google.com/uc?export=view&id=${currnetSongController.currentSongID}"),
           ),
         )); //1-HPfLLirpw2REb-quLmxq6MyEtQ3jZep
       }
@@ -143,6 +151,7 @@ class _SongPageState extends State<SongPage> {
         log("currnt index $currentSongIndex song list ${songIDList.length}");
         if (songIDList.length != (currentSongIndex+1)) {
           songId = songIDList[currentSongIndex + 1];
+       //   currnetSongController.updateCurrentSong(newSongID, poetName, albumName, artistName, audioLength, songName, composedBy, audioImage, audioFileSize, lyrics, domineName)
 
         }
       });
@@ -261,10 +270,10 @@ class _SongPageState extends State<SongPage> {
         body: currnetSongController.obx(
           (data){
             //var data = snapshot.data!.data();
-            var value = data!['song_name'];
-            log("song name $value");
+            //var value = currnetSongController.currentsongName;
+            //log("song name $value");
             if(t){
-              addSongToRecent(data!['song_id'],data!['song_name'],data!['singer_name'],data!['audio_length'],data!['audio_image']);
+              addSongToRecent(currnetSongController.currentSongID,currnetSongController.currentsongName,currnetSongController.currentartistName,currnetSongController.currentaudioLength,currnetSongController.currentalbumName);
             }
             return Container(
               height: height,
@@ -307,7 +316,7 @@ class _SongPageState extends State<SongPage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 GradientText(
-                                  "${data!['song_name']}",
+                                  "${currnetSongController.currentsongName}",
                                   style: TextStyle(
                                       color: Color(0xFF5F7185),
                                       fontSize: 18,
@@ -387,24 +396,24 @@ class _SongPageState extends State<SongPage> {
                                   children: [
                                     IconButton( onPressed: () {
 
-                                      if(addinginList.contains(data!['song_id'])== false){
-                                        final songData = LikedSong("${data!['song_name']}", "${data!['song_id']}", "${data!['singer_name']}", "${data!['audio_length']}","{data!['audio_image']}");
-                                        likedSongsHive.put("${data!['song_id']}", songData).then((value) {
+                                      if(addinginList.contains(currnetSongController.currentSongID)== false){
+                                        final songData = LikedSong("${currnetSongController.currentsongName}", "${currnetSongController.currentSongID}", "${currnetSongController.currentartistName}", "${currnetSongController.currentaudioLength}","${currnetSongController.currentaudioImage}");
+                                        likedSongsHive.put("${currnetSongController.currentSongID}", songData).then((value) {
 
                                           setState(() {
-                                            addinginList.add("${data!['song_id']}");
+                                            addinginList.add("${currnetSongController.currentSongID}");
                                           });
 
                                           final SongId = LikedList(addinginList);
                                           likedListHive.put("likedSongs", SongId);
                                         });
                                       }
-                                      if(addinginList.contains(data!['song_id'])== true){
+                                      if(addinginList.contains(currnetSongController.currentSongID)== true){
 
-                                        likedSongsHive.delete(data!['song_id']).then((value) {
+                                        likedSongsHive.delete(currnetSongController.currentSongID).then((value) {
 
                                           setState(() {
-                                            addinginList.remove("${data!['song_id']}");
+                                            addinginList.remove("${currnetSongController.currentSongID}");
                                           });
 
                                           final SongId = LikedList(addinginList);
@@ -413,10 +422,10 @@ class _SongPageState extends State<SongPage> {
                                       }
 
 
-                                    }, icon: addinginList.contains(data!['song_id'])?RadiantGradientMask(child: Icon(Icons.favorite,color:Colors.white,),)
+                                    }, icon: addinginList.contains(currnetSongController.currentSongID)?RadiantGradientMask(child: Icon(Icons.favorite,color:Colors.white,),)
                                         :Icon(Icons.favorite_border,color:Color(0XFF5F7185),)
                                       ,),
-                                    Text("${data!['album_name']}".toUpperCase(),style :TextStyle(
+                                    Text("${currnetSongController.currentalbumName}".toUpperCase(),style :TextStyle(
                                         color: Color(0xFF5F7185),
                                         fontSize: 16,
                                         fontFamily: GoogleFonts.poppins().fontFamily,
@@ -555,7 +564,7 @@ class _SongPageState extends State<SongPage> {
                               padding: EdgeInsets.all(8.0),
                               child: SingleChildScrollView(
                                 child: Text(
-                                  "${data["lyrics"].toString()}",
+                                  "${currnetSongController.currentlyrics.toString()}",
                                   //maxLines: 10,
                                   overflow: TextOverflow.visible,
                                   style: TextStyle(
@@ -603,10 +612,10 @@ class _SongPageState extends State<SongPage> {
             if (snapshot.hasError) return Text('Error = ${snapshot.error}');
             if (snapshot.hasData) {
               var data = snapshot.data!.data();
-              var value = data!['song_name'];
+              var value = currnetSongController.currentsongName;
               log("song name $value");
               if(t){
-              addSongToRecent(data!['song_id'],data!['song_name'],data!['singer_name'],data!['audio_length'],data!['audio_image']);
+              addSongToRecent(currnetSongController.currentSongID,currnetSongController.currentsongName,currnetSongController.currentartistName,currnetSongController.currentaudioLength,currnetSongController.currentaudioImage);
               }
               return Container(
                 height: height,
@@ -649,7 +658,7 @@ class _SongPageState extends State<SongPage> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   GradientText(
-                                    "${data!['song_name']}",
+                                    "${currnetSongController.currentsongName}",
                                     style: TextStyle(
                                         color: Color(0xFF5F7185),
                                         fontSize: 18,
@@ -729,24 +738,24 @@ class _SongPageState extends State<SongPage> {
                                     children: [
                                       IconButton( onPressed: () {
 
-                                          if(addinginList.contains(data!['song_id'])== false){
-                                            final songData = LikedSong("${data!['song_name']}", "${data!['song_id']}", "${data!['singer_name']}", "${data!['audio_length']}","{data!['audio_image']}");
-                                            likedSongsHive.put("${data!['song_id']}", songData).then((value) {
+                                          if(addinginList.contains(currnetSongController.currentSongID)== false){
+                                            final songData = LikedSong("${currnetSongController.currentsongName}", "${currnetSongController.currentSongID}", "${currnetSongController.currentartistName}", "${currnetSongController.currentaudioLength}","{currnetSongController.currentaudioImage}");
+                                            likedSongsHive.put("${currnetSongController.currentSongID}", songData).then((value) {
 
                                               setState(() {
-                                                addinginList.add("${data!['song_id']}");
+                                                addinginList.add("${currnetSongController.currentSongID}");
                                               });
 
                                               final SongId = LikedList(addinginList);
                                               likedListHive.put("likedSongs", SongId);
                                             });
                                           }
-                                          if(addinginList.contains(data!['song_id'])== true){
+                                          if(addinginList.contains(currnetSongController.currentSongID)== true){
 
-                                            likedSongsHive.delete(data!['song_id']).then((value) {
+                                            likedSongsHive.delete(currnetSongController.currentSongID).then((value) {
 
                                               setState(() {
-                                                addinginList.remove("${data!['song_id']}");
+                                                addinginList.remove("${currnetSongController.currentSongID}");
                                               });
 
                                               final SongId = LikedList(addinginList);
@@ -755,7 +764,7 @@ class _SongPageState extends State<SongPage> {
                                           }
 
 
-                                      }, icon: addinginList.contains(data!['song_id'])?RadiantGradientMask(child: Icon(Icons.favorite,color:Colors.white,),)
+                                      }, icon: addinginList.contains(currnetSongController.currentSongID)?RadiantGradientMask(child: Icon(Icons.favorite,color:Colors.white,),)
                                           :Icon(Icons.favorite_border,color:Color(0XFF5F7185),)
                                         ,),
                                         Text("${data!['album_name']}".toUpperCase(),style :TextStyle(
@@ -961,11 +970,11 @@ class _SongPageState extends State<SongPage> {
                   break;
                 case ConnectionState.done:
                   var data = snapshot.data!.data();
-                  var value = data!['song_name'];
+                  var value = currnetSongController.currentsongName;
                   log("song name $value");
 
                   if(t){
-                    addSongToRecent(data!['song_id'],data!['song_name'],data!['singer_name'],data!['audio_length'],data!['audio_image']);
+                    addSongToRecent(currnetSongController.currentSongID,currnetSongController.currentsongName,currnetSongController.currentartistName,currnetSongController.currentaudioLength,currnetSongController.currentaudioImage);
                   }
                   return Container(
                     height: height,
@@ -1008,7 +1017,7 @@ class _SongPageState extends State<SongPage> {
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       GradientText(
-                                        "${data!['song_name']}",
+                                        "${currnetSongController.currentsongName}",
                                         style: TextStyle(
                                             color: Color(0xFF5F7185),
                                             fontSize: 18,
@@ -1088,24 +1097,24 @@ class _SongPageState extends State<SongPage> {
                                         children: [
                                           IconButton( onPressed: () {
 
-                                            if(addinginList.contains(data!['song_id'])== false){
-                                              final songData = LikedSong("${data!['song_name']}", "${data!['song_id']}", "${data!['singer_name']}", "${data!['audio_length']}","{data!['audio_image']}");
-                                              likedSongsHive.put("${data!['song_id']}", songData).then((value) {
+                                            if(addinginList.contains(currnetSongController.currentSongID)== false){
+                                              final songData = LikedSong("${currnetSongController.currentsongName}", "${currnetSongController.currentSongID}", "${currnetSongController.currentartistName}", "${currnetSongController.currentaudioLength}","{currnetSongController.currentaudioImage}");
+                                              likedSongsHive.put("${currnetSongController.currentSongID}", songData).then((value) {
 
                                                 setState(() {
-                                                  addinginList.add("${data!['song_id']}");
+                                                  addinginList.add("${currnetSongController.currentSongID}");
                                                 });
 
                                                 final SongId = LikedList(addinginList);
                                                 likedListHive.put("likedSongs", SongId);
                                               });
                                             }
-                                            if(addinginList.contains(data!['song_id'])== true){
+                                            if(addinginList.contains(currnetSongController.currentSongID)== true){
 
-                                              likedSongsHive.delete(data!['song_id']).then((value) {
+                                              likedSongsHive.delete(currnetSongController.currentSongID).then((value) {
 
                                                 setState(() {
-                                                  addinginList.remove("${data!['song_id']}");
+                                                  addinginList.remove("${currnetSongController.currentSongID}");
                                                 });
 
                                                 final SongId = LikedList(addinginList);
@@ -1114,7 +1123,7 @@ class _SongPageState extends State<SongPage> {
                                             }
 
 
-                                          }, icon: addinginList.contains(data!['song_id'])?RadiantGradientMask(child: Icon(Icons.favorite,color:Colors.white,),)
+                                          }, icon: addinginList.contains(currnetSongController.currentSongID)?RadiantGradientMask(child: Icon(Icons.favorite,color:Colors.white,),)
                                               :Icon(Icons.favorite_border,color:Color(0XFF5F7185),)
                                             ,),
                                           Text("${data!['album_name']}".toUpperCase(),style :TextStyle(

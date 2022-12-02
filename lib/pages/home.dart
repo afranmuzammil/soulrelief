@@ -328,7 +328,7 @@ class _HomePageState extends State<HomePage> {
               Container(
                 // height: height,
                 child: StreamBuilder<QuerySnapshot>(
-                  stream: db.collection('AllSongsList').snapshots(),
+                stream: db.collection('AllSongsList').snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return const Center(
@@ -339,8 +339,9 @@ class _HomePageState extends State<HomePage> {
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         children: snapshot.data!.docs.map((doc) {
-                          // log(doc["lyrics"].toString());
-                          return LatestCards(
+                         // log(doc["song_name"].toString());
+                          return
+                            LatestCards(
                             songName: doc["song_name"].toString(),
                             artistName: doc["singer_name"].toString(),
                             lyrics: doc["lyrics"],
@@ -411,8 +412,9 @@ class _HomePageState extends State<HomePage> {
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             children: snapshot.data!.docs.map((doc) {
-                              // log(doc["lyrics"].toString());
-                              return LatestCards(
+                           //   log(doc["song_name"].toString());
+                              return
+                                LatestCards(
                                 songName: doc["song_name"].toString(),
                                 artistName: doc["singer_name"].toString(),
                                 lyrics: doc["lyrics"],

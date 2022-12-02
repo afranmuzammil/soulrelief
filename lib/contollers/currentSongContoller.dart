@@ -9,32 +9,46 @@ import '../pages/flotingAudio.dart';
 
 class CurrnetSongController extends GetxController with StateMixin<dynamic>{
 
- String currentSongID = "1rMHGBUIIxHxFX43Wef7Xhx97RlU_NHQ9";
+ String currentSongID = "1-9FK-1CjeA3JJaHyIeyyDTQ0k7pbGWMf";
+ String currentsongName = "Khudi ka sirr e Nihan La ilaaha ilallah (Bangalore version)";
+ String currentpoetName = "";
+ String currentalbumName= "";
+ String currentartistName= "";
+ String currentaudioImage= "";
+ String currentaudioFileSize= "";
+ String currentaudioLength= "";
+ String currentcomposedBy= "";
+ String currentdomineName= "";
+ String currentlyrics= "";
+
+
  @override
- Future<void> onInit() async {;;
+ Future<void> onInit() async {
    super.onInit();
-   await FirebaseFirestore.instance
-       .collection("AllSongsList").doc(currentSongID).get()
-       .then((value) {
-         ///add hive here
-     change(value, status: RxStatus.success());
-   },onError: (error){
-     log("error while getting song data $error");
-     change(null, status: RxStatus.error(error.toString()));
-   }
-   );
+
    setSong();
  }
 
  setSong(){
-   currentSongID = "1rMHGBUIIxHxFX43Wef7Xhx97RlU_NHQ9";
+   currentSongID = "1-9FK-1CjeA3JJaHyIeyyDTQ0k7pbGWMf";
    update();
    change(value, status: RxStatus.success());
  }
 
- updateCurrentSong(newSongID){
+ updateCurrentSong(newSongID, poetName, albumName, artistName, audioLength, songName, composedBy, audioImage, audioFileSize, lyrics, domineName){
    log(currentSongID);
    currentSongID = newSongID;
+   currentpoetName =poetName;
+   currentalbumName =albumName;
+   currentsongName =songName;
+   currentartistName =artistName;
+   currentaudioImage =audioImage;
+   currentaudioFileSize =audioFileSize;
+   currentaudioLength =audioLength;
+   currentcomposedBy =composedBy;
+   currentdomineName =domineName;
+   currentlyrics =lyrics;
+
    update();
    log(currentSongID);
    //var contx =  MiniPlayer(onTap: (){},).createState().context;
@@ -45,7 +59,7 @@ class CurrnetSongController extends GetxController with StateMixin<dynamic>{
 
 
  getSong(songId) async {
-   await FirebaseFirestore.instance
+   /*await FirebaseFirestore.instance
        .collection("AllSongsList").doc(songId).get()
        .then((value) {
      change(value, status: RxStatus.success());
@@ -53,7 +67,7 @@ class CurrnetSongController extends GetxController with StateMixin<dynamic>{
          log("error while getting song data $error");
      change(null, status: RxStatus.error(error.toString()));
    }
-   );
+   );*/
  }
 
 
@@ -63,8 +77,6 @@ class CurrnetSongController extends GetxController with StateMixin<dynamic>{
    var f = await FirebaseFirestore.instance
        .collection("AllSongsList");
    log("from add songs to hive: ${f}");
-
-
 
  }
 
