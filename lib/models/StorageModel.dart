@@ -20,12 +20,38 @@ class LikedSong extends HiveObject{
   @HiveField(4)
   String songImage;
 
+  @HiveField(5)
+  String poetName;
+
+  @HiveField(6)
+  String albumName;
+
+  @HiveField(7)
+  String composedBy;
+
+  @HiveField(8)
+  String audioFileSize;
+
+  @HiveField(9)
+  String lyrics;
+
+  @HiveField(10)
+  String domineName;
+
+
+
   LikedSong(
       this.songName,
       this.songID,
       this.artistName,
       this.audioLength,
-      this.songImage
+      this.songImage,
+      this.domineName,
+      this.lyrics,
+      this.audioFileSize,
+      this.composedBy,
+      this.albumName,
+      this.poetName
       );
 
 }
@@ -85,6 +111,8 @@ class PlayListSingleSong extends HiveObject{
   @HiveField(4)
   String songImage;
 
+
+
   PlayListSingleSong(
       this.songName,
       this.songID,
@@ -116,12 +144,38 @@ class RecentSong extends HiveObject{
   @HiveField(4)
   String songImage;
 
+
+  @HiveField(5)
+  String poetName;
+
+  @HiveField(6)
+  String albumName;
+
+  @HiveField(7)
+  String composedBy;
+
+  @HiveField(8)
+  String audioFileSize;
+
+  @HiveField(9)
+  String lyrics;
+
+  @HiveField(10)
+  String domineName;
+
+
   RecentSong(
       this.songName,
       this.songID,
       this.artistName,
       this.audioLength,
-      this.songImage
+      this.songImage,
+      this.domineName,
+      this.lyrics,
+      this.audioFileSize,
+      this.composedBy,
+      this.albumName,
+      this.poetName
       );
 
 }

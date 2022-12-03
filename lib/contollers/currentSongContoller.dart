@@ -5,6 +5,8 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
+import '../models/StorageModel.dart';
+import '../models/initalizeHive.dart';
 import '../pages/flotingAudio.dart';
 
 class CurrnetSongController extends GetxController with StateMixin<dynamic>{
@@ -20,6 +22,9 @@ class CurrnetSongController extends GetxController with StateMixin<dynamic>{
  String currentcomposedBy= "";
  String currentdomineName= "";
  String currentlyrics= "";
+
+ final recentSongsHive = RecentSongHive.initRecentSongDataHive();
+ final recentSongListHive = RecentSongListHive.initRecentSongListDataHive();
 
 
  @override
@@ -51,12 +56,45 @@ class CurrnetSongController extends GetxController with StateMixin<dynamic>{
 
    update();
    log(currentSongID);
+   addSongToRecent(currentSongID,currentsongName,currentartistName,currentaudioLength,currentaudioImage,currentdomineName,currentlyrics,currentaudioFileSize,currentcomposedBy,currentalbumName,currentpoetName);
    //var contx =  MiniPlayer(onTap: (){},).createState().context;
    //MiniPlayer(onTap: (){},).createState().build(contx);
    change(value, status: RxStatus.success());
 
  }
 
+ addSongToRecent(songID,songName,artistName,audioLength,songImage,
+     domineName,
+     lyrics,
+     audioFileSize,
+     composedBy,
+     albumName,
+     poetName){
+   List<String> listOfRecentSong = recentSongListHive.get("recentSongs")?.songID??[];
+
+   if(listOfRecentSong.contains(songID)== false){
+     final songData = RecentSong(songName, songID, artistName, audioLength, songImage,domineName,
+         lyrics,
+         audioFileSize,
+         composedBy,
+         albumName,
+         poetName);
+     if(listOfRecentSong.length == 5){
+       listOfRecentSong.removeLast();
+     }
+     recentSongsHive.put("$songID", songData).then((value) {
+
+
+         listOfRecentSong.add("$songID");
+         update();
+
+
+       final SongId = RecentSongList(listOfRecentSong);
+       recentSongListHive.put("recentSongs", SongId);
+     });
+   }
+
+ }
 
  getSong(songId) async {
    /*await FirebaseFirestore.instance

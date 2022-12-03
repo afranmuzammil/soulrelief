@@ -22,13 +22,19 @@ class LikedSongAdapter extends TypeAdapter<LikedSong> {
       fields[2] as String,
       fields[3] as String,
       fields[4] as String,
+      fields[10] as String,
+      fields[9] as String,
+      fields[8] as String,
+      fields[7] as String,
+      fields[6] as String,
+      fields[5] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, LikedSong obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.songName)
       ..writeByte(1)
@@ -38,7 +44,19 @@ class LikedSongAdapter extends TypeAdapter<LikedSong> {
       ..writeByte(3)
       ..write(obj.audioLength)
       ..writeByte(4)
-      ..write(obj.songImage);
+      ..write(obj.songImage)
+      ..writeByte(5)
+      ..write(obj.poetName)
+      ..writeByte(6)
+      ..write(obj.albumName)
+      ..writeByte(7)
+      ..write(obj.composedBy)
+      ..writeByte(8)
+      ..write(obj.audioFileSize)
+      ..writeByte(9)
+      ..write(obj.lyrics)
+      ..writeByte(10)
+      ..write(obj.domineName);
   }
 
   @override
@@ -216,13 +234,19 @@ class RecentSongAdapter extends TypeAdapter<RecentSong> {
       fields[2] as String,
       fields[3] as String,
       fields[4] as String,
+      fields[10] as String,
+      fields[9] as String,
+      fields[8] as String,
+      fields[7] as String,
+      fields[6] as String,
+      fields[5] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, RecentSong obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.songName)
       ..writeByte(1)
@@ -232,7 +256,19 @@ class RecentSongAdapter extends TypeAdapter<RecentSong> {
       ..writeByte(3)
       ..write(obj.audioLength)
       ..writeByte(4)
-      ..write(obj.songImage);
+      ..write(obj.songImage)
+      ..writeByte(5)
+      ..write(obj.poetName)
+      ..writeByte(6)
+      ..write(obj.albumName)
+      ..writeByte(7)
+      ..write(obj.composedBy)
+      ..writeByte(8)
+      ..write(obj.audioFileSize)
+      ..writeByte(9)
+      ..write(obj.lyrics)
+      ..writeByte(10)
+      ..write(obj.domineName);
   }
 
   @override

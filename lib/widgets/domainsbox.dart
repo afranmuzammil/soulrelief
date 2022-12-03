@@ -20,10 +20,10 @@ class DomainsCards extends StatelessWidget {
     final width = size.width;
     return InkWell(
       onTap: (){
-        Navigator.push(
+        /*Navigator.push(
           context,
           MaterialPageRoute(builder: (context) =>  DominePages(domineName: dominName,)),
-        );
+        );*/
       },
       child: Container(
         decoration: BoxDecoration(

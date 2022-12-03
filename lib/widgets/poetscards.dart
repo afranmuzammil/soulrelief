@@ -15,10 +15,10 @@ class PoetsCards extends StatelessWidget {
     final width = size.width;
     return InkWell(
       onTap: (){
-        Navigator.push(
+        /*Navigator.push(
           context,
           MaterialPageRoute(builder: (context) =>  PoetPages(poetName: poetName,)),
-        );
+        );*/
       },
       child: Container(
         padding: EdgeInsets.only(left: 8.0,right: 8.0),

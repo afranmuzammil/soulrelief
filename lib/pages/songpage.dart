@@ -173,11 +173,22 @@ class _SongPageState extends State<SongPage> {
 
 
 
-  addSongToRecent(songID,songName,artistName,audioLength,songImage){
+  addSongToRecent(songID,songName,artistName,audioLength,songImage,
+      domineName,
+      lyrics,
+      audioFileSize,
+      composedBy,
+      albumName,
+      poetName){
     List<String> listOfRecentSong = recentSongListHive.get("recentSongs")?.songID??[];
 
     if(listOfRecentSong.contains(songID)== false){
-      final songData = RecentSong(songName, songID, artistName, audioLength, songImage);
+      final songData = RecentSong(songName, songID, artistName, audioLength, songImage,domineName,
+          lyrics,
+          audioFileSize,
+          composedBy,
+          albumName,
+          poetName);
       if(listOfRecentSong.length == 5){
         listOfRecentSong.removeLast();
       }
@@ -275,7 +286,7 @@ class _SongPageState extends State<SongPage> {
             //var value = currnetSongController.currentsongName;
             //log("song name $value");
             if(t){
-              addSongToRecent(currnetSongController.currentSongID,currnetSongController.currentsongName,currnetSongController.currentartistName,currnetSongController.currentaudioLength,currnetSongController.currentalbumName);
+              addSongToRecent(currnetSongController.currentSongID,currnetSongController.currentsongName,currnetSongController.currentartistName,currnetSongController.currentaudioLength,currnetSongController.currentaudioImage,currnetSongController.currentdomineName,currnetSongController.currentlyrics,currnetSongController.currentaudioFileSize,currnetSongController.currentcomposedBy,currnetSongController.currentalbumName,currnetSongController.currentpoetName);
             }
             return Container(
               decoration: BoxDecoration(
@@ -559,7 +570,7 @@ class _SongPageState extends State<SongPage> {
               var value = currnetSongController.currentsongName;
               log("song name $value");
               if(t){
-              addSongToRecent(currnetSongController.currentSongID,currnetSongController.currentsongName,currnetSongController.currentartistName,currnetSongController.currentaudioLength,currnetSongController.currentaudioImage);
+                addSongToRecent(currnetSongController.currentSongID,currnetSongController.currentsongName,currnetSongController.currentartistName,currnetSongController.currentaudioLength,currnetSongController.currentaudioImage,currnetSongController.currentdomineName,currnetSongController.currentlyrics,currnetSongController.currentaudioFileSize,currnetSongController.currentcomposedBy,currnetSongController.currentalbumName,currnetSongController.currentpoetName);
               }
               return Container(
                 height: height,
@@ -683,7 +694,7 @@ class _SongPageState extends State<SongPage> {
                                       IconButton( onPressed: () {
 
                                           if(addinginList.contains(currnetSongController.currentSongID)== false){
-                                            final songData = LikedSong("${currnetSongController.currentsongName}", "${currnetSongController.currentSongID}", "${currnetSongController.currentartistName}", "${currnetSongController.currentaudioLength}","{currnetSongController.currentaudioImage}");
+                                            final songData = LikedSong("${currnetSongController.currentsongName}", "${currnetSongController.currentSongID}", "${currnetSongController.currentartistName}", "${currnetSongController.currentaudioLength}","${currnetSongController.currentaudioImage}","${currnetSongController.currentpoetName}","${currnetSongController.currentalbumName}","${currnetSongController.currentcomposedBy}","${currnetSongController.currentaudioFileSize}","${currnetSongController.currentlyrics}","${currnetSongController.currentdomineName}");
                                             likedSongsHive.put("${currnetSongController.currentSongID}", songData).then((value) {
 
                                               setState(() {
@@ -918,7 +929,7 @@ class _SongPageState extends State<SongPage> {
                   log("song name $value");
 
                   if(t){
-                    addSongToRecent(currnetSongController.currentSongID,currnetSongController.currentsongName,currnetSongController.currentartistName,currnetSongController.currentaudioLength,currnetSongController.currentaudioImage);
+                    addSongToRecent(currnetSongController.currentSongID,currnetSongController.currentsongName,currnetSongController.currentartistName,currnetSongController.currentaudioLength,currnetSongController.currentaudioImage,currnetSongController.currentdomineName,currnetSongController.currentlyrics,currnetSongController.currentaudioFileSize,currnetSongController.currentcomposedBy,currnetSongController.currentalbumName,currnetSongController.currentpoetName);
                   }
                   return Container(
                     height: height,
@@ -1281,7 +1292,7 @@ class _ControlButtonsState extends State<ControlButtons> {
         IconButton( onPressed: () {
 
           if(addinginList.contains(currnetSongController.currentSongID)== false){
-            final songData = LikedSong("${currnetSongController.currentsongName}", "${currnetSongController.currentSongID}", "${currnetSongController.currentartistName}", "${currnetSongController.currentaudioLength}","{currnetSongController.currentaudioImage}");
+            final songData = LikedSong("${currnetSongController.currentsongName}", "${currnetSongController.currentSongID}", "${currnetSongController.currentartistName}", "${currnetSongController.currentaudioLength}","${currnetSongController.currentaudioImage}","${currnetSongController.currentpoetName}","${currnetSongController.currentalbumName}","${currnetSongController.currentcomposedBy}","${currnetSongController.currentaudioFileSize}","${currnetSongController.currentlyrics}","${currnetSongController.currentdomineName}");
             likedSongsHive.put("${currnetSongController.currentSongID}", songData).then((value) {
 
               setState(() {
