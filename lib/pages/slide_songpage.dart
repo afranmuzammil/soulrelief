@@ -164,26 +164,36 @@ class _SlideSongPageState extends State<SlideSongPage> {
         body: _buildScreens()[IndexValue],
         panelHeader: MiniPlayer(onTap: sliderControl.sliderController.show,songId: currnetSongController.currentSongID ,),
         panel: SongPage(onTap: sliderControl.sliderController.hide,songID: currnetSongController.currentSongID,),
-        footer: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem( icon:Icon(Icons.navigation_outlined), label: 'Explore'),
-            BottomNavigationBarItem(
-                icon:Icon(Icons.library_music), label: 'Playlist'),
-          ],
-          currentIndex : IndexValue,
-          // unselectedFontSize: 0.0,
-          // selectedFontSize: 0.0,
-          elevation: 0,
-          backgroundColor: Colors.white,
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor:  Color(0xffdf99da),
-          unselectedItemColor: Color(0xFF5F7185),
-          onTap: (index) {
-            setState(() {
-              IndexValue = index;
-            });
-          },
+        footer: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF921985) , Color(0xFF193B92)],
+              begin: Alignment.topLeft,
+              end: Alignment.topRight,
+              stops: [0.0, 0.8],
+              tileMode: TileMode.clamp,
+            ),
+          ),
+          child: BottomNavigationBar(
+            items: [
+              BottomNavigationBarItem(backgroundColor:IndexValue==0?Color(0xFF193B92):Color(0xFF921985) ,icon:Icon(Icons.home), label: 'Home'),
+              BottomNavigationBarItem(icon:Icon(Icons.navigation_outlined), label: 'Explore'),
+              BottomNavigationBarItem(icon:Icon(Icons.library_music), label: 'Playlist'),
+            ],
+            currentIndex : IndexValue,
+            // unselectedFontSize: 0.0,
+            // selectedFontSize: 0.0,
+            elevation: 0,
+            backgroundColor:Colors.transparent,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor:  Color(0xffffffff),
+            unselectedItemColor: Colors.white70,
+            onTap: (index) {
+              setState(() {
+                IndexValue = index;
+              });
+            },
+          ),
         ),
         // PersistentTabView(
         //   context,

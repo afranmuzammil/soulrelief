@@ -39,10 +39,20 @@ class RecentCards extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.25),
+                    )
+                  ],
+                  border: Border.all(
+                      color: Colors.white.withOpacity(0.2), width: 1.0),
+
                   gradient: LinearGradient(
-                    colors: [Color(0xffdf99da), Color(0xff668fd7)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.white.withOpacity(0.5),
+                      Colors.white.withOpacity(0.2)
+                    ],
+                    stops: [0.0, 1.0],
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(14)),
                   // color: pictureBG,
@@ -88,12 +98,12 @@ class RecentCards extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 3, 3, 0),
                 alignment: Alignment.bottomCenter,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xffdf99da), Colors.transparent, Color(0xffdf99da)],
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.topRight,
-                  ),
-                  // color: Colors.white,
+                  // gradient: LinearGradient(
+                  //   colors: [Color(0xffdf99da), Colors.transparent, Color(0xffdf99da)],
+                  //   begin: Alignment.bottomLeft,
+                  //   end: Alignment.topRight,
+                  // ),
+                  //  color: Color(0xff),
                   border: Border.all(color: Colors.transparent),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(14),

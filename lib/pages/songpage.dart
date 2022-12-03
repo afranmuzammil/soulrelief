@@ -10,6 +10,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:soulrelief/pages/home.dart';
+import 'package:text_scroll/text_scroll.dart';
 import '../builders/gradienticon.dart';
 import '../builders/gradienttext.dart';
 import '../contollers/common.dart';
@@ -236,8 +237,9 @@ class _SongPageState extends State<SongPage> {
     final height = size.height;
     final width = size.width;
     return Scaffold(
+       // backgroundColor: Colors.transparent,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.transparent,
           elevation: 0,
           actions: [
             // IconButton(onPressed: (){}, icon: Icon(Icons.search,color: Colors.black87,)),
@@ -276,6 +278,24 @@ class _SongPageState extends State<SongPage> {
               addSongToRecent(currnetSongController.currentSongID,currnetSongController.currentsongName,currnetSongController.currentartistName,currnetSongController.currentaudioLength,currnetSongController.currentalbumName);
             }
             return Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    stops: [
+                      0.1,
+                      0.4,
+                      0.6,
+                      0.9,
+                    ],
+                    colors: [
+                      Color(0Xff193B92),
+                      Color(0Xff110D19),
+                      Color(0Xff171F46),
+                      Color(0Xff921985),
+                    ],
+                  )
+              ),
               height: height,
               width: width,
               child: SafeArea(
@@ -301,287 +321,134 @@ class _SongPageState extends State<SongPage> {
                       //     ],
                       //   ),
                       // ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.10),
+                            )
+                          ],
+                          border: Border.all(
+                              color: Colors.white.withOpacity(0.1), width: 0.0),
+
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.white.withOpacity(0.1),
+                              Colors.white.withOpacity(0.1)
+                            ],
+                            stops: [0.0, 1.0],
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(25)),
+                          // color: pictureBG,
+
                         ),
-                        elevation: 10,
-                        shadowColor: Color(0xFFC3539A),
-                        child: SizedBox(
-                            height: height * 0.66,
-                            width: width * 0.85,
+                        child: Card(
+                          color: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          elevation: 20,
+                          shadowColor: Color(0xFFC3539A),
+                          child: SizedBox(
+                              height: height * 0.52,
+                              width: width * 0.85,
 
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                GradientText(
-                                  "${currnetSongController.currentsongName}",
-                                  style: TextStyle(
-                                      color: Color(0xFF5F7185),
-                                      fontSize: 18,
-                                      fontFamily: GoogleFonts
-                                          .poppins()
-                                          .fontFamily,
-                                      fontWeight: FontWeight.bold),
-                                  gradient: LinearGradient(colors: [
-                                    Color(0xffdf99da), Color(0xff668fd7)
-                                  ]),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0.0, 22, 0.0, 50),
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16.0),
-                                    ),
-                                    shadowColor: Color(0xFFC3539A),
-                                    elevation: 20,
-                                    child: Container(
-                                      height: height * 0.25,
-                                      width: width * 0.45,
-                                      decoration: BoxDecoration(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  TextScroll(
+                                    "${currnetSongController.currentsongName}",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontFamily: GoogleFonts
+                                            .poppins()
+                                            .fontFamily,
+                                        fontWeight: FontWeight.bold),
+                                    velocity:  Velocity(pixelsPerSecond: Offset(12, 0)),
+                                  ),
 
-                                        borderRadius: BorderRadius.all(Radius.circular(14)),
-                                        // color: pictureBG,
-                                        image: DecorationImage(fit: BoxFit.fill,
-                                            image: AssetImage("assets/Allama Iqbal.png")
-                                          //NetworkImage(
-                                          //  "${Product.products[index].imageUrl}")
-                                          // CachedNetworkImageProvider(
-                                          //   items.body["featuredClothingItems"][index]["coverImage"]
-                                          //       .toString(),
-                                          // ),
-                                        ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(0.0, 22, 0.0, 10),
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(16.0),
                                       ),
-                                      // child: CachedNetworkImage(
-                                      //   placeholder: (context, imgUrl) => const Text("Image is loading"),
-                                      //   imageUrl: products.body["items"][index]["coverImage"].toString(),
-                                      // ),
+                                      shadowColor: Color(0xFFC3539A),
+                                      elevation: 20,
+                                      child: Container(
+                                        height: height * 0.25,
+                                        width: width * 0.45,
+                                        decoration: BoxDecoration(
+
+                                          borderRadius: BorderRadius.all(Radius.circular(14)),
+                                          // color: pictureBG,
+                                          image: DecorationImage(fit: BoxFit.fill,
+                                              image: AssetImage("assets/Allama Iqbal.png")
+                                            //NetworkImage(
+                                            //  "${Product.products[index].imageUrl}")
+                                            // CachedNetworkImageProvider(
+                                            //   items.body["featuredClothingItems"][index]["coverImage"]
+                                            //       .toString(),
+                                            // ),
+                                          ),
+                                        ),
+                                        // child: CachedNetworkImage(
+                                        //   placeholder: (context, imgUrl) => const Text("Image is loading"),
+                                        //   imageUrl: products.body["items"][index]["coverImage"].toString(),
+                                        // ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                StreamBuilder<PositionData>(
-                                  stream: _positionDataStream,
-                                  builder: (context, snapshot) {
-                                    final positionData = snapshot.data;
-                                    return SeekBar(
+                                  StreamBuilder<PositionData>(
+                                    stream: _positionDataStream,
+                                    builder: (context, snapshot) {
+                                      final positionData = snapshot.data;
+                                      return SeekBar(
 
-                                      duration: positionData?.duration ?? Duration.zero,
-                                      position: positionData?.position ?? Duration.zero,
-                                      bufferedPosition:
-                                      positionData?.bufferedPosition ?? Duration.zero,
-                                      onChangeEnd: _player.seek,
-                                    );
-                                  },
-                                ),
-                                Row(
-
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-
-                                    ControlButtons(_player, songIdList: songIDList,
-                                      currentSongID: songId!,
-                                      Nextsong: () {
-                                        nextSong();
-                                      },
-                                      prvsong: () {
-                                        prvSong();
-                                      },),
-
-
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    IconButton( onPressed: () {
-
-                                      if(addinginList.contains(currnetSongController.currentSongID)== false){
-                                        final songData = LikedSong("${currnetSongController.currentsongName}", "${currnetSongController.currentSongID}", "${currnetSongController.currentartistName}", "${currnetSongController.currentaudioLength}","${currnetSongController.currentaudioImage}");
-                                        likedSongsHive.put("${currnetSongController.currentSongID}", songData).then((value) {
-
-                                          setState(() {
-                                            addinginList.add("${currnetSongController.currentSongID}");
-                                          });
-
-                                          final SongId = LikedList(addinginList);
-                                          likedListHive.put("likedSongs", SongId);
-                                        });
-                                      }
-                                      if(addinginList.contains(currnetSongController.currentSongID)== true){
-
-                                        likedSongsHive.delete(currnetSongController.currentSongID).then((value) {
-
-                                          setState(() {
-                                            addinginList.remove("${currnetSongController.currentSongID}");
-                                          });
-
-                                          final SongId = LikedList(addinginList);
-                                          likedListHive.put("likedSongs", SongId);
-                                        });
-                                      }
-
-
-                                    }, icon: addinginList.contains(currnetSongController.currentSongID)?RadiantGradientMask(child: Icon(Icons.favorite,color:Colors.white,),)
-                                        :Icon(Icons.favorite_border,color:Color(0XFF5F7185),)
-                                      ,),
-                                    Text("${currnetSongController.currentalbumName}".toUpperCase(),style :TextStyle(
-                                        color: Color(0xFF5F7185),
-                                        fontSize: 16,
-                                        fontFamily: GoogleFonts.poppins().fontFamily,
-                                        fontWeight: FontWeight.w600)),
-                                    IconButton( onPressed: () {
-                                      const snackBar = SnackBar(
-                                        // padding:EdgeInsets.only(bottom: 10),
-
-                                        content: Text('Coming soon ',style: TextStyle(color: Colors.black),),
-                                        behavior: SnackBarBehavior.floating,
-                                        //      elevation: 10,
-                                        backgroundColor: Colors.white,
-                                        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                                        // action: SnackBarAction(
-                                        // //  label: 'Undo',
-                                        //   onPressed: () {
-                                        //     // Some code to undo the change.
-                                        //   },
-                                        // ),
+                                        duration: positionData?.duration ?? Duration.zero,
+                                        position: positionData?.position ?? Duration.zero,
+                                        bufferedPosition:
+                                        positionData?.bufferedPosition ?? Duration.zero,
+                                        onChangeEnd: _player.seek,
                                       );
+                                    },
+                                  ),
+                                  Row(
 
-                                      // Find the ScaffoldMessenger in the widget tree
-                                      // and use it to show a SnackBar.
-                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                    }, icon: Icon(Icons.playlist_add,color:Color(0XFF5F7185),) ,),
-                                  ],
-                                )
-                                //  ControlButtons(_player),
-                                // Display seek bar. Using StreamBuilder, this widget rebuilds
-                                // each time the position, buffered position or duration changes.
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
 
-                              ],
-                            )
+                                      ControlButtons(_player, songIdList: songIDList,
+                                        currentSongID: songId!,
+                                        Nextsong: () {
+                                          nextSong();
+                                        },
+                                        prvsong: () {
+                                          prvSong();
+                                        },),
+
+
+                                    ],
+                                  ),
+
+                                  //  ControlButtons(_player),
+                                  // Display seek bar. Using StreamBuilder, this widget rebuilds
+                                  // each time the position, buffered position or duration changes.
+
+                                ],
+                              )
+                          ),
                         ),
                       ),
                       SizedBox(
                         height: 20,
                       ),
-                      Container(
-                        height: height,
-                        width: width * 0.85,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Color(0xff3B4C77), Color(0xffD1549E)],
-                            begin: Alignment.bottomRight,
-                            end: Alignment.topLeft,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(14)),
-                          // color: pictureBG,
 
-                        ),
-                        child: ContainedTabBarView(
-                          tabBarProperties: TabBarProperties(
-                            indicatorColor: Colors.white,
-                          ),
-                          initialIndex: 1,
-                          tabs: [
-                            Text('Next'),
-                            Text('Lyrics'),
-                            Text("Info")
-                          ],
-                          views: [
-                            Container(
-                              child: StreamBuilder<QuerySnapshot>(
-                                //   stream: db.collection('AllSongsList').snapshots(),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  } else {
-                                    return
-                                      ListView(
-                                        physics: NeverScrollableScrollPhysics(),
-                                        shrinkWrap: true,
-                                        children: snapshot.data!.docs
-                                            .map((doc) =>
-                                            ListTile(
-                                              onTap: () {
-                                                setState(() {
-                                                  songId = doc["song_id"].toString();
-                                                  init();
-                                                });
-                                                print(doc["song_id"].toString());
-                                              },
-                                              leading: Container(
-                                                height: height * 0.06,
-                                                width: width * 0.12,
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.all(
-                                                      Radius.circular(0)),
-                                                  // color: pictureBG,
-                                                  image: DecorationImage(fit: BoxFit.fill,
-                                                      image: AssetImage('assets/hqdefault.png')
-                                                    //NetworkImage(
-                                                    //  "${Product.products[index].imageUrl}")
-                                                    // CachedNetworkImageProvider(
-                                                    //   items.body["featuredClothingItems"][index]["coverImage"]
-                                                    //       .toString(),
-                                                    // ),
-                                                  ),
-                                                ),
-                                                // child: CachedNetworkImage(
-                                                //   placeholder: (context, imgUrl) => const Text("Image is loading"),
-                                                //   imageUrl: products.body["items"][index]["coverImage"].toString(),
-                                                // ),
-                                              ),
-                                              title: Text(doc["song_name"].toString(),
-                                                style: TextStyle(color: Colors.white),),
-                                              subtitle: Text("${doc["singer_name"]
-                                                  .toString()} • ${doc["audio_length"]
-                                                  .toString()}",
-                                                  style: TextStyle(color: Colors.white)),
-                                              trailing: IconButton(onPressed: () {},
-                                                icon: Icon(Icons.more_vert),
-                                                color: Colors.white,),
-                                            ),
-
-
-                                        ).toList(),
-                                      );
-
-                                    // ListView.builder(
-                                    //     scrollDirection: Axis.vertical,
-                                    //     shrinkWrap: true,
-                                    //     physics: ScrollPhysics(),
-                                    //     itemCount: 3,
-                                    //     itemBuilder: (BuildContext context,int index){
-                                    //
-                                    //     });
-                                  }
-                                },
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              child: SingleChildScrollView(
-                                child: Text(
-                                  "${currnetSongController.currentlyrics.toString()}",
-                                  //maxLines: 10,
-                                  overflow: TextOverflow.visible,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontFamily: GoogleFonts
-                                          .poppins()
-                                          .fontFamily,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                            ),
-                            Container()
-                          ],
-                          onChange: (index) => print(index),
-                        ),
-                      )
                     ],
                   ),
                 ),
@@ -1092,68 +959,69 @@ class _SongPageState extends State<SongPage> {
 
                                         ],
                                       ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          IconButton( onPressed: () {
+                                      // Row(
+                                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      //   children: [
+                                      //     // IconButton( onPressed: () {
+                                      //     //
+                                      //     //   if(addinginList.contains(currnetSongController.currentSongID)== false){
+                                      //     //     final songData = LikedSong("${currnetSongController.currentsongName}", "${currnetSongController.currentSongID}", "${currnetSongController.currentartistName}", "${currnetSongController.currentaudioLength}","{currnetSongController.currentaudioImage}");
+                                      //     //     likedSongsHive.put("${currnetSongController.currentSongID}", songData).then((value) {
+                                      //     //
+                                      //     //       setState(() {
+                                      //     //         addinginList.add("${currnetSongController.currentSongID}");
+                                      //     //       });
+                                      //     //
+                                      //     //       final SongId = LikedList(addinginList);
+                                      //     //       likedListHive.put("likedSongs", SongId);
+                                      //     //     });
+                                      //     //   }
+                                      //     //   if(addinginList.contains(currnetSongController.currentSongID)== true){
+                                      //     //
+                                      //     //     likedSongsHive.delete(currnetSongController.currentSongID).then((value) {
+                                      //     //
+                                      //     //       setState(() {
+                                      //     //         addinginList.remove("${currnetSongController.currentSongID}");
+                                      //     //       });
+                                      //     //
+                                      //     //       final SongId = LikedList(addinginList);
+                                      //     //       likedListHive.put("likedSongs", SongId);
+                                      //     //     });
+                                      //     //   }
+                                      //     //
+                                      //     //
+                                      //     // }, icon: addinginList.contains(currnetSongController.currentSongID)?RadiantGradientMask(child: Icon(Icons.favorite,color:Colors.white,),)
+                                      //     //     :Icon(Icons.favorite_border,color:Color(0XFF5F7185),)
+                                      //     //   ,),
+                                      //     // Text("${data!['album_name']}".toUpperCase(),style :TextStyle(
+                                      //     //     color: Color(0xFF5F7185),
+                                      //     //     fontSize: 16,
+                                      //     //     fontFamily: GoogleFonts.poppins().fontFamily,
+                                      //     //     fontWeight: FontWeight.w600)),
+                                      //     // IconButton( onPressed: () {
+                                      //     //   const snackBar = SnackBar(
+                                      //     //     // padding:EdgeInsets.only(bottom: 10),
+                                      //     //
+                                      //     //     content: Text('Coming soon ',style: TextStyle(color: Colors.black),),
+                                      //     //     behavior: SnackBarBehavior.floating,
+                                      //     //     //      elevation: 10,
+                                      //     //     backgroundColor: Colors.white,
+                                      //     //     // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                                      //     //     // action: SnackBarAction(
+                                      //     //     // //  label: 'Undo',
+                                      //     //     //   onPressed: () {
+                                      //     //     //     // Some code to undo the change.
+                                      //     //     //   },
+                                      //     //     // ),
+                                      //     //   );
+                                      //     //
+                                      //     //   // Find the ScaffoldMessenger in the widget tree
+                                      //     //   // and use it to show a SnackBar.
+                                      //     //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                      //     // }, icon: Icon(Icons.playlist_add,color:Color(0XFF5F7185),) ,),
+                                      //   ],
+                                      // )
 
-                                            if(addinginList.contains(currnetSongController.currentSongID)== false){
-                                              final songData = LikedSong("${currnetSongController.currentsongName}", "${currnetSongController.currentSongID}", "${currnetSongController.currentartistName}", "${currnetSongController.currentaudioLength}","{currnetSongController.currentaudioImage}");
-                                              likedSongsHive.put("${currnetSongController.currentSongID}", songData).then((value) {
-
-                                                setState(() {
-                                                  addinginList.add("${currnetSongController.currentSongID}");
-                                                });
-
-                                                final SongId = LikedList(addinginList);
-                                                likedListHive.put("likedSongs", SongId);
-                                              });
-                                            }
-                                            if(addinginList.contains(currnetSongController.currentSongID)== true){
-
-                                              likedSongsHive.delete(currnetSongController.currentSongID).then((value) {
-
-                                                setState(() {
-                                                  addinginList.remove("${currnetSongController.currentSongID}");
-                                                });
-
-                                                final SongId = LikedList(addinginList);
-                                                likedListHive.put("likedSongs", SongId);
-                                              });
-                                            }
-
-
-                                          }, icon: addinginList.contains(currnetSongController.currentSongID)?RadiantGradientMask(child: Icon(Icons.favorite,color:Colors.white,),)
-                                              :Icon(Icons.favorite_border,color:Color(0XFF5F7185),)
-                                            ,),
-                                          Text("${data!['album_name']}".toUpperCase(),style :TextStyle(
-                                              color: Color(0xFF5F7185),
-                                              fontSize: 16,
-                                              fontFamily: GoogleFonts.poppins().fontFamily,
-                                              fontWeight: FontWeight.w600)),
-                                          IconButton( onPressed: () {
-                                            const snackBar = SnackBar(
-                                              // padding:EdgeInsets.only(bottom: 10),
-
-                                              content: Text('Coming soon ',style: TextStyle(color: Colors.black),),
-                                              behavior: SnackBarBehavior.floating,
-                                              //      elevation: 10,
-                                              backgroundColor: Colors.white,
-                                              // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                                              // action: SnackBarAction(
-                                              // //  label: 'Undo',
-                                              //   onPressed: () {
-                                              //     // Some code to undo the change.
-                                              //   },
-                                              // ),
-                                            );
-
-                                            // Find the ScaffoldMessenger in the widget tree
-                                            // and use it to show a SnackBar.
-                                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                          }, icon: Icon(Icons.playlist_add,color:Color(0XFF5F7185),) ,),
-                                        ],
-                                      )
                                       //  ControlButtons(_player),
                                       // Display seek bar. Using StreamBuilder, this widget rebuilds
                                       // each time the position, buffered position or duration changes.
@@ -1165,124 +1033,124 @@ class _SongPageState extends State<SongPage> {
                             SizedBox(
                               height: 20,
                             ),
-                            Container(
-                              height: height,
-                              width: width * 0.85,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [Color(0xff3B4C77), Color(0xffD1549E)],
-                                  begin: Alignment.bottomRight,
-                                  end: Alignment.topLeft,
-                                ),
-                                borderRadius: BorderRadius.all(Radius.circular(14)),
-                                // color: pictureBG,
-
-                              ),
-                              child: ContainedTabBarView(
-                                tabBarProperties: TabBarProperties(
-                                  indicatorColor: Colors.white,
-                                ),
-                                initialIndex: 1,
-                                tabs: [
-                                  Text('Next'),
-                                  Text('Lyrics'),
-                                  Text("Info")
-                                ],
-                                views: [
-                                  Container(
-                                    child: StreamBuilder<QuerySnapshot>(
-                                     // stream: db.collection('AllSongsList').snapshots(),
-                                      builder: (context, snapshot) {
-                                        if (!snapshot.hasData) {
-                                          return const Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        } else {
-                                          return
-                                            ListView(
-                                              physics: NeverScrollableScrollPhysics(),
-                                              shrinkWrap: true,
-                                              children: snapshot.data!.docs
-                                                  .map((doc) =>
-                                                  ListTile(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        songId = doc["song_id"].toString();
-                                                        init();
-                                                      });
-                                                      print(doc["song_id"].toString());
-                                                    },
-                                                    leading: Container(
-                                                      height: height * 0.06,
-                                                      width: width * 0.12,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.all(
-                                                            Radius.circular(0)),
-                                                        // color: pictureBG,
-                                                        image: DecorationImage(fit: BoxFit.fill,
-                                                            image: AssetImage('assets/kdefult.png')
-                                                          //NetworkImage(
-                                                          //  "${Product.products[index].imageUrl}")
-                                                          // CachedNetworkImageProvider(
-                                                          //   items.body["featuredClothingItems"][index]["coverImage"]
-                                                          //       .toString(),
-                                                          // ),
-                                                        ),
-                                                      ),
-                                                      // child: CachedNetworkImage(
-                                                      //   placeholder: (context, imgUrl) => const Text("Image is loading"),
-                                                      //   imageUrl: products.body["items"][index]["coverImage"].toString(),
-                                                      // ),
-                                                    ),
-                                                    title: Text(doc["song_name"].toString(),
-                                                      style: TextStyle(color: Colors.white),),
-                                                    subtitle: Text("${doc["singer_name"]
-                                                        .toString()} • ${doc["audio_length"]
-                                                        .toString()}",
-                                                        style: TextStyle(color: Colors.white)),
-                                                    trailing: IconButton(onPressed: () {},
-                                                      icon: Icon(Icons.more_vert),
-                                                      color: Colors.white,),
-                                                  ),
-
-
-                                              ).toList(),
-                                            );
-
-                                          // ListView.builder(
-                                          //     scrollDirection: Axis.vertical,
-                                          //     shrinkWrap: true,
-                                          //     physics: ScrollPhysics(),
-                                          //     itemCount: 3,
-                                          //     itemBuilder: (BuildContext context,int index){
-                                          //
-                                          //     });
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: SingleChildScrollView(
-                                      child: Text(
-                                        "${data["lyrics"].toString()}",
-                                        //maxLines: 10,
-                                        overflow: TextOverflow.visible,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 10,
-                                            fontFamily: GoogleFonts
-                                                .poppins()
-                                                .fontFamily,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ),
-                                  ),
-                                  Container()
-                                ],
-                                onChange: (index) => print(index),
-                              ),
-                            )
+                            // Container(
+                            //   height: height,
+                            //   width: width * 0.85,
+                            //   decoration: BoxDecoration(
+                            //     gradient: LinearGradient(
+                            //       colors: [Color(0xff3B4C77), Color(0xffD1549E)],
+                            //       begin: Alignment.bottomRight,
+                            //       end: Alignment.topLeft,
+                            //     ),
+                            //     borderRadius: BorderRadius.all(Radius.circular(14)),
+                            //     // color: pictureBG,
+                            //
+                            //   ),
+                            //   child: ContainedTabBarView(
+                            //     tabBarProperties: TabBarProperties(
+                            //       indicatorColor: Colors.white,
+                            //     ),
+                            //     initialIndex: 1,
+                            //     tabs: [
+                            //       Text('Next'),
+                            //       Text('Lyrics'),
+                            //       Text("Info")
+                            //     ],
+                            //     views: [
+                            //       Container(
+                            //         child: StreamBuilder<QuerySnapshot>(
+                            //          // stream: db.collection('AllSongsList').snapshots(),
+                            //           builder: (context, snapshot) {
+                            //             if (!snapshot.hasData) {
+                            //               return const Center(
+                            //                 child: CircularProgressIndicator(),
+                            //               );
+                            //             } else {
+                            //               return
+                            //                 ListView(
+                            //                   physics: NeverScrollableScrollPhysics(),
+                            //                   shrinkWrap: true,
+                            //                   children: snapshot.data!.docs
+                            //                       .map((doc) =>
+                            //                       ListTile(
+                            //                         onTap: () {
+                            //                           setState(() {
+                            //                             songId = doc["song_id"].toString();
+                            //                             init();
+                            //                           });
+                            //                           print(doc["song_id"].toString());
+                            //                         },
+                            //                         leading: Container(
+                            //                           height: height * 0.06,
+                            //                           width: width * 0.12,
+                            //                           decoration: BoxDecoration(
+                            //                             borderRadius: BorderRadius.all(
+                            //                                 Radius.circular(0)),
+                            //                             // color: pictureBG,
+                            //                             image: DecorationImage(fit: BoxFit.fill,
+                            //                                 image: AssetImage('assets/kdefult.png')
+                            //                               //NetworkImage(
+                            //                               //  "${Product.products[index].imageUrl}")
+                            //                               // CachedNetworkImageProvider(
+                            //                               //   items.body["featuredClothingItems"][index]["coverImage"]
+                            //                               //       .toString(),
+                            //                               // ),
+                            //                             ),
+                            //                           ),
+                            //                           // child: CachedNetworkImage(
+                            //                           //   placeholder: (context, imgUrl) => const Text("Image is loading"),
+                            //                           //   imageUrl: products.body["items"][index]["coverImage"].toString(),
+                            //                           // ),
+                            //                         ),
+                            //                         title: Text(doc["song_name"].toString(),
+                            //                           style: TextStyle(color: Colors.white),),
+                            //                         subtitle: Text("${doc["singer_name"]
+                            //                             .toString()} • ${doc["audio_length"]
+                            //                             .toString()}",
+                            //                             style: TextStyle(color: Colors.white)),
+                            //                         trailing: IconButton(onPressed: () {},
+                            //                           icon: Icon(Icons.more_vert),
+                            //                           color: Colors.white,),
+                            //                       ),
+                            //
+                            //
+                            //                   ).toList(),
+                            //                 );
+                            //
+                            //               // ListView.builder(
+                            //               //     scrollDirection: Axis.vertical,
+                            //               //     shrinkWrap: true,
+                            //               //     physics: ScrollPhysics(),
+                            //               //     itemCount: 3,
+                            //               //     itemBuilder: (BuildContext context,int index){
+                            //               //
+                            //               //     });
+                            //             }
+                            //           },
+                            //         ),
+                            //       ),
+                            //       Container(
+                            //         padding: EdgeInsets.all(8.0),
+                            //         child: SingleChildScrollView(
+                            //           child: Text(
+                            //             "${data["lyrics"].toString()}",
+                            //             //maxLines: 10,
+                            //             overflow: TextOverflow.visible,
+                            //             style: TextStyle(
+                            //                 color: Colors.white,
+                            //                 fontSize: 10,
+                            //                 fontFamily: GoogleFonts
+                            //                     .poppins()
+                            //                     .fontFamily,
+                            //                 fontWeight: FontWeight.w500),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //       Container()
+                            //     ],
+                            //     onChange: (index) => print(index),
+                            //   ),
+                            // )
                           ],
                         ),
                       ),
@@ -1298,7 +1166,7 @@ class _SongPageState extends State<SongPage> {
   }
 }
 
-class ControlButtons extends StatelessWidget {
+class ControlButtons extends StatefulWidget {
   final AudioPlayer player;
   final List songIdList;
   final String currentSongID;
@@ -1310,33 +1178,65 @@ class ControlButtons extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<ControlButtons> createState() => _ControlButtonsState();
+}
+
+class _ControlButtonsState extends State<ControlButtons> {
+  final likedListHive = LikedListHive.initLikedListDataHive();
+  final likedSongsHive = LikedSongsHive.initLikedSongsDataHive();
+  CurrnetSongController currnetSongController = getx.Get.put(CurrnetSongController());
+  List<String> addinginList = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    addinginList = likedListHive.get("likedSongs")?.songID??[];
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       children: [
         // Opens volume slider dialog
+        IconButton( onPressed: () {
+
+          if(addinginList.contains(currnetSongController.currentSongID)== false){
+            final songData = LikedSong("${currnetSongController.currentsongName}", "${currnetSongController.currentSongID}", "${currnetSongController.currentartistName}", "${currnetSongController.currentaudioLength}","{currnetSongController.currentaudioImage}");
+            likedSongsHive.put("${currnetSongController.currentSongID}", songData).then((value) {
+
+              setState(() {
+                addinginList.add("${currnetSongController.currentSongID}");
+              });
+
+              final SongId = LikedList(addinginList);
+              likedListHive.put("likedSongs", SongId);
+            });
+          }
+          if(addinginList.contains(currnetSongController.currentSongID)== true){
+
+            likedSongsHive.delete(currnetSongController.currentSongID).then((value) {
+
+              setState(() {
+                addinginList.remove("${currnetSongController.currentSongID}");
+              });
+
+              final SongId = LikedList(addinginList);
+              likedListHive.put("likedSongs", SongId);
+            });
+          }
+
+
+        }, icon: addinginList.contains(currnetSongController.currentSongID)?RadiantGradientMask(child: Icon(Icons.favorite,color:Colors.white,),)
+            :Icon(Icons.favorite_border,color:Colors.white,)
+          ,),
         IconButton(
-          icon: RadiantGradientMask(child: Icon(Icons.volume_up, color: Colors.white,)),
+          icon: Icon(Icons.fast_rewind_rounded, color: Colors.white, size: 40),
           onPressed: () {
-            showSliderDialog(
-              context: context,
-              title: "Adjust volume",
-              divisions: 10,
-              min: 0.0,
-              max: 1.0,
-              value: player.volume,
-              stream: player.volumeStream,
-              onChanged: player.setVolume,
-            );
-          },
-        ),
-        IconButton(
-          icon: RadiantGradientMask(
-              child: Icon(Icons.fast_rewind_rounded, color: Colors.white, size: 40)),
-          onPressed: () {
-            int currentSongIndex = songIdList.indexOf(currentSongID);
-            prvsong();
+            int currentSongIndex = widget.songIdList.indexOf(widget.currentSongID);
+            //prvsong();
 
             // showSliderDialog(
             //   context: context,
@@ -1356,7 +1256,7 @@ class ControlButtons extends StatelessWidget {
         /// loading/buffering/ready state. Depending on the state we show the
         /// appropriate button or loading indicator.
         StreamBuilder<PlayerState>(
-          stream: player.playerStateStream,
+          stream: widget.player.playerStateStream,
           builder: (context, snapshot) {
             final playerState = snapshot.data;
             final processingState = playerState?.processingState;
@@ -1372,22 +1272,22 @@ class ControlButtons extends StatelessWidget {
             } else if (playing != true) {
               return IconButton(
                 icon: RadiantGradientMask(
-                    child: Icon(Icons.play_arrow_rounded, color: Colors.white, size: 50,)),
+                    child: Icon(Icons.play_circle_fill_rounded, color: Colors.white, size: 70,)),
                 iconSize: 64.0,
-                onPressed: player.play,
+                onPressed: widget.player.play,
               );
             } else if (processingState != ProcessingState.completed) {
               return IconButton(
-                icon: RadiantGradientMask(child: Icon(Icons.pause, color: Colors.white, size: 50,)),
+                icon: RadiantGradientMask(child: Icon(Icons.pause_circle_filled_outlined, color: Colors.white, size: 70,)),
                 iconSize: 64.0,
-                onPressed: player.pause,
+                onPressed: widget.player.pause,
               );
             } else {
               return IconButton(
                 icon: RadiantGradientMask(
-                    child: Icon(Icons.replay, color: Colors.white, size: 50,)),
+                    child: Icon(Icons.replay_circle_filled_rounded, color: Colors.white, size: 70,)),
                 iconSize: 64.0,
-                onPressed: () => player.seek(Duration.zero),
+                onPressed: () => widget.player.seek(Duration.zero),
               );
             }
           },
@@ -1396,10 +1296,9 @@ class ControlButtons extends StatelessWidget {
         SizedBox(
           width: 55.0,
           child: IconButton(
-            icon: RadiantGradientMask(
-                child: Icon(Icons.fast_forward_rounded, color: Colors.white, size: 40)),
+            icon: Icon(Icons.fast_forward_rounded, color: Colors.white, size: 40),
             onPressed: () {
-              Nextsong();
+             // Nextsong();
               // showSliderDialog(
               //   context: context,
               //   title: "Adjust volume",
@@ -1413,25 +1312,45 @@ class ControlButtons extends StatelessWidget {
             },
           ),
         ),
-        StreamBuilder<double>(
-          stream: player.speedStream,
-          builder: (context, snapshot) =>
-              IconButton(
-                icon: Text("${snapshot.data?.toStringAsFixed(1)}x",
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                onPressed: () {
-                  showSliderDialog(
-                    context: context,
-                    title: "Adjust speed",
-                    divisions: 10,
-                    min: 0.5,
-                    max: 1.5,
-                    value: player.speed,
-                    stream: player.speedStream,
-                    onChanged: player.setSpeed,
-                  );
-                },
-              ),
+        // StreamBuilder<double>(
+        //   stream: player.speedStream,
+        //   builder: (context, snapshot) =>
+        //       IconButton(
+        //         icon: Text("${snapshot.data?.toStringAsFixed(1)}x",
+        //             style: const TextStyle(fontWeight: FontWeight.bold)),
+        //         onPressed: () {
+        //           showSliderDialog(
+        //             context: context,
+        //             title: "Adjust speed",
+        //             divisions: 10,
+        //             min: 0.5,
+        //             max: 1.5,
+        //             value: player.speed,
+        //             stream: player.speedStream,
+        //             onChanged: player.setSpeed,
+        //           );
+        //         },
+        //       ),
+        // ),
+        SizedBox(
+          height: 40.0,
+          width: 55.0,
+          child: IconButton(
+            icon: Icon(Icons.list, color: Colors.white, size: 28),
+            onPressed: () {
+              // Nextsong();
+              // showSliderDialog(
+              //   context: context,
+              //   title: "Adjust volume",
+              //   divisions: 10,
+              //   min: 0.0,
+              //   max: 1.0,
+              //   value: player.volume,
+              //   stream: player.volumeStream,
+              //   onChanged: player.setVolume,
+              // );
+            },
+          ),
         ),
       ],
     );

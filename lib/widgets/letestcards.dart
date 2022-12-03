@@ -68,176 +68,199 @@ class LatestCards extends StatelessWidget {
           // showOverlay();
 
         },
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
+        child: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.25),
+              )
+            ],
+            border: Border.all(
+                color: Colors.white.withOpacity(0.2), width: 1.0),
+
+            gradient: LinearGradient(
+              colors: [
+                Colors.white.withOpacity(0.5),
+                Colors.white.withOpacity(0.2)
+              ],
+              stops: [0.0, 1.0],
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(14)),
+            // color: pictureBG,
+
           ),
-          elevation: 6,
-          child: SizedBox(
-            height: height * 0.30,
-            width: width * 0.85,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
+          child: Card(
+            color: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            elevation: 6,
+            child: SizedBox(
+              height: height * 0.30,
+              width: width * 0.85,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
 
-                Text(
-                  "LATEST TARANA",
-                  style: TextStyle(
-                      color: Color(0xFF5F7185),
-                      fontSize: 10,
-                      fontFamily: GoogleFonts.poppins().fontFamily,
-                      fontWeight: FontWeight.w500),
-                ),
-                GradientText(
-                  songName ?? "Dhadakti hai jawan seeno me",
-                  style: TextStyle(
-                      color: Color(0xFF5F7185),
-                      fontSize: 16,
-                      fontFamily: GoogleFonts.poppins().fontFamily,
-                      fontWeight: FontWeight.bold),
-                  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20.0, 8.0, 0.0, 0.0),
-                  child: Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Text(
+                    "LATEST TARANA",
+                    style: TextStyle(
+                        color: Color(0xFF5F7185),
+                        fontSize: 10,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  GradientText(
+                    songName ?? "Dhadakti hai jawan seeno me",
+                    style: TextStyle(
+                        color: Color(0xFF5F7185),
+                        fontSize: 16,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
+                        fontWeight: FontWeight.bold),
+                    gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0, 8.0, 0.0, 0.0),
+                    child: Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
 
-                    children: [
-                      Container(
-                        height: height * 0.14,
-                        width: width * 0.28,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(14)),
-                          // color: pictureBG,
-                          image: DecorationImage(
-                              fit: BoxFit.fill, image: AssetImage("assets/kdefult.png")
-                              //NetworkImage(
-                              //  "${Product.products[index].imageUrl}")
-                              // CachedNetworkImageProvider(
-                              //   items.body["featuredClothingItems"][index]["coverImage"]
-                              //       .toString(),
-                              // ),
-                              ),
-                        ),
-                        // child: CachedNetworkImage(
-                        //   placeholder: (context, imgUrl) => const Text("Image is loading"),
-                        //   imageUrl: products.body["items"][index]["coverImage"].toString(),
-                        // ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                lyrics ??
-                                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: Color(0xFF5F7185),
-                                    fontSize: 10,
-                                    fontFamily: GoogleFonts.poppins().fontFamily,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              Divider(),
-                              Text(
-                                "Artist",
-                                maxLines: 10,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: Color(0xFF5F7185),
-                                    fontSize: 10,
-                                    fontFamily: GoogleFonts.poppins().fontFamily,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              Text(
-                                artistName ?? "Haider Saifullah",
-                                maxLines: 10,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: Color(0xFF5F7185),
-                                    fontSize: 10,
-                                    fontFamily: GoogleFonts.poppins().fontFamily,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
+                      children: [
+                        Container(
+                          height: height * 0.14,
+                          width: width * 0.28,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(14)),
+                            // color: pictureBG,
+                            image: DecorationImage(
+                                fit: BoxFit.fill, image: AssetImage("assets/kdefult.png")
+                                //NetworkImage(
+                                //  "${Product.products[index].imageUrl}")
+                                // CachedNetworkImageProvider(
+                                //   items.body["featuredClothingItems"][index]["coverImage"]
+                                //       .toString(),
+                                // ),
+                                ),
                           ),
+                          // child: CachedNetworkImage(
+                          //   placeholder: (context, imgUrl) => const Text("Image is loading"),
+                          //   imageUrl: products.body["items"][index]["coverImage"].toString(),
+                          // ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Text(
+                                  lyrics ??
+                                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: Color(0xFF5F7185),
+                                      fontSize: 10,
+                                      fontFamily: GoogleFonts.poppins().fontFamily,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                Divider(),
+                                Text(
+                                  "Artist",
+                                  maxLines: 10,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: Color(0xFF5F7185),
+                                      fontSize: 10,
+                                      fontFamily: GoogleFonts.poppins().fontFamily,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                Text(
+                                  artistName ?? "Haider Saifullah",
+                                  maxLines: 10,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: Color(0xFF5F7185),
+                                      fontSize: 10,
+                                      fontFamily: GoogleFonts.poppins().fontFamily,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          print("You pressed Icon Elevated Button");
+
+                       //   currnetSongController.getSong(SongID);
+                            final singleSong = SingleSong(SongID, poetName, albumName, artistName, audioLength, songName, composedBy, audioImage, audioFileSize, lyrics, domineName);
+                          CurrentSongHive.put("currentSong", singleSong);
+                          currnetSongController.updateCurrentSong(SongID, poetName, albumName, artistName, audioLength, songName, composedBy, audioImage, audioFileSize, lyrics, domineName);
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) =>  SongPage(songID: SongID,)),
+                          // );
+                        },
+                        icon: Icon(Icons.play_arrow), //icon data for elevated button
+                        label: Text("Play now"),
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.pink,
+                            //   fixedSize: const Size(300, 100),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
+                      ),
+                      NeumorphicButton(
+                        onPressed: () {
+                          print("onClick");
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title:  GradientText('Coming Soon',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
+                              content: const Text('Custom Playlist will be coming soon'),
+                              actions: <Widget>[
+
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'OK'),
+                                  child: const GradientText('OK',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
+                                ),
+                              ],
+                            ),
+                          );
+
+                        },
+                        style: NeumorphicStyle(
+                          shape: NeumorphicShape.flat,
+                          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(50)),
+                        ),
+                        //padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.playlist_add,
+                              color: Color(0xFF5F7185),
+                              size: 20,
+                            ),
+                            Text(
+                              "Add to Playlist",
+                              style: TextStyle(
+                                  color: Color(0xFF5F7185),
+                                  fontSize: 10,
+                                  fontFamily: GoogleFonts.poppins().fontFamily,
+                                  fontWeight: FontWeight.w500),
+                            )
+                          ],
                         ),
                       ),
                     ],
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        print("You pressed Icon Elevated Button");
-
-                     //   currnetSongController.getSong(SongID);
-                          final singleSong = SingleSong(SongID, poetName, albumName, artistName, audioLength, songName, composedBy, audioImage, audioFileSize, lyrics, domineName);
-                        CurrentSongHive.put("currentSong", singleSong);
-                        currnetSongController.updateCurrentSong(SongID, poetName, albumName, artistName, audioLength, songName, composedBy, audioImage, audioFileSize, lyrics, domineName);
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) =>  SongPage(songID: SongID,)),
-                        // );
-                      },
-                      icon: Icon(Icons.play_arrow), //icon data for elevated button
-                      label: Text("Play now"),
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.pink,
-                          //   fixedSize: const Size(300, 100),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
-                    ),
-                    NeumorphicButton(
-                      onPressed: () {
-                        print("onClick");
-                        showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title:  GradientText('Coming Soon',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
-                            content: const Text('Custom Playlist will be coming soon'),
-                            actions: <Widget>[
-
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, 'OK'),
-                                child: const GradientText('OK',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
-                              ),
-                            ],
-                          ),
-                        );
-
-                      },
-                      style: NeumorphicStyle(
-                        shape: NeumorphicShape.flat,
-                        boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(50)),
-                      ),
-                      //padding: const EdgeInsets.all(12.0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.playlist_add,
-                            color: Color(0xFF5F7185),
-                            size: 20,
-                          ),
-                          Text(
-                            "Add to Playlist",
-                            style: TextStyle(
-                                color: Color(0xFF5F7185),
-                                fontSize: 10,
-                                fontFamily: GoogleFonts.poppins().fontFamily,
-                                fontWeight: FontWeight.w500),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

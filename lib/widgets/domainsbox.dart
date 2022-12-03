@@ -25,22 +25,45 @@ class DomainsCards extends StatelessWidget {
           MaterialPageRoute(builder: (context) =>  DominePages(domineName: dominName,)),
         );
       },
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        elevation: 5,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image(image: AssetImage(imageLink),color:Color(0xFFE967AC),height: height*0.05 ,),
-            Text(dominName,style: TextStyle(
-                color: Color(0xFFE967AC),
-                fontSize: 12,
-                fontFamily: GoogleFonts.poppins().fontFamily,
-                fontWeight: FontWeight.w400),)
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.10),
+            )
           ],
+          border: Border.all(
+              color: Colors.white.withOpacity(0.1), width: 0.0),
+
+          gradient: LinearGradient(
+            colors: [
+              Colors.white.withOpacity(0.1),
+              Colors.white.withOpacity(0.1)
+            ],
+            stops: [0.0, 1.0],
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(14)),
+          // color: pictureBG,
+
+        ),
+        child: Card(
+          color: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          elevation: 5,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image(image: AssetImage(imageLink),color:Color(0xFFE967AC),height: height*0.05 ,),
+              Text(dominName,style: TextStyle(
+                  color: Color(0xFFE967AC),
+                  fontSize: 12,
+                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  fontWeight: FontWeight.w400),)
+            ],
+          ),
         ),
       ),
     );

@@ -44,7 +44,15 @@ class _MiniPlayerState extends State<MiniPlayer> {
     final colorTheme = Theme.of(context).colorScheme;
     return currnetSongController.obx(
       (currentSongInfo)=> Container(
-        color: Colors.white,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF921985) , Color(0xFF171F46)],
+            begin: Alignment.topLeft,
+            end: Alignment.topRight,
+            stops: [0.0, 0.8],
+            tileMode: TileMode.clamp,
+          ),
+        ),
         child: AnimatedContainer(
           duration: Duration(milliseconds: 200),
           height: 71.0,
