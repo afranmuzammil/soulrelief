@@ -27,13 +27,13 @@ class DomainsCards extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.10),
-            )
-          ],
-          border: Border.all(
-              color: Colors.white.withOpacity(0.1), width: 0.0),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.black.withOpacity(0.10),
+          //   )
+          // ],
+          // border: Border.all(
+          //     color: Colors.white.withOpacity(0.1), width: 0.0),
 
           gradient: LinearGradient(
             colors: [
@@ -51,14 +51,14 @@ class DomainsCards extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
           ),
-          elevation: 5,
+          //elevation: 5,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image(image: AssetImage(imageLink),color:Color(0xFFE967AC),height: height*0.05 ,),
+              Image(image: AssetImage(imageLink),color:Colors.white,height: height*0.05 ,),
               Text(dominName,style: TextStyle(
-                  color: Color(0xFFE967AC),
+                  color: Colors.white,
                   fontSize: 12,
                   fontFamily: GoogleFonts.poppins().fontFamily,
                   fontWeight: FontWeight.w400),)

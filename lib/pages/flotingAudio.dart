@@ -10,10 +10,11 @@ import '../contollers/currentSongContoller.dart';
 import '../models/initalizeHive.dart';
 
 class MiniPlayer extends StatefulWidget {
-  MiniPlayer({Key? key,  this.onTap, this.onClose, this.songId}) : super(key: key);
+  MiniPlayer({Key? key, this.onTap, this.onClose, this.songId}) : super(key: key);
   final Function? onTap;
   final Function? onClose;
   final String? songId;
+
   @override
   _MiniPlayerState createState() => _MiniPlayerState();
 }
@@ -24,7 +25,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
   final CurrentSongHive = SingleSongHive.initSingleSongDataHive();
 
   @override
-  initState(){
+  initState() {
     super.initState();
     //setSong();
   }
@@ -32,9 +33,9 @@ class _MiniPlayerState extends State<MiniPlayer> {
   bool isfirst = true;
   var songsIdFromController = "1rMHGBUIIxHxFX43Wef7Xhx97RlU_NHQ9";
 
-  void setSong(){
+  void setSong() {
     log("from set song");
-    setState((){
+    setState(() {
       songsIdFromController = currnetSongController.currentSongID;
     });
   }
@@ -43,10 +44,10 @@ class _MiniPlayerState extends State<MiniPlayer> {
   Widget build(BuildContext context) {
     final colorTheme = Theme.of(context).colorScheme;
     return currnetSongController.obx(
-      (currentSongInfo)=> Container(
+      (currentSongInfo) => Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF921985) , Color(0xFF171F46)],
+            colors: [Color(0xFF921985), Color(0xFF171F46)],
             begin: Alignment.topLeft,
             end: Alignment.topRight,
             stops: [0.0, 0.8],
@@ -54,73 +55,85 @@ class _MiniPlayerState extends State<MiniPlayer> {
           ),
         ),
         child: AnimatedContainer(
-          duration: Duration(milliseconds: 200),
-          height: 71.0,
-          child:Column(
-            children: [
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => widget.onTap!(),
-                    // onTap: () {
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(builder: (context) => Player()),
-                    //   );
-                    // },
-                    child: Container(
-                      width: 70,
-                      height: 70,
-                      child: Image.asset("assets/kdefult.png",
-                          fit: BoxFit.cover),
+            duration: Duration(milliseconds: 200),
+            height: 71.0,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => widget.onTap!(),
+                      // onTap: () {
+                      //   Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(builder: (context) => Player()),
+                      //   );
+                      // },
+                      child: Container(
+                        width: 70,
+                        height: 70,
+                        child: Image.asset("assets/TPicon.png", fit: BoxFit.cover),
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 20),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("${currnetSongController.currentsongName}",
-                           // '${CurrentSongHive.get("currentSong")?.songName}',
-                            //'${data!['song_name']}',
-                            style: TextStyle(color: Colors.black),
-                            // maxLines: 1,
-                            overflow: TextOverflow.ellipsis),
-                        SizedBox(width: 8, height: 8),
-                        Text('${CurrentSongHive.get("currentSong")?.singerName}',
-                            //'${data!['singer_name']}',
-                            style: TextStyle(
-                                color: Colors.black.withOpacity(0.5),
-                                fontSize: 12),
-                            //maxLines: 1,
-                            overflow: TextOverflow.ellipsis),
-                      ],
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("${currnetSongController.currentsongName}",
+                              // '${CurrentSongHive.get("currentSong")?.songName}',
+                              //'${data!['song_name']}
+                              style: TextStyle(color: Colors.white),
+                              // maxLines: 1,
+                              overflow: TextOverflow.ellipsis),
+                          SizedBox(width: 8, height: 8),
+                          Text('${CurrentSongHive.get("currentSong")?.singerName}',
+                              //'${data!['singer_name']}',
+                              style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 12),
+                              //maxLines: 1,
+                              overflow: TextOverflow.ellipsis),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 20),
-                  Icon(Icons.favorite_border, color:Colors.black),
-                  SizedBox(width: 20),
-                  GestureDetector(
-                    onTap: () {
-                      log("ontap");
-                      SongPage(songID: currnetSongController.currentSongID,).createState().initState();
+                    SizedBox(width: 20),
+                    IconButton(
+                      icon: Icon(
+                        Icons.favorite_border_rounded,
+                        color: Colors.white,
+                        //size: 40,
+                      ),
+                      //  iconSize: 40.0,
+                      onPressed: (){},
+                    ),
 
-                      widget.onTap!();
-                    },
-                    child: RadiantGradientMask(
-                      child: Icon(Icons.play_arrow,
-                          color: Colors.white, size: 30),
+                    IconButton(
+                      icon: RadiantGradientMask(
+                          child: Icon(
+                        Icons.play_circle_fill_rounded,
+                        color: Colors.white,
+                        size: 40,
+                      )),
+                      iconSize: 40.0,
+                      onPressed: (){},
                     ),
-                  ),
-                  SizedBox(width: 20),
-                ],
-              ),
-              Divider(color: colorTheme.background, height: 1),
-            ],
-          )
+                    IconButton(
+                      icon: Icon(
+                        Icons.list,
+                        color: Colors.white,
+                        //size: 40,
+                      ),
+                    //  iconSize: 40.0,
+                      onPressed: (){},
+                    ),
+                    SizedBox(width: 5),
+                  ],
+                ),
+                Divider(color: colorTheme.background, height: 1),
+              ],
+            )
 
-          /*isfirst?
+            /*isfirst?
           FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
             //future: db.collection("AllSongsList").doc(currnetSongController.currentSongID).get(),
 
@@ -514,8 +527,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
             ),
           )*/
 
-
-          /*Column(
+            /*Column(
             children: [
               Row(
                 children: [
@@ -570,12 +582,11 @@ class _MiniPlayerState extends State<MiniPlayer> {
               Divider(color: colorTheme.background, height: 1),
             ],
           ),*/
-        ),
+            ),
       ),
     );
   }
 }
-
 
 /*
 FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(

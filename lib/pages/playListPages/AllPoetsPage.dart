@@ -92,7 +92,7 @@ class _AllPoetsPageState extends State<AllPoetsPage> {
 
                           borderRadius: BorderRadius.all(Radius.circular(0)),
                           // color: pictureBG,
-                          image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/kdefult.png')
+                          image: DecorationImage(fit: BoxFit.fill, image: AssetImage('assets/Tarana- Voice of Islam.png')
                             //NetworkImage(
                             //  "${Product.products[index].imageUrl}")
                             // CachedNetworkImageProvider(

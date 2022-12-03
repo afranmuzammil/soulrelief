@@ -58,26 +58,27 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^2.1.11
   hive_generator: ^1.1.2
-  flutter_launcher_icons: ^0.10.0
-  flutter_native_splash: ^2.2.9
+  flutter_launcher_icons: ^0.11.0
+  flutter_native_splash: ^2.2.16
  # flutter_image_slideshow: ^0.1.4
-  #flutter_launcher_name: ^0.0.1
-
+#  flutter_launcher_name: ^0.0.1
+#
 #flutter_launcher_name:
-#  name: "Kooza"
+#  name: "Tarana(Voice of Islam)"
 
 
 
 flutter_native_splash:
-  android: false
+  android: true
   color: "#000000"
   ios: true
-  image: "assets/k.png"
+  image: "assets/TPicon.png"
 
 flutter_icons:
   ios: true
   android: true
-  image_path: "assets/k.png"
+  color: "#000000"
+  image_path: "assets/TPicon.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

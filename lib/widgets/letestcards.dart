@@ -89,7 +89,8 @@ class LatestCards extends StatelessWidget {
             // color: pictureBG,
 
           ),
-          child: Card(
+          child:
+          Card(
             color: Colors.transparent,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16.0),

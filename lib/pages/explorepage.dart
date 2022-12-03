@@ -75,7 +75,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       children: [
                         Image(
                           image: AssetImage(
-                            "assets/tarnana.png",
+                            "assets/Tarana- Voice of Islam.png",
                           ),
                           height: height * 0.12,
                           width: width * 0.3,
@@ -158,7 +158,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       child: Text("Domains",
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                              color: Color(0xFF5F7185),
+                              color: Colors.white,
                               fontSize: 16,
                               fontFamily: GoogleFonts.poppins().fontFamily,
                               fontWeight: FontWeight.w600)),
@@ -192,7 +192,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       child: Text("Explore by Poets",
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                              color: Color(0xFF5F7185),
+                              color: Colors.white,
                               fontSize: 16,
                               fontFamily: GoogleFonts.poppins().fontFamily,
                               fontWeight: FontWeight.w600)),
@@ -208,104 +208,104 @@ class _ExplorePageState extends State<ExplorePage> {
                         itemCount: 3,
                         itemBuilder: (BuildContext context, int index) {
                           return PoetsCards(
-                            poetImageLink: 'assets/kdefult.png',
+                            poetImageLink: 'assets/TPicon.png',
                             poetName: 'Poets',
                           );
                         }),
                   ),
                   // PoetsCards(poetImageLink: 'assets/Allama Iqbal.png', poetName: 'Allama Iqbal',)
-                  Padding(
-                    padding:
-                    const EdgeInsets.only(left: 0.0, top: 8.0, right: 220.0, bottom: 0.0),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text("Latest tarane",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              color: Color(0xFF5F7185),
-                              fontSize: 16,
-                              fontFamily: GoogleFonts.poppins().fontFamily,
-                              fontWeight: FontWeight.w600)),
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: ListTile(
-                        onTap: () {},
-                        leading: RadiantGradientMask(
-                            child: Icon(
-                              Icons.play_arrow,
-                              color: Colors.white,
-                              size: 38,
-                            )),
-                        title: Text(
-                          "Takzeeb mitane waale hum",
-                          style: TextStyle(
-                              color: Color(0xFF5F7185),
-                              fontSize: 13,
-                              fontFamily: GoogleFonts.poppins().fontFamily,
-                              fontWeight: FontWeight.w300),
-                        ),
-                        trailing: IconButton(onPressed: () {
-                          likedListHive.delete("testList");
-                        }, icon: Icon(Icons.favorite))),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: ListTile(
-                        onTap: () {},
-                        leading: RadiantGradientMask(
-                            child: Icon(
-                              Icons.play_arrow,
-                              color: Colors.white,
-                              size: 38,
-                            )),
-                        title: Text(
-                          "Dhadakti hai jawan seeno me",
-                          style: TextStyle(
-                              color: Color(0xFF5F7185),
-                              fontSize: 13,
-                              fontFamily: GoogleFonts.poppins().fontFamily,
-                              fontWeight: FontWeight.w300),
-                        ),
-                        trailing: IconButton(onPressed: () {
-                          log("single ${likedSongsHive.get("songId")!.songID} songlist ${likedListHive.get("testList")!.songID}");
-                        }, icon: Icon(Icons.favorite))),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: ListTile(
-                        onTap: () {},
-                        leading: RadiantGradientMask(
-                            child: Icon(
-                              Icons.play_arrow,
-                              color: Colors.white,
-                              size: 38,
-                            )),
-                        title: Text(
-                          "Meri SIO Meri SIO",
-                          style: TextStyle(
-                              color: Color(0xFF5F7185),
-                              fontSize: 13,
-                              fontFamily: GoogleFonts.poppins().fontFamily,
-                              fontWeight: FontWeight.w300),
-                        ),
-                        trailing: IconButton(onPressed: () {
-                            final songData = LikedSong("songName", "songID", "artistName", "audioLength","");
-                            likedSongsHive.put("songId", songData).then((value) {
-
-                              List<String> addinginList = likedListHive.get("testList")?.songID??[];
-                              setState(() {
-                                addinginList.add("songId");
-                              });
-
-                              final SongId = LikedList(addinginList);
-                              likedListHive.put("testList", SongId);
-                            });
-
-                        },
-                            icon: Icon(Icons.favorite))),
-                  ),
+                  // Padding(
+                  //   padding:
+                  //   const EdgeInsets.only(left: 0.0, top: 8.0, right: 220.0, bottom: 0.0),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.all(8.0),
+                  //     child: Text("Latest tarane",
+                  //         textAlign: TextAlign.start,
+                  //         style: TextStyle(
+                  //             color: Color(0xFF5F7185),
+                  //             fontSize: 16,
+                  //             fontFamily: GoogleFonts.poppins().fontFamily,
+                  //             fontWeight: FontWeight.w600)),
+                  //   ),
+                  // ),
+                  // Card(
+                  //   elevation: 5,
+                  //   child: ListTile(
+                  //       onTap: () {},
+                  //       leading: RadiantGradientMask(
+                  //           child: Icon(
+                  //             Icons.play_arrow,
+                  //             color: Colors.white,
+                  //             size: 38,
+                  //           )),
+                  //       title: Text(
+                  //         "Takzeeb mitane waale hum",
+                  //         style: TextStyle(
+                  //             color: Color(0xFF5F7185),
+                  //             fontSize: 13,
+                  //             fontFamily: GoogleFonts.poppins().fontFamily,
+                  //             fontWeight: FontWeight.w300),
+                  //       ),
+                  //       trailing: IconButton(onPressed: () {
+                  //         likedListHive.delete("testList");
+                  //       }, icon: Icon(Icons.favorite))),
+                  // ),
+                  // Card(
+                  //   elevation: 5,
+                  //   child: ListTile(
+                  //       onTap: () {},
+                  //       leading: RadiantGradientMask(
+                  //           child: Icon(
+                  //             Icons.play_arrow,
+                  //             color: Colors.white,
+                  //             size: 38,
+                  //           )),
+                  //       title: Text(
+                  //         "Dhadakti hai jawan seeno me",
+                  //         style: TextStyle(
+                  //             color: Color(0xFF5F7185),
+                  //             fontSize: 13,
+                  //             fontFamily: GoogleFonts.poppins().fontFamily,
+                  //             fontWeight: FontWeight.w300),
+                  //       ),
+                  //       trailing: IconButton(onPressed: () {
+                  //         log("single ${likedSongsHive.get("songId")!.songID} songlist ${likedListHive.get("testList")!.songID}");
+                  //       }, icon: Icon(Icons.favorite))),
+                  // ),
+                  // Card(
+                  //   elevation: 5,
+                  //   child: ListTile(
+                  //       onTap: () {},
+                  //       leading: RadiantGradientMask(
+                  //           child: Icon(
+                  //             Icons.play_arrow,
+                  //             color: Colors.white,
+                  //             size: 38,
+                  //           )),
+                  //       title: Text(
+                  //         "Meri SIO Meri SIO",
+                  //         style: TextStyle(
+                  //             color: Color(0xFF5F7185),
+                  //             fontSize: 13,
+                  //             fontFamily: GoogleFonts.poppins().fontFamily,
+                  //             fontWeight: FontWeight.w300),
+                  //       ),
+                  //       trailing: IconButton(onPressed: () {
+                  //           final songData = LikedSong("songName", "songID", "artistName", "audioLength","");
+                  //           likedSongsHive.put("songId", songData).then((value) {
+                  //
+                  //             List<String> addinginList = likedListHive.get("testList")?.songID??[];
+                  //             setState(() {
+                  //               addinginList.add("songId");
+                  //             });
+                  //
+                  //             final SongId = LikedList(addinginList);
+                  //             likedListHive.put("testList", SongId);
+                  //           });
+                  //
+                  //       },
+                  //           icon: Icon(Icons.favorite))),
+                  // ),
 
                   SizedBox(
                     height: 10.0,

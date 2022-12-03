@@ -238,37 +238,37 @@ class _SongPageState extends State<SongPage> {
     final width = size.width;
     return Scaffold(
        // backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            // IconButton(onPressed: (){}, icon: Icon(Icons.search,color: Colors.black87,)),
-            IconButton(onPressed: () {
-
-                log(recentSongListHive.get("recentSongs")!.songID.toString());
-
-            }, icon: Icon(Icons.more_vert, color: Colors.black87,))
-          ],
-          // title: GradientText(
-          //   "Albums",
-          //   style: TextStyle(
-          //       color: Color(0xFF5F7185),
-          //       fontSize: 20,
-          //       fontFamily: GoogleFonts.poppins().fontFamily,
-          //       fontWeight: FontWeight.bold),
-          //   gradient: LinearGradient(colors: [
-          //     Color(0xffdf99da), Color(0xff668fd7)
-          //   ]),
-          // ),
-          leading: IconButton(
-            icon: Icon(Icons.keyboard_arrow_down_rounded, color: Colors.black,), onPressed: () {
-
-              widget.onTap!();
-
-          //  Navigator.of(context).pop();
-          },),
-          centerTitle: true,
-        ),
+       //  appBar: AppBar(
+       //    backgroundColor: Colors.transparent,
+       //    elevation: 0,
+       //    actions: [
+       //      // IconButton(onPressed: (){}, icon: Icon(Icons.search,color: Colors.black87,)),
+       //      IconButton(onPressed: () {
+       //
+       //          log(recentSongListHive.get("recentSongs")!.songID.toString());
+       //
+       //      }, icon: Icon(Icons.more_vert, color: Colors.black87,))
+       //    ],
+       //    // title: GradientText(
+       //    //   "Albums",
+       //    //   style: TextStyle(
+       //    //       color: Color(0xFF5F7185),
+       //    //       fontSize: 20,
+       //    //       fontFamily: GoogleFonts.poppins().fontFamily,
+       //    //       fontWeight: FontWeight.bold),
+       //    //   gradient: LinearGradient(colors: [
+       //    //     Color(0xffdf99da), Color(0xff668fd7)
+       //    //   ]),
+       //    // ),
+       //    leading: IconButton(
+       //      icon: Icon(Icons.keyboard_arrow_down_rounded, color: Colors.black,), onPressed: () {
+       //
+       //        widget.onTap!();
+       //
+       //    //  Navigator.of(context).pop();
+       //    },),
+       //    centerTitle: true,
+       //  ),
         body: currnetSongController.obx(
           (data){
             //var data = snapshot.data!.data();
@@ -299,158 +299,235 @@ class _SongPageState extends State<SongPage> {
               height: height,
               width: width,
               child: SafeArea(
-                child: SingleChildScrollView(
-                  child: Column(
+                child: CustomScrollView(
 
-                    children: [
-                      // Container(
-                      //   height: height * 0.2,
-                      //   width: width,
-                      //   // color: Colors.red,
-                      //   child: Column(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     crossAxisAlignment: CrossAxisAlignment.center,
-                      //     children: [
-                      //       Image(
-                      //         image: AssetImage(
-                      //           "assets/tarnana.png",
-                      //         ),
-                      //         height: height * 0.12,
-                      //         width: width * 0.3,
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.10),
-                            )
-                          ],
-                          border: Border.all(
-                              color: Colors.white.withOpacity(0.1), width: 0.0),
+                  slivers: [
+                    // Container(
+                    //   height: height * 0.2,
+                    //   width: width,
+                    //   // color: Colors.red,
+                    //   child: Column(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     crossAxisAlignment: CrossAxisAlignment.center,
+                    //     children: [
+                    //       Image(
+                    //         image: AssetImage(
+                    //           "assets/tarnana.png",
+                    //         ),
+                    //         height: height * 0.12,
+                    //         width: width * 0.3,
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    SliverAppBar(
+                      snap: false,
+                      pinned: false,
+                      floating: false,
+                      elevation: 0,
+                      automaticallyImplyLeading: false,
+                      flexibleSpace:
+                      LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
 
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.white.withOpacity(0.1),
-                              Colors.white.withOpacity(0.1)
-                            ],
-                            stops: [0.0, 1.0],
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(25)),
-                          // color: pictureBG,
 
-                        ),
-                        child: Card(
-                          color: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          elevation: 20,
-                          shadowColor: Color(0xFFC3539A),
-                          child: SizedBox(
-                              height: height * 0.52,
-                              width: width * 0.85,
-
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  TextScroll(
-                                    "${currnetSongController.currentsongName}",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontFamily: GoogleFonts
-                                            .poppins()
-                                            .fontFamily,
-                                        fontWeight: FontWeight.bold),
-                                    velocity:  Velocity(pixelsPerSecond: Offset(12, 0)),
+                        return FlexibleSpaceBar(
+                          centerTitle: true,
+                          // title: Text("Tarana Portal",
+                          //     style: TextStyle(
+                          //       color: Colors.black54,
+                          //       fontSize: 16.0,
+                          //     ) //TextStyle
+                          // ), //Text
+                          background: Container(
+                            height: height * 0.1,
+                            width: width,
+                            // color: Colors.red,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Image(
+                                  image: AssetImage(
+                                    "assets/Tarana- Voice of Islam.png",
                                   ),
+                                  height: height * 0.12,
+                                  width: width * 0.3,
+                                ),
 
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(0.0, 22, 0.0, 10),
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(16.0),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                      // bottom: PreferredSize(
+                      //   preferredSize: const Size.fromHeight(30),
+                      //   child:
+                      // ),
+                      //FlexibleSpaceBar
+                      expandedHeight: height * 0.14,
+                      backgroundColor: Colors.transparent,
+                      leading: IconButton(
+                          onPressed: () {
+                            widget.onTap!();
+                          },
+                          icon: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                          )),
+                      actions: [
+                        IconButton(
+                            onPressed: () {
+
+                            },
+                            icon: Icon(
+                              Icons.search,
+                              color: Colors.white,
+                            )),
+
+                      ], //<Widget>[]
+                    ),
+
+                    SliverList(delegate: SliverChildListDelegate([
+
+                      Column(
+                        children: [
+                          Container(
+
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.10),
+                                )
+                              ],
+                              border: Border.all(
+                                  color: Colors.white.withOpacity(0.1), width: 0.0),
+
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.white.withOpacity(0.1),
+                                  Colors.white.withOpacity(0.1)
+                                ],
+                                stops: [0.0, 1.0],
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(25)),
+                              // color: pictureBG,
+
+                            ),
+
+                            child: Card(
+                              color: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                              elevation: 20,
+                              shadowColor: Color(0xFFC3539A),
+                              child: SizedBox(
+                                  height: height * 0.52,
+                                  width: width * 0.85,
+
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      TextScroll(
+                                        "${currnetSongController.currentsongName}",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontFamily: GoogleFonts
+                                                .poppins()
+                                                .fontFamily,
+                                            fontWeight: FontWeight.bold),
+                                        velocity:  Velocity(pixelsPerSecond: Offset(12, 0)),
                                       ),
-                                      shadowColor: Color(0xFFC3539A),
-                                      elevation: 20,
-                                      child: Container(
-                                        height: height * 0.25,
-                                        width: width * 0.45,
-                                        decoration: BoxDecoration(
 
-                                          borderRadius: BorderRadius.all(Radius.circular(14)),
-                                          // color: pictureBG,
-                                          image: DecorationImage(fit: BoxFit.fill,
-                                              image: AssetImage("assets/Allama Iqbal.png")
-                                            //NetworkImage(
-                                            //  "${Product.products[index].imageUrl}")
-                                            // CachedNetworkImageProvider(
-                                            //   items.body["featuredClothingItems"][index]["coverImage"]
-                                            //       .toString(),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(0.0, 22, 0.0, 10),
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(16.0),
+                                          ),
+                                          shadowColor: Color(0xFFC3539A),
+                                          elevation: 20,
+                                          child: Container(
+                                            height: height * 0.25,
+                                            width: width * 0.45,
+                                            decoration: BoxDecoration(
+
+                                              borderRadius: BorderRadius.all(Radius.circular(14)),
+                                              // color: pictureBG,
+                                              gradient: LinearGradient(
+                                                colors: [
+                                                  Colors.white.withOpacity(0.2),
+                                                  Colors.white.withOpacity(0.2)
+                                                ],
+                                                stops: [0.0, 1.0],
+                                              ),
+                                              image: DecorationImage(fit: BoxFit.fill,
+                                                  image: AssetImage("assets/TPicon.png")
+                                                //NetworkImage(
+                                                //  "${Product.products[index].imageUrl}")
+                                                // CachedNetworkImageProvider(
+                                                //   items.body["featuredClothingItems"][index]["coverImage"]
+                                                //       .toString(),
+                                                // ),
+                                              ),
+                                            ),
+                                            // child: CachedNetworkImage(
+                                            //   placeholder: (context, imgUrl) => const Text("Image is loading"),
+                                            //   imageUrl: products.body["items"][index]["coverImage"].toString(),
                                             // ),
                                           ),
                                         ),
-                                        // child: CachedNetworkImage(
-                                        //   placeholder: (context, imgUrl) => const Text("Image is loading"),
-                                        //   imageUrl: products.body["items"][index]["coverImage"].toString(),
-                                        // ),
                                       ),
-                                    ),
-                                  ),
-                                  StreamBuilder<PositionData>(
-                                    stream: _positionDataStream,
-                                    builder: (context, snapshot) {
-                                      final positionData = snapshot.data;
-                                      return SeekBar(
+                                      StreamBuilder<PositionData>(
+                                        stream: _positionDataStream,
+                                        builder: (context, snapshot) {
+                                          final positionData = snapshot.data;
+                                          return SeekBar(
 
-                                        duration: positionData?.duration ?? Duration.zero,
-                                        position: positionData?.position ?? Duration.zero,
-                                        bufferedPosition:
-                                        positionData?.bufferedPosition ?? Duration.zero,
-                                        onChangeEnd: _player.seek,
-                                      );
-                                    },
-                                  ),
-                                  Row(
-
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: [
-
-                                      ControlButtons(_player, songIdList: songIDList,
-                                        currentSongID: songId!,
-                                        Nextsong: () {
-                                          nextSong();
+                                            duration: positionData?.duration ?? Duration.zero,
+                                            position: positionData?.position ?? Duration.zero,
+                                            bufferedPosition:
+                                            positionData?.bufferedPosition ?? Duration.zero,
+                                            onChangeEnd: _player.seek,
+                                          );
                                         },
-                                        prvsong: () {
-                                          prvSong();
-                                        },),
+                                      ),
+                                      Row(
 
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+
+                                          ControlButtons(_player, songIdList: songIDList,
+                                            currentSongID: songId!,
+                                            Nextsong: () {
+                                              nextSong();
+                                            },
+                                            prvsong: () {
+                                              prvSong();
+                                            },),
+
+
+                                        ],
+                                      ),
+
+                                      //  ControlButtons(_player),
+                                      // Display seek bar. Using StreamBuilder, this widget rebuilds
+                                      // each time the position, buffered position or duration changes.
 
                                     ],
-                                  ),
-
-                                  //  ControlButtons(_player),
-                                  // Display seek bar. Using StreamBuilder, this widget rebuilds
-                                  // each time the position, buffered position or duration changes.
-
-                                ],
-                              )
+                                  )
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
+                        ],
                       ),
 
-                    ],
-                  ),
+                    ])),
+
+
+                  ],
                 ),
               ),
             );
@@ -1232,6 +1309,7 @@ class _ControlButtonsState extends State<ControlButtons> {
         }, icon: addinginList.contains(currnetSongController.currentSongID)?RadiantGradientMask(child: Icon(Icons.favorite,color:Colors.white,),)
             :Icon(Icons.favorite_border,color:Colors.white,)
           ,),
+
         IconButton(
           icon: Icon(Icons.fast_rewind_rounded, color: Colors.white, size: 40),
           onPressed: () {

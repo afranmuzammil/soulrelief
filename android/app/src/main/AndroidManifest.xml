@@ -6,7 +6,7 @@
 
 
    <application
-        android:label="Kooza"
+        android:label="Tarana(Voice of Islam)"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
        <activity

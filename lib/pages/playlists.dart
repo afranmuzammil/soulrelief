@@ -77,7 +77,7 @@ class PlayList extends StatelessWidget {
                         children: [
                           Image(
                             image: AssetImage(
-                              "assets/tarnana.png",
+                              "assets/Tarana- Voice of Islam.png",
                             ),
                             height: height * 0.12,
                             width: width * 0.3,
@@ -117,171 +117,350 @@ class PlayList extends StatelessWidget {
               ),
               SliverList(delegate: SliverChildListDelegate([
                 Padding(
-                  padding: const EdgeInsets.only(left: 0.0, top: 0.0, right: 170.0, bottom: 0.0),
-                  child: Text("Recent Activity",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: Color(0xFF5F7185),
-                          fontSize: 16,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                          fontWeight: FontWeight.w600)),
-                ),
-                SizedBox(
-                  height: 8.0,
-                ),
-                Visibility( visible: recentSongListHive.get("recentSongs")?.songID != null,
-                  child:recentSongListHive.get("recentSongs")?.songID.isNotEmpty ?? false
-                      ? Container(
-                    height: height * 0.16,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: recentSongListHive.get("recentSongs")?.songID.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return RecentCards(
-                            songName:
-                            "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songName}",
-                            coverImageUrl: 'assets/kdefult.png',
-                            songId:
-                            "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songID}",
-                            artistName:
-                            "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.artistName}",
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        onTap: (){
+                          if(likedListHive.get("likedSongs")!.songID.isNotEmpty){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) =>  LikedSongsPage()),
+                            );
+                          }
+                        },
+                        child: Container(
+                          height: height*0.12,
+                          width: width *0.40,
+              //    alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              gradient:LinearGradient(
+                                colors: [Color(0xff721992), Color(0xffFF517B) ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                             //color: Colors.white,
+                            border: Border.all(color: Colors.transparent),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Icon(Icons.favorite,color:Colors.white,size: 35,),
+                              Text("Liked By\n You!",
+                                  textAlign: TextAlign.start,
+                                  overflow: TextOverflow.visible,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontFamily: GoogleFonts.poppins().fontFamily,
+                                      fontWeight: FontWeight.bold))
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title:  GradientText('Coming Soon',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
+                              content: const Text('Downloading of songs is Coming soon'),
+                              actions: <Widget>[
+
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'OK'),
+                                  child: const GradientText('OK',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
+                                ),
+                              ],
+                            ),
                           );
-                        }),
-                  )
-                      : Container(),
+                        },
+                        child: Container(
+                          height: height*0.12,
+                          width: width *0.40,
+                          //    alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            gradient:LinearGradient(
+                              colors: [Color(0xff19923B), Color(0xff33C1C1) ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            //color: Colors.white,
+                            border: Border.all(color: Colors.transparent),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Icon(Icons.folder_sharp,color:Colors.white,size: 35,),
+                              Text("Your\n Downloads",
+                                  textAlign: TextAlign.start,
+                                  overflow: TextOverflow.visible,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontFamily: GoogleFonts.poppins().fontFamily,
+                                      fontWeight: FontWeight.bold))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 8.0,
                 ),
                 Divider(),
-                Container(
-                  //color: Colors.cyan,
-                  height: height*0.06,
-                  child: ListTile(
-                    onTap: (){
-                      if(likedListHive.get("likedSongs")!.songID.isNotEmpty){
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0,right: 20,top: 5,bottom: 5),
+                  child: Container(
+                    //color: Colors.cyan,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.10),
+                        )
+                      ],
+                      border: Border.all(
+                          color: Colors.white.withOpacity(0.1), width: 0.0),
+
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.white.withOpacity(0.1),
+                          Colors.white.withOpacity(0.1)
+                        ],
+                        stops: [0.0, 1.0],
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(14)),
+                      // color: pictureBG,
+
+                    ),
+                    height: height*0.08,
+                    child: ListTile(
+                      onTap: (){
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) =>  LikedSongsPage()),
+                          MaterialPageRoute(builder: (context) =>  AllSongsPage()),
                         );
-                      }
 
-                    },
-                    leading: Icon(Icons.favorite),
-                    title: Text("Liked Songs",
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 20,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    trailing: Icon(Icons.arrow_forward_ios_sharp),
-                  ),
-                ),
-                Divider(),
-                Container(
-                  //color: Colors.cyan,
-                  height: height*0.06,
-                  child: ListTile(
-                    onTap: (){
-                      showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          title:  GradientText('Coming Soon',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
-                          content: const Text('Downloading of songs is Coming soon'),
-                          actions: <Widget>[
+                      },
+                      leading: Icon(Icons.music_note,color: Colors.white ,),
+                      title: Text("All Songs",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontWeight: FontWeight.w400),
+                      ),
 
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'OK'),
-                              child: const GradientText('OK',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
-                            ),
-                          ],
-                        ),
-                      );
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) =>  DownloadsPage()),
-                      // );
-                    },
-                    leading: Icon(Icons.download_sharp),
-                    title: Text("Downloads",
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 20,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                          fontWeight: FontWeight.w400),
                     ),
-                    trailing: Icon(Icons.arrow_forward_ios_sharp),
                   ),
                 ),
-                Divider(),
-                Container(
-                  //color: Colors.cyan,
-                  height: height*0.06,
-                  child: ListTile(
-                    onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>  AllSongsPage()),
-                      );
-                    },
-                    leading: Icon(Icons.music_note),
-                    title: Text("All Songs",
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 20,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                          fontWeight: FontWeight.w400),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0,right: 20,top: 5,bottom: 5),
+                  child: Container(
+                    //color: Colors.cyan,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.10),
+                        )
+                      ],
+                      border: Border.all(
+                          color: Colors.white.withOpacity(0.1), width: 0.0),
+
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.white.withOpacity(0.1),
+                          Colors.white.withOpacity(0.1)
+                        ],
+                        stops: [0.0, 1.0],
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(14)),
+                      // color: pictureBG,
+
                     ),
-                    trailing: Icon(Icons.arrow_forward_ios_sharp),
+                    height: height*0.08,
+                    child: ListTile(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  AlbumsPage()),
+                        );
+
+                      },
+                      leading: Icon(Icons.album,color: Colors.white ,),
+                      title: Text("Albums",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontWeight: FontWeight.w400),
+                      ),
+
+                    ),
                   ),
                 ),
-                Divider(),
-                Container(
-                  //color: Colors.cyan,
-                  height: height*0.06,
-                  child: ListTile(
-                    onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>  AlbumsPage()),
-                      );
-                    },
-                    leading: Icon(Icons.album),
-                    title: Text("Albums",
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 20,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                          fontWeight: FontWeight.w400),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0,right: 20,top: 5,bottom: 5),
+                  child: Container(
+                    //color: Colors.cyan,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.10),
+                        )
+                      ],
+                      border: Border.all(
+                          color: Colors.white.withOpacity(0.1), width: 0.0),
+
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.white.withOpacity(0.1),
+                          Colors.white.withOpacity(0.1)
+                        ],
+                        stops: [0.0, 1.0],
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(14)),
+                      // color: pictureBG,
+
                     ),
-                    trailing: Icon(Icons.arrow_forward_ios_sharp),
+                    height: height*0.08,
+                    child: ListTile(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  ArtistsPage()),
+                        );
+
+                      },
+                      leading: Icon(Icons.mic_external_on_outlined,color: Colors.white ,),
+                      title: Text("Artists",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontWeight: FontWeight.w400),
+                      ),
+
+                    ),
                   ),
                 ),
-                Divider(),
-                Container(
-                  //color: Colors.cyan,
-                  height: height*0.06,
-                  child: ListTile(
-                    onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>  ArtistsPage()),
-                      );
-                    },
-                    leading: Icon(Icons.mic_external_on_outlined),
-                    title: Text("Artists",
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 20,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                          fontWeight: FontWeight.w400),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0,right: 20,top: 5,bottom: 5),
+                  child: Container(
+                    //color: Colors.cyan,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.10),
+                        )
+                      ],
+                      border: Border.all(
+                          color: Colors.white.withOpacity(0.1), width: 0.0),
+
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.white.withOpacity(0.1),
+                          Colors.white.withOpacity(0.1)
+                        ],
+                        stops: [0.0, 1.0],
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(14)),
+                      // color: pictureBG,
+
                     ),
-                    trailing: Icon(Icons.arrow_forward_ios_sharp),
+                    height: height*0.08,
+                    child: ListTile(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  AllDominePages()),
+                        );
+
+                      },
+                      leading: Icon(Icons.select_all,color: Colors.white ,),
+                      title: Text("Domines",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontWeight: FontWeight.w400),
+                      ),
+
+                    ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0,right: 20,top: 5,bottom: 5),
+                  child: Container(
+                    //color: Colors.cyan,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.10),
+                        )
+                      ],
+                      border: Border.all(
+                          color: Colors.white.withOpacity(0.1), width: 0.0),
+
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.white.withOpacity(0.1),
+                          Colors.white.withOpacity(0.1)
+                        ],
+                        stops: [0.0, 1.0],
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(14)),
+                      // color: pictureBG,
+
+                    ),
+                    height: height*0.08,
+                    child: ListTile(
+                      onTap: (){
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title:  GradientText('Coming Soon',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
+                            content: const Text('Custom Playlist will be coming soon'),
+                            actions: <Widget>[
+
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const GradientText('OK',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
+                              ),
+                            ],
+                          ),
+                        );
+
+                      },
+                      leading: Icon(Icons.queue_music,color: Colors.white ,),
+                      title: Text("My PlayList",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                            fontWeight: FontWeight.w400),
+                      ),
+
+                    ),
+                  ),
+                ),
+
+
                 Divider(),
-                Container(
+
+
+
+
+                /*Container(
                   //color: Colors.cyan,
                   height: height*0.06,
                   child: ListTile(
@@ -301,63 +480,11 @@ class PlayList extends StatelessWidget {
                     ),
                     trailing: Icon(Icons.arrow_forward_ios_sharp),
                   ),
-                ),
-                Divider(),
-                Container(
-                  //color: Colors.cyan,
-                  height: height*0.06,
-                  child: ListTile(
-                    onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>  AllDominePages()),
-                      );
-                    },
-                    leading: Icon(Icons.select_all),
-                    title: Text("Domines",
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 20,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    trailing: Icon(Icons.arrow_forward_ios_sharp),
-                  ),
-                ),
-                Divider(),
-                Container(
-                  //color: Colors.cyan,
-                  height: height*0.06,
-                  child: ListTile(
-                    onTap: (){
-                      showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          title:  GradientText('Coming Soon',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
-                          content: const Text('Custom Playlist will be coming soon'),
-                          actions: <Widget>[
+                ),*/
 
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'OK'),
-                              child: const GradientText('OK',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
-                            ),
-                          ],
-                        ),
-                      );
 
-                    },
-                    leading: Icon(Icons.queue_music),
-                    title: Text("My PlayList",
-                      style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 20,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    trailing: Icon(Icons.arrow_forward_ios_sharp),
-                  ),
-                ),
-                Divider(),
+
+
                 Container(),
               ]))
             ],

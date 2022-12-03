@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SeekBar extends StatefulWidget {
   final Duration duration;
@@ -71,9 +72,7 @@ class _SeekBarState extends State<SeekBar> {
         SliderTheme(
           data: _sliderThemeData.copyWith(
             thumbColor: Color(0xFF9A5190),
-            thumbShape: RoundSliderThumbShape(
-                enabledThumbRadius:5.0
-            ),
+            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 5.0),
             activeTrackColor: Color(0xFF9A5190),
             inactiveTrackColor: Colors.transparent,
           ),
@@ -102,26 +101,33 @@ class _SeekBarState extends State<SeekBar> {
           left: 20.0,
           bottom: 0.0,
           child: Text(
-              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                  .firstMatch("$_remaining")
-                  ?.group(1) ??
-                  '$_remaining',
-              style: Theme.of(context).textTheme.caption),
+            RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$').firstMatch("$_remaining")?.group(1) ??
+                '$_remaining',
+            style: TextStyle(
+              color: Colors.white70,
+              fontFamily: GoogleFonts.poppins().fontFamily,
+              fontSize: 10,
+            ),
+          ),
         ),
         Positioned(
           right: 16.0,
           bottom: 0.0,
           child: Text(
-              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                  .firstMatch("$_totalTime")
-                  ?.group(1) ??
+              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$').firstMatch("$_totalTime")?.group(1) ??
                   '$_totalTime',
-              style: Theme.of(context).textTheme.caption),
+              style: TextStyle(
+                color: Colors.white70,
+                fontFamily: GoogleFonts.poppins().fontFamily,
+                fontSize: 10,
+              ),),
         ),
       ],
     );
   }
+
   Duration get _totalTime => widget.duration;
+
   Duration get _remaining => widget.duration - widget.position;
 }
 
@@ -131,19 +137,19 @@ class HiddenThumbComponentShape extends SliderComponentShape {
 
   @override
   void paint(
-      PaintingContext context,
-      Offset center, {
-        required Animation<double> activationAnimation,
-        required Animation<double> enableAnimation,
-        required bool isDiscrete,
-        required TextPainter labelPainter,
-        required RenderBox parentBox,
-        required SliderThemeData sliderTheme,
-        required TextDirection textDirection,
-        required double value,
-        required double textScaleFactor,
-        required Size sizeWithOverflow,
-      }) {}
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {}
 }
 
 class PositionData {
@@ -178,9 +184,7 @@ void showSliderDialog({
             children: [
               Text('${snapshot.data?.toStringAsFixed(1)}$valueSuffix',
                   style: const TextStyle(
-                      fontFamily: 'Fixed',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24.0)),
+                      fontFamily: 'Fixed', fontWeight: FontWeight.bold, fontSize: 24.0)),
               Slider(
                 divisions: divisions,
                 min: min,
