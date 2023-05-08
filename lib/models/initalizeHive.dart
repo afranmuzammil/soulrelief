@@ -52,3 +52,21 @@ class SingleSongHive{
     return Hive.box<SingleSong>("SingleSong");
   }
 }
+
+class DownloadedSongHive{
+  static Box<DownloadedSong> initDownloadedSongDataHive(){
+    return Hive.box<DownloadedSong>("DownloadedSong");
+  }
+}
+
+class DownloadedSongListHive{
+  static Box<DownloadedSongList> initDownloadedSongListDataHive(){
+    return Hive.box<DownloadedSongList>("DownloadedSongList");
+  }
+}
+
+class CurrentPlayListHive{
+  static Box<CurrentPlayList?> initCurrentPlayListDataHive(){
+    return Hive.box<CurrentPlayList>("CurrentPlayList");
+  }
+}

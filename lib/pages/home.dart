@@ -250,8 +250,121 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Container(
                           height: height * 0.16,
-                          child: StreamBuilder<QuerySnapshot>(
-                            stream: db.collection('AllSongsList').snapshots(),
+                          // child: StreamBuilder<QuerySnapshot>(
+                          //   stream: db.collection('AllSongsList').snapshots(),
+                          //   builder: (context, snapshot) {
+                          //     if (!snapshot.hasData) {
+                          //       return const Center(
+                          //         child: CircularProgressIndicator(),
+                          //       );
+                          //     } else if (snapshot.hasData) {
+                          //       return ListView(
+                          //         scrollDirection: Axis.horizontal,
+                          //         //   physics: NeverScrollableScrollPhysics(),
+                          //         shrinkWrap: true,
+                          //         children: snapshot.data!.docs.map((doc) {
+                          //           //   log(doc["song_name"].toString());
+                          //           return RecentCards(
+                          //             songName: "${doc["song_name"].toString()}",
+                          //             audioImage:
+                          //                 Uri.parse("${doc["audio_image"].toString()}").isAbsolute
+                          //                     ? "${doc["audio_image"].toString()}"
+                          //                     : 'assets/TPicon.png',
+                          //             SongID: "${doc["song_id"].toString()}",
+                          //             artistName:
+                          //                 "${"${doc["singer_name"].toString()} • ${doc["audio_length"].toString()}"}",
+                          //             lyrics: doc["lyrics"],
+                          //             poetName: doc["poet_name"].toString(),
+                          //             albumName: doc["album_name"].toString(),
+                          //             audioFileSize: doc["song_id"].toString(),
+                          //             audioLength: doc["audio_length"].toString(),
+                          //             composedBy: doc["composed_by"].toString(),
+                          //             domineName: doc["domine_name"].toString(),
+                          //           );
+                          //         }).toList(),
+                          //       );
+                          //       // ListView.builder(
+                          //       //     scrollDirection: Axis.vertical,
+                          //       //     shrinkWrap: true,
+                          //       //     physics: ScrollPhysics(),
+                          //       //     itemCount: 3,
+                          //       //     itemBuilder: (BuildContext context,int index){
+                          //       //
+                          //       //     });
+                          //     } else if (snapshot.hasError) {
+                          //       return Center(
+                          //         child: Text(
+                          //           "Some Thing went wrong please try restating the Application ",
+                          //           overflow: TextOverflow.visible,
+                          //           style: TextStyle(),
+                          //         ),
+                          //       );
+                          //     } else {
+                          //       switch (snapshot.connectionState) {
+                          //         case ConnectionState.none:
+                          //           return Center(
+                          //             child: Text(
+                          //               "Some Thing went wrong please try restating the Application ${snapshot.hasError}",
+                          //               overflow: TextOverflow.visible,
+                          //               style: TextStyle(),
+                          //             ),
+                          //           );
+                          //
+                          //           break;
+                          //
+                          //         case ConnectionState.waiting:
+                          //           return Column(
+                          //             children: [
+                          //               Center(child: CircularProgressIndicator()),
+                          //               Center(
+                          //                 child: Text("Please wait While loading"),
+                          //               ),
+                          //             ],
+                          //           );
+                          //           // children =  [
+                          //           //   Center(child: Text("Please wait While loading"),),
+                          //           //
+                          //           // ];
+                          //           break;
+                          //         case ConnectionState.active:
+                          //           return Center(child: CircularProgressIndicator());
+                          //
+                          //           // children =  [
+                          //           //         Center(child: CupertinoActivityIndicator()),
+                          //           //       ];
+                          //           break;
+                          //         case ConnectionState.done:
+                          //           return ListView(
+                          //             physics: NeverScrollableScrollPhysics(),
+                          //             shrinkWrap: true,
+                          //             children: snapshot.data!.docs.map((doc) {
+                          //               //   log(doc["song_name"].toString());
+                          //               return RecentCards(
+                          //                 songName: "${doc["song_name"].toString()}",
+                          //                 audioImage:
+                          //                     Uri.parse("${doc["audio_image"].toString()}").isAbsolute
+                          //                         ? "${doc["audio_image"].toString()}"
+                          //                         : 'assets/TPicon.png',
+                          //                 SongID: "${doc["song_id"].toString()}",
+                          //                 artistName:
+                          //                     "${"${doc["singer_name"].toString()} • ${doc["audio_length"].toString()}"}",
+                          //                 lyrics: doc["lyrics"],
+                          //                 poetName: doc["poet_name"].toString(),
+                          //                 albumName: doc["album_name"].toString(),
+                          //                 audioFileSize: doc["song_id"].toString(),
+                          //                 audioLength: doc["audio_length"].toString(),
+                          //                 composedBy: doc["composed_by"].toString(),
+                          //                 domineName: doc["domine_name"].toString(),
+                          //               );
+                          //             }).toList(),
+                          //           );
+                          //           break;
+                          //       }
+                          //     }
+                          //   },
+                          // ),
+                          child:StreamBuilder<QuerySnapshot>(
+                            stream: db.collection('AllSongsList').orderBy('song_name', descending: true).limit(6).snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
                                 return const Center(
@@ -260,19 +373,17 @@ class _HomePageState extends State<HomePage> {
                               } else if (snapshot.hasData) {
                                 return ListView(
                                   scrollDirection: Axis.horizontal,
-                                  //   physics: NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   children: snapshot.data!.docs.map((doc) {
-                                    //   log(doc["song_name"].toString());
                                     return RecentCards(
                                       songName: "${doc["song_name"].toString()}",
                                       audioImage:
-                                          Uri.parse("${doc["audio_image"].toString()}").isAbsolute
-                                              ? "${doc["audio_image"].toString()}"
-                                              : 'assets/TPicon.png',
+                                      Uri.parse("${doc["audio_image"].toString()}").isAbsolute
+                                          ? "${doc["audio_image"].toString()}"
+                                          : 'assets/TPicon.png',
                                       SongID: "${doc["song_id"].toString()}",
                                       artistName:
-                                          "${"${doc["singer_name"].toString()} • ${doc["audio_length"].toString()}"}",
+                                      "${"${doc["singer_name"].toString()} • ${doc["audio_length"].toString()}"}",
                                       lyrics: doc["lyrics"],
                                       poetName: doc["poet_name"].toString(),
                                       albumName: doc["album_name"].toString(),
@@ -280,21 +391,12 @@ class _HomePageState extends State<HomePage> {
                                       audioLength: doc["audio_length"].toString(),
                                       composedBy: doc["composed_by"].toString(),
                                       domineName: doc["domine_name"].toString(),
-                                    );
-                                  }).toList(),
+                                    );                                }).toList(),
                                 );
-                                // ListView.builder(
-                                //     scrollDirection: Axis.vertical,
-                                //     shrinkWrap: true,
-                                //     physics: ScrollPhysics(),
-                                //     itemCount: 3,
-                                //     itemBuilder: (BuildContext context,int index){
-                                //
-                                //     });
                               } else if (snapshot.hasError) {
                                 return Center(
                                   child: Text(
-                                    "Some Thing went wrong please try restating the Application ",
+                                    "Something went wrong. Please try restarting the application.",
                                     overflow: TextOverflow.visible,
                                     style: TextStyle(),
                                   ),
@@ -304,50 +406,39 @@ class _HomePageState extends State<HomePage> {
                                   case ConnectionState.none:
                                     return Center(
                                       child: Text(
-                                        "Some Thing went wrong please try restating the Application ${snapshot.hasError}",
+                                        "Something went wrong. Please try restarting the application ${snapshot.hasError}",
                                         overflow: TextOverflow.visible,
                                         style: TextStyle(),
                                       ),
                                     );
-
                                     break;
-
                                   case ConnectionState.waiting:
                                     return Column(
                                       children: [
                                         Center(child: CircularProgressIndicator()),
                                         Center(
-                                          child: Text("Please wait While loading"),
+                                          child: Text("Please wait while loading"),
                                         ),
                                       ],
                                     );
-                                    // children =  [
-                                    //   Center(child: Text("Please wait While loading"),),
-                                    //
-                                    // ];
                                     break;
                                   case ConnectionState.active:
                                     return Center(child: CircularProgressIndicator());
-
-                                    // children =  [
-                                    //         Center(child: CupertinoActivityIndicator()),
-                                    //       ];
                                     break;
                                   case ConnectionState.done:
                                     return ListView(
                                       physics: NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
                                       children: snapshot.data!.docs.map((doc) {
-                                        //   log(doc["song_name"].toString());
                                         return RecentCards(
                                           songName: "${doc["song_name"].toString()}",
                                           audioImage:
-                                              Uri.parse("${doc["audio_image"].toString()}").isAbsolute
-                                                  ? "${doc["audio_image"].toString()}"
-                                                  : 'assets/TPicon.png',
+                                          Uri.parse("${doc["audio_image"].toString()}").isAbsolute
+                                              ? "${doc["audio_image"].toString()}"
+                                              : 'assets/TPicon.png',
                                           SongID: "${doc["song_id"].toString()}",
                                           artistName:
-                                              "${"${doc["singer_name"].toString()} • ${doc["audio_length"].toString()}"}",
+                                          "${"${doc["singer_name"].toString()} • ${doc["audio_length"].toString()}"}",
                                           lyrics: doc["lyrics"],
                                           poetName: doc["poet_name"].toString(),
                                           albumName: doc["album_name"].toString(),
@@ -355,8 +446,7 @@ class _HomePageState extends State<HomePage> {
                                           audioLength: doc["audio_length"].toString(),
                                           composedBy: doc["composed_by"].toString(),
                                           domineName: doc["domine_name"].toString(),
-                                        );
-                                      }).toList(),
+                                        );                                    }).toList(),
                                     );
                                     break;
                                 }
@@ -365,36 +455,10 @@ class _HomePageState extends State<HomePage> {
                           ),
                         )
 
-                        /*Visibility(
-                          visible: recentSongListHive.get("recentSongs")?.songID != null,
-                          child: recentSongListHive.get("recentSongs")?.songID.isNotEmpty ?? false
-                              ? Container(
-                                  height: height * 0.16,
-                                  child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: recentSongListHive.get("recentSongs")?.songID.length,
-                                      itemBuilder: (BuildContext context, int index) {
-                                        return RecentCards(
-                                          songName:
-                                              "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songName}",
-                                          coverImageUrl: Uri.parse(
-                                                      "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songImage}")
-                                                  .isAbsolute
-                                              ? recentSongsHive
-                                                  .get(recentSongListHive
-                                                      .get("recentSongs")
-                                                      ?.songID[index])!
-                                                  .songImage
-                                              : 'assets/Tarana- Voice of Islam.png',
-                                          songId:
-                                              "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songID}",
-                                          artistName:
-                                              "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.artistName}",
-                                        );
-                                      }),
-                                )
-                              : Container(),
-                        ),*/
+                        ///
+
+
+
                       ],
                     ),
                   ),

@@ -33,6 +33,10 @@ void main() async{
   Hive.registerAdapter(RecentSongAdapter());
   Hive.registerAdapter(RecentSongListAdapter());
   Hive.registerAdapter(SingleSongAdapter());
+  Hive.registerAdapter(DownloadedSongAdapter());
+  Hive.registerAdapter(DownloadedSongListAdapter());
+  Hive.registerAdapter(CurrentPlayListAdapter());
+
 
   await Hive.openBox<LikedSong>("LikedSong");
   await Hive.openBox<LikedList>("LikedList");
@@ -42,6 +46,9 @@ void main() async{
   await Hive.openBox<RecentSong>("RecentSong");
   await Hive.openBox<RecentSongList>("RecentSongList");
   await Hive.openBox<SingleSong>("SingleSong");
+  await Hive.openBox<DownloadedSong>("DownloadedSong");
+  await Hive.openBox<DownloadedSongList>("DownloadedSongList");
+  await Hive.openBox<CurrentPlayList>("CurrentPlayList");
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
         (value) => runApp(

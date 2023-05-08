@@ -19,6 +19,8 @@ class PlayList extends StatelessWidget {
   final recentSongsHive = RecentSongHive.initRecentSongDataHive();
   final recentSongListHive = RecentSongListHive.initRecentSongListDataHive();
    final likedListHive = LikedListHive.initLikedListDataHive();
+   // final DownloadedSongsHive = DownloadedSongHive.initDownloadedSongDataHive();
+   final DownloadedSongsListHive = DownloadedSongListHive.initDownloadedSongListDataHive();
    CurrnetSongController currnetSongController = Get.put(CurrnetSongController());
 
   @override
@@ -171,20 +173,27 @@ class PlayList extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: (){
-                            showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) => AlertDialog(
-                                title:  GradientText('Coming Soon',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
-                                content: const Text('Downloading of songs is Coming soon'),
-                                actions: <Widget>[
+                            // showDialog<String>(
+                            //   context: context,
+                            //   builder: (BuildContext context) => AlertDialog(
+                            //     title:  GradientText('Coming Soon',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
+                            //     content: const Text('Downloading of songs is Coming soon'),
+                            //     actions: <Widget>[
+                            //
+                            //       TextButton(
+                            //         onPressed: () => Navigator.pop(context, 'OK'),
+                            //         child: const GradientText('OK',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // );
 
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context, 'OK'),
-                                    child: const GradientText('OK',  gradient: LinearGradient(colors: [Color(0xffdf99da), Color(0xff668fd7)]),),
-                                  ),
-                                ],
-                              ),
-                            );
+                            if(DownloadedSongsListHive.get("downloadSongs")!.songID.isNotEmpty){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) =>  DownloadsPage()),
+                              );
+                            }
                           },
                           child: Container(
                             height: height*0.12,

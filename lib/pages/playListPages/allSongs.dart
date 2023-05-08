@@ -25,6 +25,7 @@ class AllSongsPage extends StatefulWidget {
 class _AllSongsPageState extends State<AllSongsPage> {
   final likedListHive = LikedListHive.initLikedListDataHive();
   final likedSongsHive = LikedSongsHive.initLikedSongsDataHive();
+  final currentPlayListHive = CurrentPlayListHive.initCurrentPlayListDataHive();
   final CurrentSongHive = SingleSongHive.initSingleSongDataHive();
   List<String> addinginList = [];
   CurrnetSongController currnetSongController = Get.put(CurrnetSongController());
@@ -188,6 +189,10 @@ class _AllSongsPageState extends State<AllSongsPage> {
                                   doc["lyrics"],
                                   doc["domine_name"].toString(),
                                 );
+                                List<dynamic> Songs = snapshot.data!.docs.map((e) => e.data()).toList();
+                                List<String> SongsString = Songs.map((e) => e.toString()).toList();
+                                final allSongs = CurrentPlayList(SongsString);
+                                currentPlayListHive.put("currentPlayList", allSongs);
                               },
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),

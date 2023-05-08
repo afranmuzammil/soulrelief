@@ -21,7 +21,10 @@ import 'package:just_audio_cache/just_audio_cache.dart';
 import '../contollers/currentSongContoller.dart';
 import '../models/StorageModel.dart';
 import '../models/initalizeHive.dart';
+import '../models/songStorageModel.dart';
 import '../widgets/letestcards.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+
 
 class SongPage extends StatefulWidget {
   const SongPage({Key? key,  required this.songID,  this.onTap}) : super(key: key);
@@ -40,12 +43,17 @@ class _SongPageState extends State<SongPage> {
   final likedSongsHive = LikedSongsHive.initLikedSongsDataHive();
   final recentSongsHive = RecentSongHive.initRecentSongDataHive();
   final recentSongListHive = RecentSongListHive.initRecentSongListDataHive();
+  final DownloadedSongsHive = DownloadedSongHive.initDownloadedSongDataHive();
+  final DownloadedSongsListHive = DownloadedSongListHive.initDownloadedSongListDataHive();
+  final CurrentSongHive = SingleSongHive.initSingleSongDataHive();
+  final currentPlayListHive = CurrentPlayListHive.initCurrentPlayListDataHive();
   CurrnetSongController currnetSongController = getx.Get.put(CurrnetSongController());
   List<String> addinginList = [];
+  List<String> downloadSongsinList = [];
   var t = true;
   /// String songId="12ig9Z23DlI2frx0pb8DozUcqGrYsg7vQ";
   String? songId;
-
+  var offlineSongFile;
   //_SongPageState(this.songId);
   // var duration = await player.setUrl('https://foo.com/bar.mp3');
   // var duration = await player.setFilePath('/path/to/file.mp3');
@@ -87,6 +95,7 @@ class _SongPageState extends State<SongPage> {
     log("song Init Started") ;
     // Inform the operating system of our app's audio attributes etc.
     // We pick a reasonable default for an app that plays speech.
+
     final session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.speech());
     // Listen to errors during playback.
@@ -97,11 +106,28 @@ class _SongPageState extends State<SongPage> {
     // Try to load audio from a source and catch any errors.
     try {
       //await _player.existedInLocal(url: "https://drive.google.com/uc?export=view&id=$songId") == true
-      if(false){
-        await _player.dynamicSet( url: "https://drive.google.com/uc?export=view&id=$songId");
+      if(DownloadedSongsListHive.get("downloadSongs")!.songID.contains(
+          currnetSongController.currentSongID)){
+        log("from Downloads ${DownloadedSongsHive.get(currnetSongController.currentSongID)!.filePath}");
+        //await _player.dynamicSet( url: "https://drive.google.com/uc?export=view&id=$songId");
         ////TODO: have a look at his download of audio
+        await _player.setAudioSource(
+            AudioSource.uri(
+              Uri.parse(
+                  "${DownloadedSongsHive.get(currnetSongController.currentSongID)!.filePath}"),
+              tag: MediaItem(
+                // Specify a unique ID for each media item:
+                id: '1',
+                // Metadata to display in the notification:
+                album: "Album name",
+                title: "Song name",
+                artUri: Uri.parse("${DownloadedSongsHive.get(currnetSongController.currentSongID)!.filePath}"),
+              ),
+            ));
+        downloadSongsinList = DownloadedSongsListHive.get("downloadSongs")!.songID;
       }else{
-        _player.cacheFile( url: "https://drive.google.com/uc?export=view&id=${currnetSongController.currentSongID}");
+      //  _player.cacheFile( url: "https://drive.google.com/uc?export=view&id=${currnetSongController.currentSongID}");
+        log("from online");
         await _player.setAudioSource(
             AudioSource.uri(
           Uri.parse(
@@ -110,8 +136,8 @@ class _SongPageState extends State<SongPage> {
             // Specify a unique ID for each media item:
             id: '1',
             // Metadata to display in the notification:
-            album: "Album name",
-            title: "Song name",
+            album: "${currnetSongController.currentalbumName}",
+            title: "${currnetSongController.currentsongName}",
             artUri: Uri.parse("https://drive.google.com/uc?export=view&id=${currnetSongController.currentSongID}"),
           ),
         )); //1-HPfLLirpw2REb-quLmxq6MyEtQ3jZep
@@ -140,20 +166,70 @@ class _SongPageState extends State<SongPage> {
       // s.map((event) => log(event.data().toString()));
 
 
-    } catch (e) {
+    }
+    catch (e) {
       print("Error loading audio source: $e");
+      if(e.toString()=="Null check operator used on a null value"){
+        await _player.setAudioSource(
+            AudioSource.uri(
+              Uri.parse(
+                  "https://drive.google.com/uc?export=view&id=${currnetSongController.currentSongID}"),
+              tag: MediaItem(
+                // Specify a unique ID for each media item:
+                id: '1',
+                // Metadata to display in the notification:
+                album: "Album name",
+                title: "Song name",
+                artUri: Uri.parse("https://drive.google.com/uc?export=view&id=${currnetSongController.currentSongID}"),
+              ),
+            ));
+      }
     }
   }
 
   nextSong() {
-    int currentSongIndex = songIDList.indexOf(songId);
+
+
+    int currentSongIndex =  currentPlayListHive.get("currentPlayList")!.songID.indexOf(currnetSongController.currentSongID);
+    int currentListLength = currentPlayListHive.get("currentPlayList")!.songID.length;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        log("currnt index $currentSongIndex song list ${songIDList.length}");
-        if (songIDList.length != (currentSongIndex+1)) {
-          songId = songIDList[currentSongIndex + 1];
+        log(currentSongIndex.toString());
+        log(currentListLength.toString());
+        if (currentListLength != (currentSongIndex+1)) {
+         var nextSongIndex = currentSongIndex + 1;
+         log(nextSongIndex.toString());
+         log("${currentPlayListHive.get("currentPlayListHive")?.songID[nextSongIndex]}");
+         //TODO: Make proper hive for current playlist so that data can be saved and played
+          final singleSong = SingleSong(
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.songID,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.poetName,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.albumName,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.artistName,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.audioLength,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.songName,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.composedBy,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.songImage,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.audioFileSize,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.lyrics,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.domineName
+          );
+          CurrentSongHive.put("currentSong", singleSong);
+          currnetSongController.updateCurrentSong(
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.songID,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.poetName,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.albumName,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.artistName,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.audioLength,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.songName,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.composedBy,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.songImage,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.audioFileSize,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.lyrics,
+              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.domineName
+          );
        //   currnetSongController.updateCurrentSong(newSongID, poetName, albumName, artistName, audioLength, songName, composedBy, audioImage, audioFileSize, lyrics, domineName)
-
+         init();
         }
       });
     });
@@ -387,8 +463,59 @@ class _SongPageState extends State<SongPage> {
                           )),
                       actions: [
                         IconButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              log("downloading the song...");
+                              offlineSongFile = await DefaultCacheManager().getSingleFile("https://drive.google.com/uc?export=view&id=${currnetSongController.currentSongID}").
+                              then((value) { log("song is downloaded${value.path}");
+                              if (downloadSongsinList.contains(
+                                  currnetSongController.currentSongID) ==
+                                  false) {
+                                final songData = DownloadedSong(
+                                    "${currnetSongController.currentsongName}",
+                                    "${currnetSongController.currentSongID}",
+                                    "${currnetSongController.currentartistName}",
+                                    "${currnetSongController.currentaudioLength}",
+                                    "${currnetSongController.currentaudioImage}",
+                                    "${currnetSongController.currentpoetName}",
+                                    "${currnetSongController.currentalbumName}",
+                                    "${currnetSongController.currentcomposedBy}",
+                                    "${currnetSongController.currentaudioFileSize}",
+                                    "${currnetSongController.currentlyrics}",
+                                    "${currnetSongController.currentdomineName}",
+                                    "${value.path.toString()}"
+                                );
+                                DownloadedSongsHive
+                                    .put("${currnetSongController.currentSongID}",
+                                    songData)
+                                    .then((value) {
+                                  setState(() {
+                                    downloadSongsinList.add(
+                                        "${currnetSongController.currentSongID}");
+                                  });
 
+                                  final SongId = DownloadedSongList(downloadSongsinList);
+                                  DownloadedSongsListHive.put("downloadSongs", SongId);
+                                });
+                                log("songAdded to the downloadedList");
+                              }
+                              });
+
+                              // if (addinginList.contains(
+                              //     currnetSongController.currentSongID) ==
+                              //     true) {
+                              //   likedSongsHive
+                              //       .delete(currnetSongController.currentSongID)
+                              //       .then((value) {
+                              //     setState(() {
+                              //       addinginList.remove(
+                              //           "${currnetSongController.currentSongID}");
+                              //     });
+                              //
+                              //     final SongId = LikedList(addinginList);
+                              //     likedListHive.put("likedSongs", SongId);
+                              //   });
+                              // }
+                              //
                             },
                             icon: Icon(
                               Icons.search,
@@ -1350,6 +1477,11 @@ class _ControlButtonsState extends State<ControlButtons> {
             final playerState = snapshot.data;
             final processingState = playerState?.processingState;
             final playing = playerState?.playing;
+
+            if(processingState == ProcessingState.completed){
+              widget.Nextsong();
+            }
+
             if (processingState == ProcessingState.loading ||
                 processingState == ProcessingState.buffering) {
               return Container(
@@ -1371,7 +1503,8 @@ class _ControlButtonsState extends State<ControlButtons> {
                 iconSize: 64.0,
                 onPressed: widget.player.pause,
               );
-            } else {
+            }
+            else {
               return IconButton(
                 icon: RadiantGradientMask(
                     child: Icon(Icons.replay_circle_filled_rounded, color: Colors.white, size: 70,)),
@@ -1379,6 +1512,7 @@ class _ControlButtonsState extends State<ControlButtons> {
                 onPressed: () => widget.player.seek(Duration.zero),
               );
             }
+
           },
         ),
         // Opens speed slider dialog
