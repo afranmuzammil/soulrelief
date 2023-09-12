@@ -234,7 +234,7 @@ class _DownloadsPageState extends State<DownloadsPage> {
                             DownloadedSongsHive.get(DownloadedSongsListHive.get("downloadSongs")?.songID[index])!.domineName
                         );
                         log(DownloadedSongsHive.get("${DownloadedSongsListHive.get("downloadSongs")!.songID[index]}")!.filePath);
-                        final allSongs = CurrentPlayList(DownloadedSongsListHive.get("downloadSongs")!.songID);
+                        final allSongs = CurrentPlayList(DownloadedSongsListHive.get("downloadSongs")!.songID,"downloadSongs");
                         currentPlayListHive.put("currentPlayList", allSongs);
                       },
                       child: Padding(

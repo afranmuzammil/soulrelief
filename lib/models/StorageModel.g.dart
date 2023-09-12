@@ -429,15 +429,18 @@ class CurrentPlayListAdapter extends TypeAdapter<CurrentPlayList> {
     };
     return CurrentPlayList(
       (fields[0] as List).cast<String>(),
+      fields[1] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, CurrentPlayList obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.songID);
+      ..write(obj.songID)
+      ..writeByte(1)
+      ..write(obj.CurrentPlaylistName);
   }
 
   @override

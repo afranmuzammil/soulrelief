@@ -154,8 +154,8 @@ class _AllSongsPageState extends State<AllSongsPage> {
                           );
                         } else if (snapshot.hasData) {
                           //  print("firebase data ${snapshot.data!.docs.map((e) => e.data() as Map<String,dynamic>).toList()}");
-                          print("firebase data ${snapshot.data!.docs.map((e)=>json.decode(json.encode(e.data()))).toList()}");
-                          snapshot.data!.docs.map((e)=>json.decode(json.encode(e.data()))).toList();
+                          // print("firebase data ${snapshot.data!.docs.map((e)=>json.decode(json.encode(e.data()))).toList()}");
+                           snapshot.data!.docs.map((e)=>json.decode(json.encode(e.data()))).toList();
                           return ListView(
                             physics :NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
@@ -191,7 +191,7 @@ class _AllSongsPageState extends State<AllSongsPage> {
                                 );
                                 List<dynamic> Songs = snapshot.data!.docs.map((e) => e.data()).toList();
                                 List<String> SongsString = Songs.map((e) => e.toString()).toList();
-                                final allSongs = CurrentPlayList(SongsString);
+                                final allSongs = CurrentPlayList(SongsString,"allSongs");
                                 currentPlayListHive.put("currentPlayList", allSongs);
                               },
                                   child: Padding(
@@ -229,27 +229,28 @@ class _AllSongsPageState extends State<AllSongsPage> {
                                         IconButton(
                                           onPressed: () {
                                             if (addinginList.contains(
-                                                currnetSongController.currentSongID) ==
+                                                doc["song_id"].toString()) ==
                                                 false) {
                                               final songData = LikedSong(
-                                                  "${currnetSongController.currentsongName}",
-                                                  "${currnetSongController.currentSongID}",
-                                                  "${currnetSongController.currentartistName}",
-                                                  "${currnetSongController.currentaudioLength}",
-                                                  "${currnetSongController.currentaudioImage}",
-                                                  "${currnetSongController.currentpoetName}",
-                                                  "${currnetSongController.currentalbumName}",
-                                                  "${currnetSongController.currentcomposedBy}",
-                                                  "${currnetSongController.currentaudioFileSize}",
-                                                  "${currnetSongController.currentlyrics}",
-                                                  "${currnetSongController.currentdomineName}");
+                                                  doc["song_name"].toString(),
+                                                  doc["song_id"].toString(),
+                                                  doc["poet_name"].toString(),
+                                                  doc["audio_length"].toString(),
+                                                  doc["audio_image"].toString(),
+                                                  doc["singer_name"].toString(),
+                                                  doc["album_name"].toString(),
+                                                  doc["composed_by"].toString(),
+                                                  doc["audio_file_size"].toString(),
+                                                  doc["lyrics"],
+                                                  doc["domine_name"].toString(),
+                                            );
                                               likedSongsHive
-                                                  .put("${currnetSongController.currentSongID}",
+                                                  .put("${doc["song_id"].toString()}",
                                                   songData)
                                                   .then((value) {
                                                 setState(() {
                                                   addinginList.add(
-                                                      "${currnetSongController.currentSongID}");
+                                                      "${doc["song_id"].toString()}");
                                                 });
 
                                                 final SongId = LikedList(addinginList);
@@ -257,14 +258,14 @@ class _AllSongsPageState extends State<AllSongsPage> {
                                               });
                                             }
                                             if (addinginList.contains(
-                                                currnetSongController.currentSongID) ==
+                                                doc["song_id"].toString()) ==
                                                 true) {
                                               likedSongsHive
-                                                  .delete(currnetSongController.currentSongID)
+                                                  .delete(doc["song_id"].toString())
                                                   .then((value) {
                                                 setState(() {
                                                   addinginList.remove(
-                                                      "${currnetSongController.currentSongID}");
+                                                      "${doc["song_id"].toString()}");
                                                 });
 
                                                 final SongId = LikedList(addinginList);
@@ -273,7 +274,7 @@ class _AllSongsPageState extends State<AllSongsPage> {
                                             }
                                           },
                                           icon: addinginList
-                                              .contains(currnetSongController.currentSongID)
+                                              .contains(doc["song_id"].toString())
                                               ? RadiantGradientMask(
                                             child: Icon(
                                               Icons.favorite,
@@ -288,7 +289,7 @@ class _AllSongsPageState extends State<AllSongsPage> {
                                         IconButton(
                                           icon: RadiantGradientMask(
                                               child: Icon(
-                                                Icons.play_circle_filled_rounded,
+                                                doc["song_id"].toString()  == currnetSongController.currentSongID? Icons.pause_circle_filled_outlined:Icons.play_circle_filled_rounded,
                                                 color: Colors.white,
                                                 size: 40,
                                               )),
@@ -303,7 +304,7 @@ class _AllSongsPageState extends State<AllSongsPage> {
                                                 doc["song_name"].toString(),
                                                 doc["composed_by"].toString(),
                                                 doc["audio_image"].toString(),
-                                                doc["song_id"].toString(),
+                                                doc["audio_length"].toString(),
                                                 doc["lyrics"],
                                                 doc["domine_name"].toString(),
                                             );
@@ -317,10 +318,11 @@ class _AllSongsPageState extends State<AllSongsPage> {
                                               doc["song_name"].toString(),
                                               doc["composed_by"].toString(),
                                               doc["audio_image"].toString(),
-                                              doc["song_id"].toString(),
+                                              doc["audio_length"].toString(),
                                               doc["lyrics"],
                                               doc["domine_name"].toString(),
                                             );
+
                                           },
                                         ),
                                         IconButton(

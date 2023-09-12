@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,6 +14,7 @@ import 'package:soulrelief/pages/home.dart';
 import 'package:text_scroll/text_scroll.dart';
 import '../builders/gradienticon.dart';
 import '../builders/gradienttext.dart';
+import '../contollers/autoPlayController.dart';
 import '../contollers/common.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:we_slide/we_slide.dart';
@@ -47,6 +49,7 @@ class _SongPageState extends State<SongPage> {
   final DownloadedSongsListHive = DownloadedSongListHive.initDownloadedSongListDataHive();
   final CurrentSongHive = SingleSongHive.initSingleSongDataHive();
   final currentPlayListHive = CurrentPlayListHive.initCurrentPlayListDataHive();
+  AutoPlayController autoPlayController = getx.Get.put(AutoPlayController());
   CurrnetSongController currnetSongController = getx.Get.put(CurrnetSongController());
   List<String> addinginList = [];
   List<String> downloadSongsinList = [];
@@ -119,8 +122,8 @@ class _SongPageState extends State<SongPage> {
                 // Specify a unique ID for each media item:
                 id: '1',
                 // Metadata to display in the notification:
-                album: "Album name",
-                title: "Song name",
+                album: "${currnetSongController.currentalbumName}",
+                title: "${currnetSongController.currentsongName}",
                 artUri: Uri.parse("${DownloadedSongsHive.get(currnetSongController.currentSongID)!.filePath}"),
               ),
             ));
@@ -178,8 +181,8 @@ class _SongPageState extends State<SongPage> {
                 // Specify a unique ID for each media item:
                 id: '1',
                 // Metadata to display in the notification:
-                album: "Album name",
-                title: "Song name",
+                album: "${currnetSongController.currentalbumName}",
+                title: "${currnetSongController.currentsongName}",
                 artUri: Uri.parse("https://drive.google.com/uc?export=view&id=${currnetSongController.currentSongID}"),
               ),
             ));
@@ -188,51 +191,97 @@ class _SongPageState extends State<SongPage> {
   }
 
   nextSong() {
+    int currentSongIndex = 0;
+
+    if(currentPlayListHive.get("currentPlayList")!.CurrentPlaylistName == "allSongs"){
+
+      List<dynamic> playlist = currentPlayListHive.get("currentPlayList")!.songID;
+
+      int currentListLength = currentPlayListHive.get("currentPlayList")!.songID.length;
+      for (int i = 0; i < playlist.length; i++) {
+        String jsonString = playlist[i].toString();
+
+    //    log("index: $i +++ $jsonString");
+        jsonString = jsonString.replaceAll(':', '":"').replaceAll(', ', '","').replaceAll('@', ':');
+        jsonString = jsonString.replaceAll('{', '{"');
+        jsonString = jsonString.replaceAll('}', '"}');
+        jsonString = jsonString.replaceAll(', ', '","').replaceAll(' null', 'null');
+        jsonString = jsonString.replaceAllMapped(
+          RegExp(r'\s\d+":"\d+'),
+              (match) => match.group(0)!.replaceAll('":"', ':'),
+        );
+        jsonString = jsonString.replaceAll(RegExp('[\\x00-\\x1F\\x7F-\x9F]'), '');
+        log("index: $i +++ $jsonString");
+        Map<dynamic, dynamic> map = json.decode(jsonString);
 
 
-    int currentSongIndex =  currentPlayListHive.get("currentPlayList")!.songID.indexOf(currnetSongController.currentSongID);
-    int currentListLength = currentPlayListHive.get("currentPlayList")!.songID.length;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        log(currentSongIndex.toString());
-        log(currentListLength.toString());
-        if (currentListLength != (currentSongIndex+1)) {
-         var nextSongIndex = currentSongIndex + 1;
-         log(nextSongIndex.toString());
-         log("${currentPlayListHive.get("currentPlayListHive")?.songID[nextSongIndex]}");
-         //TODO: Make proper hive for current playlist so that data can be saved and played
-          final singleSong = SingleSong(
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.songID,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.poetName,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.albumName,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.artistName,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.audioLength,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.songName,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.composedBy,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.songImage,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.audioFileSize,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.lyrics,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.domineName
-          );
-          CurrentSongHive.put("currentSong", singleSong);
-          currnetSongController.updateCurrentSong(
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.songID,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.poetName,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.albumName,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.artistName,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.audioLength,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.songName,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.composedBy,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.songImage,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.audioFileSize,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.lyrics,
-              DownloadedSongsHive.get(currentPlayListHive.get("currentPlayList")?.songID[nextSongIndex])!.domineName
-          );
-       //   currnetSongController.updateCurrentSong(newSongID, poetName, albumName, artistName, audioLength, songName, composedBy, audioImage, audioFileSize, lyrics, domineName)
-         init();
+        if (map["song_id"].toString().removeAllWhitespace == currnetSongController.currentSongID) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+          setState(() {
+            currentSongIndex = i;
+            log("from all songs if $i");
+            log(" current song index in current playlist : ${currentSongIndex.toString()}");
+            log(currentListLength.toString());
+            if (currentListLength > (currentSongIndex+1)) {
+              var nextSongIndex = currentSongIndex + 1;
+              log(nextSongIndex.toString());
+              log("${currentPlayListHive.get("currentPlayListHive")?.songID[nextSongIndex]}");
+              //TODO: Make proper hive for current playlist so that data can be saved and played
+              autoPlayController.ChangePlayList("${currentPlayListHive.get("currentPlayList")!.CurrentPlaylistName}", nextSongIndex);
+              log("current playlist is : ${currentPlayListHive.get("currentPlayList")!.CurrentPlaylistName}");
+              //   currnetSongController.updateCurrentSong(newSongID, poetName, albumName, artistName, audioLength, songName, composedBy, audioImage, audioFileSize, lyrics, domineName)
+              init();
+            }else{
+              log("out of index for autoplay");
+              var nextSongIndex = 0;
+              log(nextSongIndex.toString());
+              log("${currentPlayListHive.get("currentPlayListHive")?.songID[nextSongIndex]}");
+              //TODO: Make proper hive for current playlist so that data can be saved and played
+              autoPlayController.ChangePlayList("${currentPlayListHive.get("currentPlayList")!.CurrentPlaylistName}", nextSongIndex);
+              log("current playlist is : ${currentPlayListHive.get("currentPlayList")!.CurrentPlaylistName}");
+              //   currnetSongController.updateCurrentSong(newSongID, poetName, albumName, artistName, audioLength, songName, composedBy, audioImage, audioFileSize, lyrics, domineName)
+              init();
+            }
+          });});
+          break;
         }
-      });
-    });
+      }
+
+
+    }else{
+      currentSongIndex =  currentPlayListHive.get("currentPlayList")!.songID.indexOf(currnetSongController.currentSongID);
+      int currentListLength = currentPlayListHive.get("currentPlayList")!.songID.length;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        log(" current song index in current playlist : ${currentSongIndex.toString()}");
+        log(currentListLength.toString());
+        if (currentListLength > (currentSongIndex+1)) {
+          var nextSongIndex = currentSongIndex + 1;
+          log(nextSongIndex.toString());
+          log("${currentPlayListHive.get("currentPlayListHive")?.songID[nextSongIndex]}");
+          //TODO: Make proper hive for current playlist so that data can be saved and played
+          autoPlayController.ChangePlayList("${currentPlayListHive.get("currentPlayList")!.CurrentPlaylistName}", nextSongIndex);
+          log("current playlist is : ${currentPlayListHive.get("currentPlayList")!.CurrentPlaylistName}");
+          //   currnetSongController.updateCurrentSong(newSongID, poetName, albumName, artistName, audioLength, songName, composedBy, audioImage, audioFileSize, lyrics, domineName)
+          init();
+        }else{
+          log("out of index for autoplay");
+          var nextSongIndex = 0;
+          log(nextSongIndex.toString());
+          log("${currentPlayListHive.get("currentPlayListHive")?.songID[nextSongIndex]}");
+          //TODO: Make proper hive for current playlist so that data can be saved and played
+          autoPlayController.ChangePlayList("${currentPlayListHive.get("currentPlayList")!.CurrentPlaylistName}", nextSongIndex);
+          log("current playlist is : ${currentPlayListHive.get("currentPlayList")!.CurrentPlaylistName}");
+          //   currnetSongController.updateCurrentSong(newSongID, poetName, albumName, artistName, audioLength, songName, composedBy, audioImage, audioFileSize, lyrics, domineName)
+          init();
+
+        }
+      });});
+    }
+
+
+
+
   }
 
   prvSong() {
@@ -1521,7 +1570,7 @@ class _ControlButtonsState extends State<ControlButtons> {
           child: IconButton(
             icon: Icon(Icons.fast_forward_rounded, color: Colors.white, size: 40),
             onPressed: () {
-             // Nextsong();
+             widget.Nextsong();
               // showSliderDialog(
               //   context: context,
               //   title: "Adjust volume",

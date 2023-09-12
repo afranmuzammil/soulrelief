@@ -22,6 +22,7 @@ class _LikedSongsPageState extends State<LikedSongsPage> {
   final likedListHive = LikedListHive.initLikedListDataHive();
   final likedSongsHive = LikedSongsHive.initLikedSongsDataHive();
   final CurrentSongHive = SingleSongHive.initSingleSongDataHive();
+  final currentPlayListHive = CurrentPlayListHive.initCurrentPlayListDataHive();
   List<String> addinginList = [];
   CurrnetSongController currnetSongController = Get.put(CurrnetSongController());
   @override
@@ -210,6 +211,8 @@ class _LikedSongsPageState extends State<LikedSongsPage> {
                             likedSongsHive.get(likedListHive.get("likedSongs")?.songID[index])!.lyrics,
                             likedSongsHive.get(likedListHive.get("likedSongs")?.songID[index])!.domineName
                         );
+                        final allSongs = CurrentPlayList(likedListHive.get("likedSongs")!.songID,"likedSongs");
+                        currentPlayListHive.put("currentPlayList", allSongs);
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

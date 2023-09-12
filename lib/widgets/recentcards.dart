@@ -183,7 +183,9 @@ class RecentCards extends StatelessWidget {
                   // ),
                   child: IconButton(
                     icon: RadiantGradientMask(
-                        child: Icon(Icons.play_circle_fill_rounded, color: Colors.white, size: 36,)),
+                        child: Icon(
+                          SongID  == currnetSongController.currentSongID? Icons.pause_circle_filled_outlined:Icons.play_circle_filled_rounded,
+                          color: Colors.white, size: 36,)),
                     iconSize: 44.0,
                     onPressed: (){},
                   ),

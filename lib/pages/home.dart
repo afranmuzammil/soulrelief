@@ -508,146 +508,177 @@ class _HomePageState extends State<HomePage> {
                                     log(recentSongListHive.get("recentSongs")!.songID.length.toString());
                                     return Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: CustomListTile(
-                                        leading: Container(
-                                          padding: EdgeInsets.only(left: 10),
-                                          height: height * 0.06,
-                                          width: width * 0.12,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                                            // color: pictureBG,
-                                            image: DecorationImage(
-                                                fit: BoxFit.fill,
-                                                image: AssetImage('assets/TPicon.png')
-                                                //NetworkImage(
-                                                //  "${Product.products[index].imageUrl}")
-                                                // CachedNetworkImageProvider(
-                                                //   items.body["featuredClothingItems"][index]["coverImage"]
-                                                //       .toString(),
-                                                // ),
-                                                ),
+                                      child: GestureDetector(
+                                        onTap: (){
+                                          final singleSong = SingleSong(
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songID,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.poetName,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.albumName,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.artistName,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.audioLength,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songName,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.composedBy,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songImage,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.audioFileSize,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.lyrics,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.domineName
+                                          );
+                                          CurrentSongHive.put("currentSong", singleSong);
+                                          currnetSongController.updateCurrentSong(
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songID,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.poetName,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.albumName,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.artistName,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.audioLength,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songName,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.composedBy,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songImage,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.audioFileSize,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.lyrics,
+                                              recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.domineName
+                                          );
+                                        },
+                                        child: CustomListTile(
+                                          leading: Container(
+                                            padding: EdgeInsets.only(left: 10),
+                                            height: height * 0.06,
+                                            width: width * 0.12,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                                              // color: pictureBG,
+                                              image: DecorationImage(
+                                                  fit: BoxFit.fill,
+                                                  image: AssetImage('assets/TPicon.png')
+                                                  //NetworkImage(
+                                                  //  "${Product.products[index].imageUrl}")
+                                                  // CachedNetworkImageProvider(
+                                                  //   items.body["featuredClothingItems"][index]["coverImage"]
+                                                  //       .toString(),
+                                                  // ),
+                                                  ),
+                                            ),
+                                            // child: CachedNetworkImage(
+                                            //   placeholder: (context, imgUrl) => const Text("Image is loading"),
+                                            //   imageUrl: products.body["items"][index]["coverImage"].toString(),
+                                            // ),
                                           ),
-                                          // child: CachedNetworkImage(
-                                          //   placeholder: (context, imgUrl) => const Text("Image is loading"),
-                                          //   imageUrl: products.body["items"][index]["coverImage"].toString(),
-                                          // ),
-                                        ),
-                                        title: recentSongsHive
-                                            .get(
-                                                recentSongListHive.get("recentSongs")?.songID[index])!
-                                            .songName,
-                                        subtitle:
-                                            "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.artistName}",
-                                        trailing: Container(
-                                          width: width * 0.5,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                            children: [
-                                              IconButton(
-                                                onPressed: () {
-                                                  if (addinginList.contains(
-                                                          currnetSongController.currentSongID) ==
-                                                      false) {
-                                                    final songData = LikedSong(
-                                                        "${currnetSongController.currentsongName}",
-                                                        "${currnetSongController.currentSongID}",
-                                                        "${currnetSongController.currentartistName}",
-                                                        "${currnetSongController.currentaudioLength}",
-                                                        "${currnetSongController.currentaudioImage}",
-                                                        "${currnetSongController.currentpoetName}",
-                                                        "${currnetSongController.currentalbumName}",
-                                                        "${currnetSongController.currentcomposedBy}",
-                                                        "${currnetSongController.currentaudioFileSize}",
-                                                        "${currnetSongController.currentlyrics}",
-                                                        "${currnetSongController.currentdomineName}");
-                                                    likedSongsHive
-                                                        .put("${currnetSongController.currentSongID}",
-                                                            songData)
-                                                        .then((value) {
-                                                      setState(() {
-                                                        addinginList.add(
-                                                            "${currnetSongController.currentSongID}");
-                                                      });
+                                          title: recentSongsHive
+                                              .get(
+                                                  recentSongListHive.get("recentSongs")?.songID[index])!
+                                              .songName,
+                                          subtitle:
+                                              "${recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.artistName}",
+                                          trailing: Container(
+                                            width: width * 0.5,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {
+                                                    if (addinginList.contains(
+                                                            currnetSongController.currentSongID) ==
+                                                        false) {
+                                                      final songData = LikedSong(
+                                                          "${currnetSongController.currentsongName}",
+                                                          "${currnetSongController.currentSongID}",
+                                                          "${currnetSongController.currentartistName}",
+                                                          "${currnetSongController.currentaudioLength}",
+                                                          "${currnetSongController.currentaudioImage}",
+                                                          "${currnetSongController.currentpoetName}",
+                                                          "${currnetSongController.currentalbumName}",
+                                                          "${currnetSongController.currentcomposedBy}",
+                                                          "${currnetSongController.currentaudioFileSize}",
+                                                          "${currnetSongController.currentlyrics}",
+                                                          "${currnetSongController.currentdomineName}");
+                                                      likedSongsHive
+                                                          .put("${currnetSongController.currentSongID}",
+                                                              songData)
+                                                          .then((value) {
+                                                        setState(() {
+                                                          addinginList.add(
+                                                              "${currnetSongController.currentSongID}");
+                                                        });
 
-                                                      final SongId = LikedList(addinginList);
-                                                      likedListHive.put("likedSongs", SongId);
-                                                    });
-                                                  }
-                                                  if (addinginList.contains(
-                                                          currnetSongController.currentSongID) ==
-                                                      true) {
-                                                    likedSongsHive
-                                                        .delete(currnetSongController.currentSongID)
-                                                        .then((value) {
-                                                      setState(() {
-                                                        addinginList.remove(
-                                                            "${currnetSongController.currentSongID}");
+                                                        final SongId = LikedList(addinginList);
+                                                        likedListHive.put("likedSongs", SongId);
                                                       });
+                                                    }
+                                                    if (addinginList.contains(
+                                                            currnetSongController.currentSongID) ==
+                                                        true) {
+                                                      likedSongsHive
+                                                          .delete(currnetSongController.currentSongID)
+                                                          .then((value) {
+                                                        setState(() {
+                                                          addinginList.remove(
+                                                              "${currnetSongController.currentSongID}");
+                                                        });
 
-                                                      final SongId = LikedList(addinginList);
-                                                      likedListHive.put("likedSongs", SongId);
-                                                    });
-                                                  }
-                                                },
-                                                icon: addinginList
-                                                        .contains(currnetSongController.currentSongID)
-                                                    ? RadiantGradientMask(
-                                                        child: Icon(
-                                                          Icons.favorite,
+                                                        final SongId = LikedList(addinginList);
+                                                        likedListHive.put("likedSongs", SongId);
+                                                      });
+                                                    }
+                                                  },
+                                                  icon: addinginList
+                                                          .contains(currnetSongController.currentSongID)
+                                                      ? RadiantGradientMask(
+                                                          child: Icon(
+                                                            Icons.favorite,
+                                                            color: Colors.white,
+                                                          ),
+                                                        )
+                                                      : Icon(
+                                                          Icons.favorite_border,
                                                           color: Colors.white,
                                                         ),
-                                                      )
-                                                    : Icon(
-                                                        Icons.favorite_border,
-                                                        color: Colors.white,
-                                                      ),
-                                              ),
-                                              IconButton(
-                                                icon: RadiantGradientMask(
-                                                    child: Icon(
-                                                  Icons.play_circle_filled_rounded,
-                                                  color: Colors.white,
-                                                  size: 40,
-                                                )),
-                                                iconSize: 40.0,
-                                                onPressed: () {
-                                                  final singleSong = SingleSong(
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songID,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.poetName,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.albumName,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.artistName,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.audioLength,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songName,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.composedBy,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songImage,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.audioFileSize,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.lyrics,
-                                                    recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.domineName
-                                                  );
-                                                  CurrentSongHive.put("currentSong", singleSong);
-                                                  currnetSongController.updateCurrentSong(
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songID,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.poetName,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.albumName,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.artistName,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.audioLength,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songName,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.composedBy,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songImage,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.audioFileSize,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.lyrics,
-                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.domineName
-                                                  );
-                                                },
-                                              ),
-                                              IconButton(
-                                                onPressed: () {},
-                                                icon: Icon(
-                                                  Icons.list,
-                                                  color: Colors.white,
                                                 ),
-                                              ),
-                                            ],
+                                                IconButton(
+                                                  icon: RadiantGradientMask(
+                                                      child:Icon(
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songID == currnetSongController.currentSongID? Icons.pause_circle_filled_outlined:Icons.play_circle_filled_rounded,
+                                                    color: Colors.white,
+                                                    size: 40,
+                                                  )),
+                                                  iconSize: 40.0,
+                                                  onPressed: () {
+                                                    final singleSong = SingleSong(
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songID,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.poetName,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.albumName,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.artistName,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.audioLength,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songName,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.composedBy,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songImage,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.audioFileSize,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.lyrics,
+                                                      recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.domineName
+                                                    );
+                                                    CurrentSongHive.put("currentSong", singleSong);
+                                                    currnetSongController.updateCurrentSong(
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songID,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.poetName,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.albumName,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.artistName,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.audioLength,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songName,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.composedBy,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.songImage,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.audioFileSize,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.lyrics,
+                                                        recentSongsHive.get(recentSongListHive.get("recentSongs")?.songID[index])!.domineName
+                                                    );
+                                                  },
+                                                ),
+                                                IconButton(
+                                                  onPressed: () {},
+                                                  icon: Icon(
+                                                    Icons.list,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),

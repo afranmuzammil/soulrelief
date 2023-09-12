@@ -110,7 +110,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
                     IconButton(
                       icon: RadiantGradientMask(
                           child: Icon(
-                        Icons.play_circle_fill_rounded,
+                            CurrentSongHive.get("currentSong")?.songId == currnetSongController.currentSongID? Icons.pause_circle_filled_outlined:Icons.play_circle_filled_rounded,
                         color: Colors.white,
                         size: 40,
                       )),

@@ -268,8 +268,10 @@ class CurrentPlayList extends HiveObject{
 
   @HiveField(0)
   List<String> songID;
+  @HiveField(1)
+  String CurrentPlaylistName;
 
-  CurrentPlayList(this.songID,);
+  CurrentPlayList(this.songID,this.CurrentPlaylistName);
 
 }
 
